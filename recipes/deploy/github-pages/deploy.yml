@@ -33,7 +33,7 @@ jobs:
       # `--with` form needs no pyproject.toml; if you have one, use `uv sync`
       # followed by `uv run pyssg build` instead.
       - name: Build site
-        run: uv run --python 3.13 --with "pyssg[plugins]" pyssg build
+        run: uv run --python 3.13 --with "pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git" pyssg build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public

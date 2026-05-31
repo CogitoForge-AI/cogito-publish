@@ -27,7 +27,7 @@ class ReadFileTest(unittest.TestCase):
             config = Config(src=src, out=root / "out", plugins=[ReadFile()])
             build = Builder(config).run()
 
-            by_rel = {str(s.relpath): s.raw for s in build.sources}
+            by_rel = {s.relpath.as_posix(): s.raw for s in build.sources}
             self.assertEqual(by_rel, {"a.md": "alpha", "blog/b.md": "beta"})
 
     def test_custom_patterns(self) -> None:

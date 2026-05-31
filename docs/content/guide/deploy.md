@@ -36,7 +36,7 @@ Config(..., options={"base_url": "https://your-domain.example"})
 
 ```yaml
 - uses: astral-sh/setup-uv@v5
-- run: uv run --python 3.13 --with "pyssg[plugins]" pyssg build
+- run: uv run --python 3.13 --with "pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git" pyssg build
 - uses: actions/upload-pages-artifact@v3
   with:
     path: public
@@ -53,7 +53,7 @@ pip:
 
 ```toml
 [build]
-  command = "pip install 'pyssg[plugins]' && pyssg build"
+  command = "pip install 'pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git' && pyssg build"
   publish = "public"
 
 [build.environment]
@@ -64,7 +64,7 @@ pip:
 
 Create a Pages project from your repository and set:
 
-- **Build command:** `pip install "pyssg[plugins]" && pyssg build`
+- **Build command:** `pip install "pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git" && pyssg build`
 - **Build output directory:** `public`
 - **Environment variable:** `PYTHON_VERSION = 3.13`
 

@@ -138,11 +138,11 @@ def render_terminal(
     if error.stage:
         lines.append(f"  stage: {error.stage}")
     if error.source_path is not None:
-        lines.append(f"  in:    {error.source_path}")
+        lines.append(f"  in:    {error.source_path.as_posix()}")
 
     location = error.location
     if location is not None:
-        where = str(location.file)
+        where = location.file.as_posix()
         if location.line is not None:
             where += f":{location.line}"
             if location.column is not None:
@@ -183,11 +183,11 @@ def render_html_overlay(error: BuildError) -> str:
     if error.stage:
         rows.append(_row("stage", error.stage))
     if error.source_path is not None:
-        rows.append(_row("in", str(error.source_path)))
+        rows.append(_row("in", error.source_path.as_posix()))
     location = error.location
     snippet_html = ""
     if location is not None:
-        where = str(location.file)
+        where = location.file.as_posix()
         if location.line is not None:
             where += f":{location.line}"
             if location.column is not None:
