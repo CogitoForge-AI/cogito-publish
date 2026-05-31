@@ -77,6 +77,30 @@ class TransformTest(unittest.TestCase):
         Highlight(css_class="chroma")._transform(source, make_build())
         self.assertIn('<div class="chroma">', source.content)
 
+    def test_bool_linenums_emit_table_line_numbers(self) -> None:
+        source = make_source(fenced("python", "x = 1\ny = 2\n"))
+        try:
+            highlight = Highlight(linenums=True)
+        except TypeError as exc:
+            self.fail(f"Highlight should accept linenums: {exc}")
+
+        highlight._transform(source, make_build())
+
+        self.assertIn('class="highlighttable"', source.content)
+        self.assertIn('class="linenos"', source.content)
+
+    def test_inline_linenums_emit_inline_line_numbers(self) -> None:
+        source = make_source(fenced("python", "x = 1\ny = 2\n"))
+        try:
+            highlight = Highlight(linenums="inline")
+        except TypeError as exc:
+            self.fail(f"Highlight should accept linenums: {exc}")
+
+        highlight._transform(source, make_build())
+
+        self.assertNotIn('class="highlighttable"', source.content)
+        self.assertIn('class="linenos"', source.content)
+
 
 class PlainBlockTest(unittest.TestCase):
     def test_plain_block_untouched_by_default(self) -> None:
@@ -130,6 +154,20 @@ class StylesheetTest(unittest.TestCase):
         assert isinstance(globals_, dict)
         css = str(globals_["highlight_css"]())
         self.assertIn(".chroma", css)
+
+    def test_stylesheet_includes_linenum_rules_when_linenums_enabled(self) -> None:
+        build = make_build()
+        try:
+            highlight = Highlight(linenums=True, dark_style=None)
+        except TypeError as exc:
+            self.fail(f"Highlight should accept linenums: {exc}")
+
+        highlight._collect(build)
+
+        globals_ = build.meta["template_globals"]
+        assert isinstance(globals_, dict)
+        css = str(globals_["highlight_css"]())
+        self.assertIn(".linenos", css)
 
 
 class IntegrationTest(unittest.TestCase):

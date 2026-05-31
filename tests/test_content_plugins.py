@@ -34,6 +34,23 @@ class MarkdownTest(unittest.TestCase):
 
         self.assertEqual(source.content, "<p>hello world</p>")
 
+    def test_extension_configs_are_forwarded(self) -> None:
+        source = Source(path=Path("a.md"), relpath=Path("a.md"), body="# Title")
+        build = make_build(Path("content"), Path("out"))
+        try:
+            markdown = Markdown(
+                extensions=["toc"],
+                extension_configs={"toc": {"permalink": True}},
+            )
+        except TypeError as exc:
+            self.fail(f"Markdown should accept extension_configs: {exc}")
+
+        markdown._transform(source, build)
+
+        self.assertIn('id="title"', source.content)
+        self.assertIn('class="headerlink"', source.content)
+        self.assertIn('href="#title"', source.content)
+
 
 class TemplateTest(unittest.TestCase):
     def test_wraps_content_in_layout(self) -> None:

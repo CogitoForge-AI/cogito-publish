@@ -27,7 +27,7 @@ from __future__ import annotations
 
 import html
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from pyssg.build import Build
 from pyssg.builder import Builder
@@ -37,6 +37,8 @@ if TYPE_CHECKING:
     from markupsafe import Markup
     from pygments.formatters import HtmlFormatter
     from pygments.lexer import Lexer
+
+LineNumbers = bool | Literal["table", "inline"]
 
 # Run after Markdown's transform (stage 0) so the fenced blocks already exist.
 _TRANSFORM_STAGE = 100
@@ -58,12 +60,14 @@ class Highlight:
         css_class: str = "highlight",
         default_lang: str | None = None,
         guess: bool = False,
+        linenums: LineNumbers = False,
     ) -> None:
         self._style = style
         self._dark_style = dark_style
         self._css_class = css_class
         self._default_lang = default_lang
         self._guess = guess
+        self._linenos = _normalize_linenums(linenums)
         self._formatter: HtmlFormatter | None = None
         self._css: str | None = None
 
@@ -140,31 +144,36 @@ class Highlight:
 
     def _make_formatter(self) -> HtmlFormatter:
         if self._formatter is None:
-            from pygments.formatters import HtmlFormatter
-
-            self._formatter = HtmlFormatter(style=self._style, cssclass=self._css_class)
+            self._formatter = self._make_html_formatter(self._style)
         return self._formatter
+
+    def _make_html_formatter(self, style: str) -> HtmlFormatter:
+        from pygments.formatters import HtmlFormatter
+
+        return HtmlFormatter(
+            style=style,
+            cssclass=self._css_class,
+            linenos=self._linenos,
+        )
 
     def _stylesheet(self) -> str:
         if self._css is not None:
             return self._css
-        from pygments.formatters import HtmlFormatter
-
         selector = f".{self._css_class}"
-        css = str(
-            HtmlFormatter(style=self._style, cssclass=self._css_class).get_style_defs(
-                selector
-            )
-        )
+        css = str(self._make_html_formatter(self._style).get_style_defs(selector))
         if self._dark_style:
             dark = str(
-                HtmlFormatter(
-                    style=self._dark_style, cssclass=self._css_class
-                ).get_style_defs(selector)
+                self._make_html_formatter(self._dark_style).get_style_defs(selector)
             )
             css += f"\n@media (prefers-color-scheme: dark) {{\n{dark}\n}}\n"
         self._css = css
         return css
+
+
+def _normalize_linenums(linenums: LineNumbers) -> bool | Literal["table", "inline"]:
+    if linenums is True:
+        return "table"
+    return linenums
 
 
 def _make_css_global(css: str) -> object:
