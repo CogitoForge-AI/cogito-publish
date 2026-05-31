@@ -58,6 +58,30 @@ jobs:
       - name: unittest
         run: uv run python -m unittest discover -s tests -v
 
+  coverage:
+    name: Coverage (ubuntu, fail-under 85%)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - run: uv sync --all-extras
+      - name: Run tests under coverage
+        run: uv run coverage run --branch -m unittest discover -s tests
+      # `coverage report` exits non-zero below the fail_under threshold set in
+      # pyproject.toml, so this step is itself the gate. The table is also written
+      # to the run summary for at-a-glance review on each pull request.
+      - name: Coverage report (gate via fail_under)
+        run: |
+          {
+            echo '### Coverage report'
+            echo '```'
+            uv run coverage report
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
   package:
     name: Build and smoke test (git-install channel)
     runs-on: ubuntu-latest
