@@ -33,6 +33,7 @@ from pyssg.models import Source
 SITE = "site"
 COLLECTIONS = "collections"
 MENUS = "menus"
+I18N = "i18n"
 
 # source.meta keys
 URL = "url"
@@ -40,6 +41,9 @@ OUTPUT_PATH = "output_path"
 GENERATED = "generated"
 PREV = "prev"
 NEXT = "next"
+LOCALE = "locale"
+TRANSLATION_KEY = "translation_key"
+TRANSLATIONS = "translations"
 
 # Collection kinds
 KIND_TAG = "tag"

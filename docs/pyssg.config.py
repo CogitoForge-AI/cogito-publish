@@ -3,12 +3,14 @@
 from pathlib import Path
 
 from pyssg.config import Config
-from pyssg_cli.presets import docs
+from pyssg_cli.presets import i18n_docs
 from pyssg_plugins import Fingerprint, Highlight, Statistics
 
 
 def config() -> Config:
-    plugins = docs(
+    plugins = i18n_docs(
+        locales=("en", "vi"),
+        default_locale="en",
         markdown_extensions=("fenced_code", "tables", "toc"),
         sitemap=True,
         minify=True,

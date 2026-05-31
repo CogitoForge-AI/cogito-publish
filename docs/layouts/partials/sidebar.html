@@ -1,6 +1,6 @@
 <nav>
-  <a class="nav-home{% if current_url == '/' %} active{% endif %}" href="/">Home</a>
-  {% for node in menus.main recursive %}
+  <a class="nav-home{% if current_url == '/' + locale + '/' %} active{% endif %}" href="/{{ locale }}/">Home</a>
+  {% for node in menus['main:' + locale] recursive %}
     <div class="nav-group">
       {% if node.url %}
         <a class="nav-link{% if node.url == current_url %} active{% endif %}" href="{{ node.url }}">{{ node.title }}</a>

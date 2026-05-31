@@ -5,16 +5,19 @@ from __future__ import annotations
 import unittest
 
 from pyssg.plugin import Plugin
-from pyssg_cli.presets import blog, docs, site
+from pyssg_cli.presets import blog, docs, i18n_blog, i18n_docs, site
 from pyssg_plugins import (
     Collections,
     Highlight,
+    I18n,
     Listing,
     Markdown,
     MarkdownPage,
     Navigation,
     Permalink,
     ReadFile,
+    Redirects,
+    Rss,
     WriteFile,
 )
 
@@ -68,6 +71,74 @@ class PresetShapeTest(unittest.TestCase):
             self.assertIn(Highlight, stack)
             # Highlight must come after Markdown so the fenced blocks exist.
             self.assertGreater(stack.index(Highlight), stack.index(Markdown))
+
+
+class I18nBlogPresetTest(unittest.TestCase):
+    def _stack(self, **kwargs: object) -> list[Plugin]:
+        params: dict[str, object] = {"locales": ["vi", "en"], "default_locale": "vi"}
+        params.update(kwargs)
+        return i18n_blog(**params)  # type: ignore[arg-type]
+
+    def test_is_a_valid_read_write_stack(self) -> None:
+        stack = self._stack()
+        for plugin in stack:
+            self.assertIsInstance(plugin, Plugin)
+        self.assertIs(types_in(stack)[0], ReadFile)
+        self.assertIs(types_in(stack)[-1], WriteFile)
+
+    def test_has_i18n_and_grouped_structure(self) -> None:
+        types = types_in(self._stack())
+        self.assertIn(I18n, types)
+        self.assertIn(Collections, types)
+        self.assertIn(Navigation, types)
+
+    def test_one_index_listing_per_locale_plus_tag_listing(self) -> None:
+        # Three locales -> three per-locale index listings + one tag listing.
+        listings = [
+            p for p in self._stack(locales=["vi", "en", "ja"]) if isinstance(p, Listing)
+        ]
+        self.assertEqual(len(listings), 4)
+
+    def test_one_rss_feed_per_locale(self) -> None:
+        feeds = [p for p in self._stack() if isinstance(p, Rss)]
+        self.assertEqual(len(feeds), 2)
+        self.assertNotIn(Rss, types_in(self._stack(rss=False)))
+
+    def test_root_redirect_toggles_redirects_plugin(self) -> None:
+        self.assertIn(Redirects, types_in(self._stack()))
+        self.assertNotIn(Redirects, types_in(self._stack(root_redirect=False)))
+
+    def test_default_locale_must_be_in_locales(self) -> None:
+        with self.assertRaises(ValueError):
+            i18n_blog(locales=["vi", "en"], default_locale="fr")
+
+
+class I18nDocsPresetTest(unittest.TestCase):
+    def _stack(self, **kwargs: object) -> list[Plugin]:
+        params: dict[str, object] = {"locales": ["en", "vi"], "default_locale": "en"}
+        params.update(kwargs)
+        return i18n_docs(**params)  # type: ignore[arg-type]
+
+    def test_is_a_valid_read_write_stack(self) -> None:
+        stack = self._stack()
+        for plugin in stack:
+            self.assertIsInstance(plugin, Plugin)
+        self.assertIs(types_in(stack)[0], ReadFile)
+        self.assertIs(types_in(stack)[-1], WriteFile)
+
+    def test_has_i18n_navigation_no_listing(self) -> None:
+        types = types_in(self._stack())
+        self.assertIn(I18n, types)
+        self.assertIn(Navigation, types)
+        self.assertNotIn(Listing, types)
+
+    def test_root_redirect_toggles_redirects_plugin(self) -> None:
+        self.assertIn(Redirects, types_in(self._stack()))
+        self.assertNotIn(Redirects, types_in(self._stack(root_redirect=False)))
+
+    def test_default_locale_must_be_in_locales(self) -> None:
+        with self.assertRaises(ValueError):
+            i18n_docs(locales=["en", "vi"], default_locale="fr")
 
 
 if __name__ == "__main__":

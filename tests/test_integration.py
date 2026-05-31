@@ -8,7 +8,7 @@ from pathlib import Path
 
 from pyssg.builder import Builder
 from pyssg.config import Config
-from pyssg_cli.presets import blog, docs
+from pyssg_cli.presets import blog, docs, i18n_blog, i18n_docs
 
 
 def write(path: Path, text: str) -> None:
@@ -94,6 +94,132 @@ class BlogIntegrationTest(unittest.TestCase):
             self.assertEqual(
                 (out / "blog" / "page" / "3" / "index.html").read_text(), "p3/3"
             )
+
+
+class I18nBlogIntegrationTest(unittest.TestCase):
+    def test_multilingual_build(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            content = root / "content"
+            layouts = root / "layouts"
+            out = root / "public"
+
+            post = "---\ntitle: {t}\ndate: 2024-01-01\ntags: [python]\n---\nBody\n"
+            write(content / "vi" / "posts" / "oauth2.md", post.format(t="OAuth2 VI"))
+            write(content / "en" / "posts" / "oauth2.md", post.format(t="OAuth2 EN"))
+            write(
+                content / "vi" / "about.md",
+                "---\ntitle: Gioi thieu\nmenu: main\n---\nAbout\n",
+            )
+
+            # The post layout prints the locale and the language-switcher links.
+            write(
+                layouts / "default.html",
+                "L:{{ page.locale }}|"
+                "{% for t in page.translations %}"
+                "{{ t.locale }}={{ t.url }}{% if t.current %}*{% endif %};"
+                "{% endfor %}|{{ content }}",
+            )
+            write(
+                layouts / "list.html",
+                "MENU[{% for n in menus['main:' + page.locale] %}"
+                "{{ n.url }}{% endfor %}]"
+                "{% for item in page.entries %}{{ item.url }};{% endfor %}",
+            )
+
+            config = Config(
+                src=content,
+                out=out,
+                plugins=i18n_blog(locales=["vi", "en"], default_locale="vi"),
+            )
+            Builder(config).run()
+
+            # Every locale, including the default, is URL-prefixed.
+            self.assertTrue((out / "vi" / "posts" / "oauth2" / "index.html").exists())
+            self.assertTrue((out / "en" / "posts" / "oauth2" / "index.html").exists())
+
+            # The post page carries its locale and a switcher to the other locale.
+            vi_post = (out / "vi" / "posts" / "oauth2" / "index.html").read_text()
+            self.assertIn("L:vi|", vi_post)
+            self.assertIn("vi=/vi/posts/oauth2/*;", vi_post)
+            self.assertIn("en=/en/posts/oauth2/;", vi_post)
+
+            # One paginated index per locale, listing only that locale's posts.
+            vi_index = (out / "vi" / "index.html").read_text()
+            self.assertIn("/vi/posts/oauth2/;", vi_index)
+            self.assertNotIn("/en/posts/oauth2/;", vi_index)
+            # The menu is the locale-specific one.
+            self.assertIn("MENU[/vi/about/]", vi_index)
+
+            # Tag pages and feeds exist per locale.
+            self.assertTrue((out / "vi" / "tags" / "python" / "index.html").exists())
+            self.assertTrue((out / "en" / "tags" / "python" / "index.html").exists())
+            self.assertTrue((out / "vi" / "feed.xml").exists())
+            self.assertTrue((out / "en" / "feed.xml").exists())
+
+            # The bare root redirects to the default locale's home.
+            self.assertIn("/vi/", (out / "index.html").read_text())
+
+
+class I18nDocsIntegrationTest(unittest.TestCase):
+    def test_per_locale_sidebar_is_rooted_at_locale(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            content = root / "content"
+            layouts = root / "layouts"
+            out = root / "public"
+
+            for locale in ("en", "vi"):
+                write(
+                    content / locale / "index.md",
+                    f"---\ntitle: Home {locale}\n---\nH\n",
+                )
+                write(
+                    content / locale / "guide" / "index.md",
+                    f"---\ntitle: Guide {locale}\norder: 1\n---\nG\n",
+                )
+                write(
+                    content / locale / "guide" / "install.md",
+                    f"---\ntitle: Install {locale}\norder: 1\n---\nI\n",
+                )
+                write(
+                    content / locale / "guide" / "usage.md",
+                    f"---\ntitle: Usage {locale}\norder: 2\n---\nU\n",
+                )
+
+            # Sidebar prints node urls; the locale segment must NOT appear as a
+            # top-level node (no empty-url "En"/"Vi" wrapper).
+            nav = (
+                "NAV[{% for n in menus['main:' + page.locale] %}"
+                "{{ n.title }}:{{ n.url }}>"
+                "{% for c in n.children %}{{ c.title }}:{{ c.url }},{% endfor %}"
+                "{% endfor %}]"
+            )
+            prevnext = (
+                "{% if page.prev %}P:{{ page.prev.url }}{% endif %}"
+                "{% if page.next %}N:{{ page.next.url }}{% endif %}"
+            )
+            write(layouts / "default.html", f"{nav}{prevnext}|{{{{ content }}}}")
+
+            config = Config(
+                src=content,
+                out=out,
+                plugins=i18n_docs(locales=["en", "vi"], default_locale="en"),
+            )
+            Builder(config).run()
+
+            install = (out / "en" / "guide" / "install" / "index.html").read_text()
+            # The sidebar is rooted at the "guide" folder, not a redundant "en".
+            self.assertIn("Guide en:/en/guide/", install)
+            self.assertIn("Install en:/en/guide/install/", install)
+            self.assertNotIn("/en/guide/install/", install.split("NAV[")[0])
+            # Sequential prev/next stays within the locale.
+            usage = (out / "en" / "guide" / "usage" / "index.html").read_text()
+            self.assertIn("P:/en/guide/install/", usage)
+            # vi pages exist and are prefixed.
+            self.assertTrue((out / "vi" / "guide" / "install" / "index.html").exists())
+            # Root redirects to the default locale.
+            self.assertIn("/en/", (out / "index.html").read_text())
 
 
 class DocsIntegrationTest(unittest.TestCase):

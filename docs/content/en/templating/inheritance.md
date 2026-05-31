@@ -57,5 +57,5 @@ layouts/
   partials/              # reusable snippets (see Partials)
 ```
 
-See the [lookup cascade](/templating/lookup-cascade/) for how `single.html` and
+See the [lookup cascade](/en/templating/lookup-cascade/) for how `single.html` and
 `list.html` get selected automatically.
