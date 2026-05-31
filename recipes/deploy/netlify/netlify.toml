@@ -4,7 +4,7 @@
 # extras to match your project's plugin dependencies.
 
 [build]
-  command = "pip install 'pyssg[plugins]' && pyssg build"
+  command = "pip install 'pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git' && pyssg build"
   publish = "public"
 
 [build.environment]

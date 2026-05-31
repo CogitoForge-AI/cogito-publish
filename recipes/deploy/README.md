@@ -39,7 +39,7 @@ dependencies.
   the repo in Netlify. The publish directory and build command come from the
   file.
 - **Cloudflare Pages** -- create a Pages project, set the build command to
-  `pip install "pyssg[plugins]" && pyssg build`, the output directory to
+  `pip install "pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git" && pyssg build`, the output directory to
   `public`, and the env var `PYTHON_VERSION=3.13`. Or use the optional
   `cloudflare-pages/deploy.yml` workflow.
 

@@ -14,14 +14,18 @@ This guide takes you from an empty folder to a built site.
 
 ## Install
 
-The kernel has no dependencies. The built-in `Markdown` and `Template` plugins
-need third party libraries, declared as optional extras:
+pyssg installs directly from GitHub - it is not published on PyPI. The kernel has
+no dependencies; the built-in `Markdown`, `Template` and `Highlight` plugins need
+third party libraries, bundled in the `plugins` extra:
 
 ```bash
-uv add "pyssg[plugins]"      # markdown + jinja2
-# or
-pip install "pyssg[plugins]"
+# uv (recommended)
+uv add "pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git"
+# pip
+pip install "pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git"
 ```
+
+Pin to a released tag by appending `@v0.1.0` to the URL.
 
 ## Project layout
 

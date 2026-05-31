@@ -2,7 +2,7 @@
 #
 # Simpler alternative -- skip this file and configure the build in the
 # Cloudflare dashboard:
-#   Build command:           pip install "pyssg[plugins]" && pyssg build
+#   Build command:           pip install "pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git" && pyssg build
 #   Build output directory:  public
 #   Environment variable:    PYTHON_VERSION = 3.13
 #
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
       - name: Build site
-        run: uv run --python 3.13 --with "pyssg[plugins]" pyssg build
+        run: uv run --python 3.13 --with "pyssg[plugins] @ git+https://github.com/magiskboy/pyssg.git" pyssg build
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
