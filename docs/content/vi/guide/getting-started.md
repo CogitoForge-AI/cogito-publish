@@ -96,5 +96,4 @@ Trang của bạn giờ nằm trong `public/`. Để dùng file cấu hình ở 
 pyssg build -c path/to/pyssg.config.py
 ```
 
-Tiếp theo: tìm hiểu chi tiết các tùy chọn [cấu hình](/en/guide/configuration/)
-(bản tiếng Việt sẽ bổ sung sau).
+Tiếp theo: tìm hiểu chi tiết các tùy chọn [cấu hình](/vi/guide/configuration/).

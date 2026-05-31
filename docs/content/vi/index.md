@@ -52,7 +52,5 @@ pyssg build
 ## Đi tiếp đâu
 
 - **Mới đến?** Bắt đầu với [Bắt đầu nhanh](/vi/guide/getting-started/).
-- **Đang dựng trang?** Học [Templating](/en/templating/) và các [plugin có sẵn](/en/plugins/built-in/).
-- **Muốn hiểu bên trong?** Đọc tổng quan [Kiến trúc](/en/architecture/) hoặc tìm hiểu [viết plugin](/en/plugins/writing-plugins/).
-
-> Các mục chưa dịch tạm liên kết tới bản tiếng Anh; nội dung tiếng Việt sẽ bổ sung dần.
+- **Đang dựng trang?** Học [Templating](/vi/templating/) và các [plugin có sẵn](/vi/plugins/built-in/).
+- **Muốn hiểu bên trong?** Đọc tổng quan [Kiến trúc](/vi/architecture/) hoặc tìm hiểu [viết plugin](/vi/plugins/writing-plugins/).
