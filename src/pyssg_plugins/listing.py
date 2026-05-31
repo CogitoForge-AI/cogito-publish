@@ -29,7 +29,9 @@ from pyssg.build import Build
 from pyssg.builder import Builder
 from pyssg.content import (
     GENERATED,
+    LOCALE,
     OUTPUT_PATH,
+    TRANSLATION_KEY,
     URL,
     Collection,
     collections,
@@ -85,28 +87,39 @@ class Listing:
         if self._sort is not None:
             pages = sort_pages(pages, self._sort)
 
+        slug = slugify(collection.name)
+        locale = collection.meta.get(LOCALE)
+        locale = str(locale) if locale is not None else None
+
         # The URL slugifies the collection name; the title keeps it verbatim.
-        base = self._base_url.replace(":name", slugify(collection.name))
+        # ``:locale`` resolves from the (locale-grouped) collection.
+        base = _fill(self._base_url, slug, locale)
         if self._title is not None:
-            title = self._title.replace(":name", collection.name)
+            title = _fill_title(self._title, collection.name, locale)
         else:
             title = collection.name
+        # A locale-independent identity so the page pairs with its sibling in
+        # other locales (the I18n plugin reads ``translation_key``).
+        tkey = _strip_locale(self._base_url).replace(":name", slug)
 
         if self._page_size is None or self._page_size <= 0:
-            self._make_page(build, base, title, pages, collection)
+            self._make_page(build, base, title, pages, collection, locale, tkey)
             return
 
         chunks = _chunk(pages, self._page_size)
         total = len(chunks)
         for index, chunk in enumerate(chunks, start=1):
             url = base if index == 1 else f"{base}page/{index}/"
+            page_key = tkey if index == 1 else f"{tkey}page/{index}/"
             paginator: dict[str, object] = {
                 "number": index,
                 "total_pages": total,
                 "prev_url": _page_url(base, index - 1) if index > 1 else None,
                 "next_url": _page_url(base, index + 1) if index < total else None,
             }
-            self._make_page(build, url, title, chunk, collection, paginator)
+            self._make_page(
+                build, url, title, chunk, collection, locale, page_key, paginator
+            )
 
     def _make_page(
         self,
@@ -115,6 +128,8 @@ class Listing:
         title: str,
         items: list[Source],
         collection: Collection,
+        locale: str | None,
+        translation_key: str,
         paginator: dict[str, object] | None = None,
     ) -> None:
         output_path = url_to_output_path(url)
@@ -127,9 +142,30 @@ class Listing:
         # and `page.items` would resolve to the dict method, not this list.
         source.meta["entries"] = [page_ref(page) for page in items]
         source.meta["collection"] = collection.name
+        if locale is not None:
+            source.meta[LOCALE] = locale
+            source.meta[TRANSLATION_KEY] = translation_key
         if paginator is not None:
             source.meta["paginator"] = paginator
         build.sources.append(source)
+
+
+def _fill(base_url: str, slug: str, locale: str | None) -> str:
+    url = base_url.replace(":name", slug)
+    if locale is not None:
+        return url.replace(":locale", locale)
+    return _strip_locale(url)
+
+
+def _fill_title(title: str, name: str, locale: str | None) -> str:
+    filled = title.replace(":name", name)
+    return filled.replace(":locale", locale or "")
+
+
+def _strip_locale(base_url: str) -> str:
+    """Drop the ``:locale`` path segment, yielding a locale-independent path."""
+
+    return base_url.replace(":locale/", "").replace(":locale", "")
 
 
 def _page_url(base: str, number: int) -> str:

@@ -18,6 +18,7 @@ from pyssg_plugins.dev_server import DevServer
 from pyssg_plugins.fingerprint import Fingerprint
 from pyssg_plugins.frontmatter import Frontmatter
 from pyssg_plugins.highlight import Highlight
+from pyssg_plugins.i18n import I18n
 from pyssg_plugins.listing import Listing
 from pyssg_plugins.markdown import Markdown
 from pyssg_plugins.markdown_page import MarkdownPage
@@ -41,6 +42,7 @@ __all__ = [
     "Fingerprint",
     "Frontmatter",
     "Highlight",
+    "I18n",
     "Listing",
     "Markdown",
     "MarkdownPage",

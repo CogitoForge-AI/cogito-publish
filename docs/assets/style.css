@@ -154,6 +154,9 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 4px;
+  /* Hug the right edge at every width, even when the tagline (the flex spacer)
+     is hidden on small screens. */
+  margin-left: auto;
 }
 .topbar-link {
   padding: 6px 12px;
@@ -166,6 +169,40 @@ a:hover {
   background: var(--bg-mute);
   color: var(--fg);
   text-decoration: none;
+}
+
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 6px;
+  padding: 2px 6px 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-soft);
+}
+.lang-globe {
+  color: var(--fg-mute);
+  margin-right: 2px;
+}
+.lang-switcher .lang {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  color: var(--fg-mute);
+}
+.lang-switcher a.lang:hover {
+  color: var(--fg);
+  background: var(--bg-mute);
+  text-decoration: none;
+}
+.lang-switcher .lang.active {
+  color: var(--brand-contrast);
+  background: var(--brand);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ---------- Layout ---------- */

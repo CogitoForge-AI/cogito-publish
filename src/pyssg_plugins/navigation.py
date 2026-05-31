@@ -22,7 +22,6 @@ linked through ``source.meta["prev"|"next"]`` (docs prev/next).
 from __future__ import annotations
 
 from collections.abc import Callable
-from pathlib import Path
 
 from pyssg.build import Build
 from pyssg.builder import Builder
@@ -52,12 +51,17 @@ class Navigation:
         include: Predicate | None = None,
         items: list[dict[str, object]] | None = None,
         sequential: bool = False,
+        group_by: str | None = None,
     ) -> None:
         self._menu = menu
         self._mode = mode
         self._include = include
         self._items = items
         self._sequential = sequential
+        # When set, build one menu per ``source.meta[group_by]`` value, named
+        # ``"<menu>:<value>"`` (e.g. "main:vi"), so a layout selects the menu for
+        # the current page's locale.
+        self._group_by = group_by
 
     def apply(self, builder: Builder) -> None:
         # Declared here too: the site() preset uses Navigation without Collections.
@@ -67,22 +71,43 @@ class Navigation:
     def _collect(self, build: Build) -> None:
         if self._items is not None:
             tree = [_node_from_dict(item) for item in self._items]
-        else:
-            pages = [
-                source
-                for source in build.sources
-                if not is_generated(source)
-                and not is_draft(source)
-                and (self._include is None or self._include(source))
-            ]
-            if self._mode == "frontmatter":
-                tree = self._frontmatter_menu(pages)
-            else:
-                tree = self._folder_tree(pages)
+            menus(build)[self._menu] = tree
+            if self._sequential:
+                _link_sequential(tree)
+            return
 
-        menus(build)[self._menu] = tree
-        if self._sequential:
-            _link_sequential(tree)
+        pages = [
+            source
+            for source in build.sources
+            if not is_generated(source)
+            and not is_draft(source)
+            and (self._include is None or self._include(source))
+        ]
+        for name, (value, group_pages) in self._partition(pages).items():
+            # In a grouped folder menu the group value is the top folder (the
+            # locale segment); strip it so the sidebar is rooted at the locale's
+            # content, not under a redundant "vi"/"en" node.
+            tree = (
+                self._frontmatter_menu(group_pages)
+                if self._mode == "frontmatter"
+                else self._folder_tree(group_pages, strip=value)
+            )
+            menus(build)[name] = tree
+            if self._sequential:
+                _link_sequential(tree)
+
+    def _partition(
+        self, pages: list[Source]
+    ) -> dict[str, tuple[str | None, list[Source]]]:
+        if self._group_by is None:
+            return {self._menu: (None, pages)}
+        groups: dict[str, tuple[str | None, list[Source]]] = {}
+        for page in pages:
+            value = page.meta.get(self._group_by)
+            text = str(value) if value is not None else None
+            name = f"{self._menu}:{text}" if text is not None else self._menu
+            groups.setdefault(name, (text, []))[1].append(page)
+        return groups
 
     def _frontmatter_menu(self, pages: list[Source]) -> list[NavNode]:
         nodes = [
@@ -106,7 +131,9 @@ class Navigation:
             return self._menu in [str(item) for item in declaration]
         return False
 
-    def _folder_tree(self, pages: list[Source]) -> list[NavNode]:
+    def _folder_tree(
+        self, pages: list[Source], strip: str | None = None
+    ) -> list[NavNode]:
         root: list[NavNode] = []
         folders: dict[tuple[str, ...], NavNode] = {}
 
@@ -123,8 +150,10 @@ class Navigation:
 
         for page in pages:
             relpath = page.relpath
-            parent_dir = relpath.parent
-            folder_parts = () if parent_dir == Path(".") else parent_dir.parts
+            parts = relpath.parts
+            if strip is not None and parts and parts[0] == strip:
+                parts = parts[1:]
+            folder_parts = parts[:-1]
 
             if relpath.stem == "index":
                 node = ensure_folder(folder_parts)

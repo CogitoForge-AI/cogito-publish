@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ page.locale | default('en') }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,11 +10,11 @@
   {% if highlight_css is defined %}<style>{{ highlight_css() }}</style>{% endif %}
 </head>
 <body>
-  {{ partial("partials/topbar.html") }}
+  {{ partial("partials/topbar.html", {"page": page}) }}
 
   <div class="layout">
     <aside class="sidebar">
-      {{ partial("partials/sidebar.html", {"current_url": page.url}) }}
+      {{ partial("partials/sidebar.html", {"current_url": page.url, "locale": page.locale | default('en')}) }}
     </aside>
 
     <main class="content">

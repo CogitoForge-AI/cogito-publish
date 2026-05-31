@@ -50,6 +50,7 @@ class Collections:
         sort: str = "auto",
         include_drafts: bool = False,
         tags_field: str = "tags",
+        group_by: str | None = None,
     ) -> None:
         self._by_tag = by_tag
         self._by_folder = by_folder
@@ -57,6 +58,11 @@ class Collections:
         self._sort = sort
         self._include_drafts = include_drafts
         self._tags_field = tags_field
+        # Optional extra dimension: when set, tag collections are keyed per group
+        # value (read from ``source.meta[group_by]``) so e.g. tag "python" in two
+        # locales becomes two collections. The group value is stored on
+        # ``collection.meta[group_by]`` for downstream plugins (e.g. Listing).
+        self._group_by = group_by
 
     def apply(self, builder: Builder) -> None:
         builder.schema.declare(FieldSpec("date", type="date", example="2026-01-31"))
@@ -90,6 +96,12 @@ class Collections:
         for collection in registry.values():
             collection.pages = sort_pages(collection.pages, self._sort)
 
+    def _group(self, source: Source) -> str | None:
+        if self._group_by is None:
+            return None
+        value = source.meta.get(self._group_by)
+        return str(value) if value is not None else None
+
     def _add_folders(
         self, registry: dict[str, Collection], pages: list[Source]
     ) -> None:
@@ -97,19 +109,32 @@ class Collections:
             folder = page.relpath.parent
             if folder == Path("."):
                 continue
+            # Folder names already carry the locale segment (``vi/posts``), so the
+            # key needs no group prefix; the value is still stamped on the
+            # collection so listings can build per-locale URLs.
             name = folder.as_posix()
             collection = registry.setdefault(
                 name, Collection(name=name, kind=KIND_FOLDER)
             )
+            self._stamp_group(collection, page)
             collection.pages.append(page)
 
     def _add_tags(self, registry: dict[str, Collection], pages: list[Source]) -> None:
         for page in pages:
+            group = self._group(page)
             for tag in _tags(page, self._tags_field):
+                key = f"{group}/{tag}" if group is not None else tag
                 collection = registry.setdefault(
-                    tag, Collection(name=tag, kind=KIND_TAG)
+                    key, Collection(name=tag, kind=KIND_TAG)
                 )
+                self._stamp_group(collection, page)
                 collection.pages.append(page)
+
+    def _stamp_group(self, collection: Collection, source: Source) -> None:
+        if self._group_by is not None:
+            group = self._group(source)
+            if group is not None:
+                collection.meta[self._group_by] = group
 
 
 def _tags(source: Source, field: str) -> list[str]:
