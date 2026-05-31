@@ -60,7 +60,7 @@ jobs:
       # Upload only the build artifacts. `uv build` also writes a `dist/.gitignore`
       # (a single `*`), and a bare `dist/*` glob would attach it to the Release.
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           prerelease: ${{ steps.prerelease.outputs.value }}
