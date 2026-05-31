@@ -96,4 +96,4 @@ Your site is now in `public/`. To use a config file in a different location:
 pyssg build -c path/to/pyssg.config.py
 ```
 
-Next: learn the [configuration](/en/guide/configuration/) options in detail.
+Next: learn the [configuration](/guide/configuration/) options in detail.

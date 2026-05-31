@@ -104,9 +104,19 @@ class I18nBlogPresetTest(unittest.TestCase):
         self.assertEqual(len(feeds), 2)
         self.assertNotIn(Rss, types_in(self._stack(rss=False)))
 
-    def test_root_redirect_toggles_redirects_plugin(self) -> None:
-        self.assertIn(Redirects, types_in(self._stack()))
-        self.assertNotIn(Redirects, types_in(self._stack(root_redirect=False)))
+    def test_default_locale_at_root_no_redirect(self) -> None:
+        # The default locale lives at the root, so no "/" redirect is added.
+        self.assertNotIn(Redirects, types_in(self._stack()))
+
+    def test_default_locale_index_at_root_others_prefixed(self) -> None:
+        listings = [p for p in self._stack() if isinstance(p, Listing)]
+        index_urls = {p._base_url for p in listings if p._collection is not None}
+        self.assertIn("/", index_urls)
+        self.assertIn("/en/", index_urls)
+
+    def test_default_locale_feed_at_root_others_prefixed(self) -> None:
+        paths = {p._path for p in self._stack() if isinstance(p, Rss)}
+        self.assertEqual(paths, {"feed.xml", "en/feed.xml"})
 
     def test_default_locale_must_be_in_locales(self) -> None:
         with self.assertRaises(ValueError):
@@ -132,9 +142,8 @@ class I18nDocsPresetTest(unittest.TestCase):
         self.assertIn(Navigation, types)
         self.assertNotIn(Listing, types)
 
-    def test_root_redirect_toggles_redirects_plugin(self) -> None:
-        self.assertIn(Redirects, types_in(self._stack()))
-        self.assertNotIn(Redirects, types_in(self._stack(root_redirect=False)))
+    def test_default_locale_at_root_no_redirect(self) -> None:
+        self.assertNotIn(Redirects, types_in(self._stack()))
 
     def test_default_locale_must_be_in_locales(self) -> None:
         with self.assertRaises(ValueError):

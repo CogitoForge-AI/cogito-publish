@@ -3,7 +3,14 @@
 Folder-based only: the first path segment of a source decides its locale
 (``vi/posts/x.md`` -> locale ``vi``). The locale segment is kept in the path on
 purpose, so :class:`~pyssg_plugins.permalink.Permalink` derives the public URL
-``/vi/posts/x/`` for free -- every locale, including the default, is prefixed.
+from it.
+
+The default locale renders at the site root (``en/posts/x.md`` ->
+``/posts/x/`` when ``en`` is the default); every other locale keeps its prefix
+(``/vi/posts/x/``). I18n communicates this to Permalink via
+``meta["locale_prefix"]`` -- ``""`` for the default locale, the segment
+otherwise -- so the relpath itself is never rewritten (collection names and
+navigation trees keep the locale segment).
 
 It taps ``collect`` twice:
 
@@ -31,6 +38,7 @@ from pyssg.builder import Builder
 from pyssg.content import (
     I18N,
     LOCALE,
+    LOCALE_PREFIX,
     TRANSLATION_KEY,
     TRANSLATIONS,
     URL,
@@ -72,11 +80,15 @@ class I18n:
             parts = source.relpath.parts
             first = parts[0] if parts else ""
             if first in self._locales:
-                source.meta[LOCALE] = first
+                locale = first
                 rest = Path(*parts[1:]) if len(parts) > 1 else source.relpath
             else:
-                source.meta[LOCALE] = self._default
+                locale = self._default
                 rest = source.relpath
+            source.meta[LOCALE] = locale
+            # The default locale lives at the root (no prefix); others keep
+            # their segment. Permalink reads this to strip the prefix.
+            source.meta[LOCALE_PREFIX] = "" if locale == self._default else locale
             source.meta[TRANSLATION_KEY] = self._translation_key(source, rest)
 
     def _translation_key(self, source: Source, rest: Path) -> str:

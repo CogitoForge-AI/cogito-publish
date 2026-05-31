@@ -43,7 +43,7 @@ contract between the kernel and its extensions.
 
 The `Builder` is created from a `Config`. On construction it applies every
 plugin (calling `apply`), then fires the `initialize` hook. Calling `run()`
-executes one full [lifecycle](/en/architecture/lifecycle/) and returns the
+executes one full [lifecycle](/architecture/lifecycle/) and returns the
 resulting `Build`.
 
 Because the builder is a long-lived object, it is the natural home for a future

@@ -52,9 +52,9 @@ Config(..., options={"title": "Docs", "author": "Jane"})
 
 ## Choosing plugins
 
-You can use a [preset](/en/plugins/presets/) or assemble plugins by hand. The order
+You can use a [preset](/plugins/presets/) or assemble plugins by hand. The order
 matters: plugins run in the order listed, and within a lifecycle hook the order
-is refined by each plugin's *stage*. See [Lifecycle](/en/architecture/lifecycle/)
+is refined by each plugin's *stage*. See [Lifecycle](/architecture/lifecycle/)
 for the full picture.
 
 ```python

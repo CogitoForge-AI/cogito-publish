@@ -30,6 +30,7 @@ from pyssg.builder import Builder
 from pyssg.content import (
     GENERATED,
     LOCALE,
+    LOCALE_PREFIX,
     OUTPUT_PATH,
     TRANSLATION_KEY,
     URL,
@@ -90,17 +91,24 @@ class Listing:
         slug = slugify(collection.name)
         locale = collection.meta.get(LOCALE)
         locale = str(locale) if locale is not None else None
+        # The default locale renders at the root: drop the :locale token even
+        # though the collection still carries its locale value.
+        at_root = collection.meta.get(LOCALE_PREFIX) == ""
 
         # The URL slugifies the collection name; the title keeps it verbatim.
         # ``:locale`` resolves from the (locale-grouped) collection.
-        base = _fill(self._base_url, slug, locale)
+        base = _fill(self._base_url, slug, locale, at_root)
         if self._title is not None:
-            title = _fill_title(self._title, collection.name, locale)
+            title = _fill_title(self._title, collection.name, locale, at_root)
         else:
             title = collection.name
         # A locale-independent identity so the page pairs with its sibling in
-        # other locales (the I18n plugin reads ``translation_key``).
+        # other locales (the I18n plugin reads ``translation_key``). Drop both
+        # the ``:locale`` token and a literal leading ``/<locale>/`` segment, so
+        # per-locale base URLs (e.g. ``/`` and ``/en/``) resolve to one key.
         tkey = _strip_locale(self._base_url).replace(":name", slug)
+        if locale and tkey.startswith(f"/{locale}/"):
+            tkey = "/" + tkey[len(locale) + 2 :]
 
         if self._page_size is None or self._page_size <= 0:
             self._make_page(build, base, title, pages, collection, locale, tkey)
@@ -150,16 +158,18 @@ class Listing:
         build.sources.append(source)
 
 
-def _fill(base_url: str, slug: str, locale: str | None) -> str:
+def _fill(base_url: str, slug: str, locale: str | None, at_root: bool = False) -> str:
     url = base_url.replace(":name", slug)
-    if locale is not None:
+    if locale is not None and not at_root:
         return url.replace(":locale", locale)
     return _strip_locale(url)
 
 
-def _fill_title(title: str, name: str, locale: str | None) -> str:
+def _fill_title(
+    title: str, name: str, locale: str | None, at_root: bool = False
+) -> str:
     filled = title.replace(":name", name)
-    return filled.replace(":locale", locale or "")
+    return filled.replace(":locale", "" if at_root else (locale or ""))
 
 
 def _strip_locale(base_url: str) -> str:

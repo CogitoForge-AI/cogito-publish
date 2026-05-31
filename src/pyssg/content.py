@@ -42,6 +42,10 @@ GENERATED = "generated"
 PREV = "prev"
 NEXT = "next"
 LOCALE = "locale"
+# "" means the locale renders at the site root (the default locale); a non-empty
+# value (e.g. "en") is the path segment kept in the URL. Set by I18n, read by
+# Permalink (to strip the prefix) and Listing (to drop the :locale token).
+LOCALE_PREFIX = "locale_prefix"
 TRANSLATION_KEY = "translation_key"
 TRANSLATIONS = "translations"
 

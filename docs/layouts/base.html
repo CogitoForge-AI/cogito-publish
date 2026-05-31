@@ -10,11 +10,13 @@
   {% if highlight_css is defined %}<style>{{ highlight_css() }}</style>{% endif %}
 </head>
 <body>
-  {{ partial("partials/topbar.html", {"page": page}) }}
+  {% set lp = page.locale_prefix | default('') %}
+  {% set home = '/' if lp == '' else '/' + lp + '/' %}
+  {{ partial("partials/topbar.html", {"page": page, "home": home}) }}
 
   <div class="layout">
     <aside class="sidebar">
-      {{ partial("partials/sidebar.html", {"current_url": page.url, "locale": page.locale | default('en')}) }}
+      {{ partial("partials/sidebar.html", {"current_url": page.url, "locale": page.locale | default('en'), "home": home}) }}
     </aside>
 
     <main class="content">

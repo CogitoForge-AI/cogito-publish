@@ -15,6 +15,12 @@ Resolution order (highest priority first):
 
 Placeholders in patterns / permalinks: ``:slug``, ``:year``, ``:month``,
 ``:day``, ``:title`` and ``:<key>`` for any frontmatter value.
+
+When the I18n plugin marks a source as the default locale (``meta``
+``locale_prefix`` is ``""``), the derived URL has its locale segment stripped
+so the default locale renders at the site root (``/vi/posts/x/`` -> ``/posts/x/``).
+This applies only to the path-derived URL; an explicit ``permalink`` or
+``pattern`` is the author's responsibility and is left untouched.
 """
 
 from __future__ import annotations
@@ -24,7 +30,14 @@ from pathlib import Path
 
 from pyssg.build import Build
 from pyssg.builder import Builder
-from pyssg.content import OUTPUT_PATH, URL, is_generated, url_to_output_path
+from pyssg.content import (
+    LOCALE,
+    LOCALE_PREFIX,
+    OUTPUT_PATH,
+    URL,
+    is_generated,
+    url_to_output_path,
+)
 from pyssg.models import Source
 
 # Permalink runs before Collections (-100), Listing (0) and Navigation (100).
@@ -59,6 +72,7 @@ class Permalink:
             url = _normalize_url(_apply_pattern(self._pattern, source))
         else:
             url = _default_url(source.relpath, self._pretty)
+            url = _strip_locale_prefix(url, source)
 
         source.meta[URL] = url
         source.meta[OUTPUT_PATH] = url_to_output_path(url)
@@ -66,6 +80,26 @@ class Permalink:
 
 def slugify(text: str) -> str:
     return _SLUG_STRIP.sub("-", text.strip().lower()).strip("-")
+
+
+def _strip_locale_prefix(url: str, source: Source) -> str:
+    """Drop the leading ``/<locale>/`` for a default-locale page (root rendering).
+
+    A no-op unless I18n marked the source with ``locale_prefix == ""``; Permalink
+    used standalone (no I18n) leaves the URL untouched.
+    """
+
+    if source.meta.get(LOCALE_PREFIX) != "":
+        return url
+    locale = source.meta.get(LOCALE)
+    if not isinstance(locale, str) or not locale:
+        return url
+    segment = f"/{locale}/"
+    if url == segment:
+        return "/"
+    if url.startswith(segment):
+        return "/" + url[len(segment) :]
+    return url
 
 
 def _apply_pattern(pattern: str, source: Source) -> str:

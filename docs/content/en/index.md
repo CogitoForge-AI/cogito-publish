@@ -51,8 +51,8 @@ That is the entire setup behind the site you are reading.
 
 ## Where to next
 
-- **New here?** Start with [Getting started](/en/guide/getting-started/).
-- **Building pages?** Learn [Templating](/en/templating/) and the [built-in plugins](/en/plugins/built-in/).
-- **Want the internals?** Read the [Architecture](/en/architecture/) overview or learn about [writing plugins](/en/plugins/writing-plugins/).
+- **New here?** Start with [Getting started](/guide/getting-started/).
+- **Building pages?** Learn [Templating](/templating/) and the [built-in plugins](/plugins/built-in/).
+- **Want the internals?** Read the [Architecture](/architecture/) overview or learn about [writing plugins](/plugins/writing-plugins/).
 
 
