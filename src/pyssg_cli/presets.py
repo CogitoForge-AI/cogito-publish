@@ -44,16 +44,21 @@ from pyssg_plugins.rss import Rss
 from pyssg_plugins.seo import Seo
 from pyssg_plugins.sitemap import Sitemap
 from pyssg_plugins.template import Template
+from pyssg_plugins.wikilinks import WikiLink
 from pyssg_plugins.write_file import WriteFile
 
 
-def _head(markdown_extensions: Sequence[str], highlight: bool) -> list[Plugin]:
+def _head(
+    markdown_extensions: Sequence[str], highlight: bool, wikilinks: bool
+) -> list[Plugin]:
     head: list[Plugin] = [
         ReadFile(),
         Frontmatter(),
         Markdown(extensions=markdown_extensions),
         LinkResolver(),
     ]
+    if wikilinks:
+        head.append(WikiLink())
     if highlight:
         head.append(Highlight(dark_style="github-dark"))
     return head
@@ -99,9 +104,10 @@ def docs(
     strict_links: bool = False,
     seo: bool = True,
     highlight: bool = False,
+    wikilinks: bool = False,
 ) -> list[Plugin]:
     return [
-        *_head(markdown_extensions, highlight),
+        *_head(markdown_extensions, highlight, wikilinks),
         Permalink(),
         Collections(by_tag=False, by_folder=True),
         Navigation(mode="folder", sequential=True),
@@ -133,9 +139,10 @@ def blog(
     strict_links: bool = False,
     seo: bool = True,
     highlight: bool = False,
+    wikilinks: bool = False,
 ) -> list[Plugin]:
     plugins: list[Plugin] = [
-        *_head(markdown_extensions, highlight),
+        *_head(markdown_extensions, highlight, wikilinks),
         Permalink(),
         Collections(by_tag=True, by_folder=True),
         Listing(
@@ -180,6 +187,7 @@ def i18n_blog(
     strict_links: bool = False,
     seo: bool = True,
     highlight: bool = False,
+    wikilinks: bool = False,
 ) -> list[Plugin]:
     """A multilingual blog: one ``blog()`` partitioned per locale.
 
@@ -199,7 +207,7 @@ def i18n_blog(
         return "/" if locale == default_locale else f"/{locale}/"
 
     plugins: list[Plugin] = [
-        *_head(markdown_extensions, highlight),
+        *_head(markdown_extensions, highlight, wikilinks),
         I18n(locales=list(locales), default_locale=default_locale),
         Permalink(),
         Collections(by_tag=True, by_folder=True, group_by="locale"),
@@ -257,6 +265,7 @@ def i18n_docs(
     strict_links: bool = False,
     seo: bool = True,
     highlight: bool = False,
+    wikilinks: bool = False,
 ) -> list[Plugin]:
     """Multilingual technical documentation: ``docs()`` partitioned per locale.
 
@@ -273,7 +282,7 @@ def i18n_docs(
         )
 
     plugins: list[Plugin] = [
-        *_head(markdown_extensions, highlight),
+        *_head(markdown_extensions, highlight, wikilinks),
         I18n(locales=list(locales), default_locale=default_locale),
         Permalink(),
         Collections(by_tag=False, by_folder=True, group_by="locale"),
@@ -305,9 +314,10 @@ def site(
     strict_links: bool = False,
     seo: bool = True,
     highlight: bool = False,
+    wikilinks: bool = False,
 ) -> list[Plugin]:
     return [
-        *_head(markdown_extensions, highlight),
+        *_head(markdown_extensions, highlight, wikilinks),
         Permalink(),
         Navigation(mode="frontmatter"),
         *_extras(

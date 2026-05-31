@@ -14,11 +14,15 @@ from pyssg_plugins import (
     Listing,
     Markdown,
     MarkdownPage,
+    Minify,
     Navigation,
     Permalink,
     ReadFile,
     Redirects,
+    Robots,
     Rss,
+    Sitemap,
+    WikiLink,
     WriteFile,
 )
 
@@ -60,6 +64,12 @@ class PresetShapeTest(unittest.TestCase):
         listings = [p for p in stack if isinstance(p, Listing)]
         self.assertTrue(listings)
 
+    def test_extras_flags_wire_their_plugins(self) -> None:
+        stack = docs(sitemap=True, robots=True, markdown_pages=True, minify=True)
+        types = types_in(stack)
+        for plugin_type in (Sitemap, Robots, MarkdownPage, Minify):
+            self.assertIn(plugin_type, types)
+
     def test_broken_links_flag_adds_plugin(self) -> None:
         self.assertNotIn(BrokenLinks, types_in(docs()))
         self.assertIn(BrokenLinks, types_in(docs(broken_links=True)))
@@ -82,6 +92,14 @@ class PresetShapeTest(unittest.TestCase):
             self.assertIn(Highlight, stack)
             # Highlight must come after Markdown so the fenced blocks exist.
             self.assertGreater(stack.index(Highlight), stack.index(Markdown))
+
+    def test_wikilinks_flag_adds_plugin_after_markdown(self) -> None:
+        for preset in (docs, blog, site):
+            self.assertNotIn(WikiLink, types_in(preset()))
+            stack = types_in(preset(wikilinks=True))
+            self.assertIn(WikiLink, stack)
+            # WikiLink post-processes the rendered HTML, so it follows Markdown.
+            self.assertGreater(stack.index(WikiLink), stack.index(Markdown))
 
 
 class I18nBlogPresetTest(unittest.TestCase):

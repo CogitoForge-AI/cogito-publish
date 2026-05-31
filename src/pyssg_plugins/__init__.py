@@ -36,6 +36,7 @@ from pyssg_plugins.sitemap import Sitemap
 from pyssg_plugins.static_files import StaticFiles
 from pyssg_plugins.stats import Statistics
 from pyssg_plugins.template import Template
+from pyssg_plugins.wikilinks import WikiLink
 from pyssg_plugins.write_file import WriteFile
 
 __all__ = [
@@ -62,5 +63,6 @@ __all__ = [
     "StaticFiles",
     "Statistics",
     "Template",
+    "WikiLink",
     "WriteFile",
 ]
