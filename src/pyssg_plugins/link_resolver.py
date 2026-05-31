@@ -75,7 +75,7 @@ class LinkResolver:
         if not source.content:
             return source
         registry = _registry(build)
-        broken = _broken_links(build)
+        broken = broken_links(build)
 
         def replace(match: re.Match[str]) -> str:
             resolved = self._resolve(match.group(3), source.relpath, registry, broken)
@@ -153,8 +153,12 @@ def _registry(build: Build) -> dict[str, str]:
     return registry
 
 
-def _broken_links(build: Build) -> list[BrokenLink]:
-    """Return the accumulator for unresolved internal links, creating it once."""
+def broken_links(build: Build) -> list[BrokenLink]:
+    """Return the accumulator for unresolved internal links, creating it once.
+
+    Shared with other link plugins (e.g. WikiLink) so every unresolved link is
+    reported through the same ``build.meta["broken_links"]`` list.
+    """
 
     existing = build.meta.get(BROKEN_LINKS)
     if isinstance(existing, list):
