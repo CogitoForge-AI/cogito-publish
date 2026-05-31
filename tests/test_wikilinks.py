@@ -202,6 +202,142 @@ class IndexTest(unittest.TestCase):
         self.assertIn('<span class="wikilink-broken">draft</span>', out)
 
 
+def build_with_content(pages: dict[str, str]) -> Build:
+    """A build whose sources carry rendered content (for embed tests)."""
+
+    build = Build(config=Config(src=Path("content"), out=Path("public")))
+    for relpath, content in pages.items():
+        source = Source(path=Path(relpath), relpath=Path(relpath), content=content)
+        source.meta[URL] = "/" + relpath.removesuffix(".md") + "/"
+        build.sources.append(source)
+    return build
+
+
+def embed(build: Build, relpath: str) -> str:
+    source = next(s for s in build.sources if s.relpath == Path(relpath))
+    WikiLink()._embed(source, build)
+    return source.content
+
+
+class EmbedTest(unittest.TestCase):
+    def test_full_body_is_inlined(self) -> None:
+        build = build_with_content(
+            {"Note.md": "<p>note body</p>", "page.md": "<p>x ![[Note]]</p>"}
+        )
+        out = embed(build, "page.md")
+        self.assertIn('<div class="wikilink-embed"><p>note body</p></div>', out)
+
+    def test_section_embed_extracts_one_section(self) -> None:
+        note = "<h2>Intro</h2>\n<p>a</p>\n<h2>Details</h2>\n<p>b</p>"
+        build = build_with_content({"Note.md": note, "page.md": "![[Note#Details]]"})
+        out = embed(build, "page.md")
+        self.assertIn("<h2>Details</h2>", out)
+        self.assertIn("<p>b</p>", out)
+        self.assertNotIn("Intro", out)
+
+    def test_section_stops_at_same_level_heading(self) -> None:
+        note = "<h2>Intro</h2>\n<p>a</p>\n<h2>Details</h2>\n<p>b</p>"
+        build = build_with_content({"Note.md": note, "page.md": "![[Note#Intro]]"})
+        out = embed(build, "page.md")
+        self.assertIn("<p>a</p>", out)
+        self.assertNotIn("Details", out)
+
+    def test_section_includes_deeper_subheadings(self) -> None:
+        note = "<h2>Intro</h2>\n<h3>Sub</h3>\n<p>x</p>\n<h2>Next</h2>\n<p>y</p>"
+        build = build_with_content({"Note.md": note, "page.md": "![[Note#Intro]]"})
+        out = embed(build, "page.md")
+        self.assertIn("<h3>Sub</h3>", out)
+        self.assertIn("<p>x</p>", out)
+        self.assertNotIn("Next", out)
+
+    def test_missing_section_is_broken(self) -> None:
+        build = build_with_content(
+            {"Note.md": "<h2>Intro</h2>", "page.md": "![[Note#Nope]]"}
+        )
+        out = embed(build, "page.md")
+        self.assertIn('<span class="wikilink-broken">![[Note#Nope]]</span>', out)
+        recorded = build.meta.get(BROKEN_LINKS)
+        assert isinstance(recorded, list)
+        self.assertEqual(recorded[0], BrokenLink("page.md", "![[Note#Nope]]"))
+
+    def test_unknown_target_is_broken_and_recorded(self) -> None:
+        build = build_with_content({"page.md": "![[Ghost]]"})
+        out = embed(build, "page.md")
+        self.assertIn('<span class="wikilink-broken">![[Ghost]]</span>', out)
+        recorded = build.meta.get(BROKEN_LINKS)
+        assert isinstance(recorded, list)
+        self.assertEqual(recorded[0], BrokenLink("page.md", "![[Ghost]]"))
+
+    def test_nested_embed_is_expanded(self) -> None:
+        build = build_with_content(
+            {
+                "Inner.md": "<p>inner</p>",
+                "Outer.md": "<p>outer ![[Inner]]</p>",
+                "page.md": "![[Outer]]",
+            }
+        )
+        out = embed(build, "page.md")
+        self.assertIn("inner", out)
+        self.assertIn("outer", out)
+
+    def test_recursive_cycle_is_broken(self) -> None:
+        build = build_with_content(
+            {"A.md": "<p>a ![[B]]</p>", "B.md": "<p>b ![[A]]</p>"}
+        )
+        out = embed(build, "A.md")
+        self.assertIn("(recursive)", out)
+        self.assertIn(">a ", out)
+        self.assertIn("b ", out)
+
+    def test_self_embed_is_broken(self) -> None:
+        build = build_with_content({"A.md": "<p>a ![[A]]</p>"})
+        out = embed(build, "A.md")
+        self.assertIn("(recursive)", out)
+
+    def test_embed_inside_code_is_untouched(self) -> None:
+        build = build_with_content(
+            {"Note.md": "<p>n</p>", "page.md": "<pre><code>![[Note]]</code></pre>"}
+        )
+        out = embed(build, "page.md")
+        self.assertEqual(out, "<pre><code>![[Note]]</code></pre>")
+
+    def test_no_embeds_is_unchanged(self) -> None:
+        build = build_with_content({"page.md": "<p>plain</p>"})
+        self.assertEqual(embed(build, "page.md"), "<p>plain</p>")
+
+    def test_empty_content_is_noop(self) -> None:
+        build = Build(config=Config(src=Path("c"), out=Path("o")))
+        source = Source(path=Path("a.md"), relpath=Path("a.md"), content="")
+        WikiLink()._embed(source, build)
+        self.assertEqual(source.content, "")
+
+    def test_embed_index_skips_url_less_sources(self) -> None:
+        build = build_with_content({"page.md": "![[Note]]"})
+        build.sources.insert(
+            0, Source(path=Path("draft.md"), relpath=Path("draft.md"), content="d")
+        )
+        out = embed(build, "page.md")
+        # No "Note" page exists, so the embed is broken (the URL-less draft is
+        # not indexed and cannot satisfy it either).
+        self.assertIn('<span class="wikilink-broken">![[Note]]</span>', out)
+
+    def test_embed_index_is_cached_across_sources(self) -> None:
+        build = build_with_content(
+            {"Note.md": "<p>n</p>", "p1.md": "![[Note]]", "p2.md": "![[Note]]"}
+        )
+        embed(build, "p1.md")
+        self.assertIn("_wikilink_embed_index", build.meta)
+        # A second source reuses the cached snapshot (the cache-hit path).
+        out = embed(build, "p2.md")
+        self.assertIn('<div class="wikilink-embed"><p>n</p></div>', out)
+
+    def test_custom_embed_class(self) -> None:
+        build = build_with_content({"Note.md": "<p>n</p>", "page.md": "![[Note]]"})
+        source = next(s for s in build.sources if s.relpath == Path("page.md"))
+        WikiLink(embed_class="emb")._embed(source, build)
+        self.assertIn('<div class="emb"><p>n</p></div>', source.content)
+
+
 class HookTest(unittest.TestCase):
     def test_apply_taps_transform(self) -> None:
         from pyssg.builder import Builder
@@ -215,6 +351,15 @@ class HookTest(unittest.TestCase):
         build.sources.append(source)
         result = builder.hooks.transform.call(source, build)
         self.assertIn('href="/note/"', result.content)
+
+    def test_apply_taps_render_for_embeds(self) -> None:
+        from pyssg.builder import Builder
+
+        builder = Builder(Config(src=Path("c"), out=Path("o"), plugins=[WikiLink()]))
+        build = build_with_content({"Note.md": "<p>n</p>", "page.md": "![[Note]]"})
+        source = next(s for s in build.sources if s.relpath == Path("page.md"))
+        builder.hooks.render.call(source, build)
+        self.assertIn('<div class="wikilink-embed"><p>n</p></div>', source.content)
 
 
 if __name__ == "__main__":
