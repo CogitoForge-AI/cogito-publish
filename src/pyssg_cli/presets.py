@@ -37,7 +37,6 @@ from pyssg_plugins.minify import Minify
 from pyssg_plugins.navigation import Navigation
 from pyssg_plugins.permalink import Permalink
 from pyssg_plugins.read_file import ReadFile
-from pyssg_plugins.redirects import Redirects
 from pyssg_plugins.robots import Robots
 from pyssg_plugins.rss import Rss
 from pyssg_plugins.seo import Seo
@@ -160,15 +159,14 @@ def i18n_blog(
     markdown_pages: bool = False,
     seo: bool = True,
     highlight: bool = False,
-    root_redirect: bool = True,
 ) -> list[Plugin]:
     """A multilingual blog: one ``blog()`` partitioned per locale.
 
-    Sources live under ``<locale>/<posts_dir>/...``; the locale segment is kept
-    in the URL (``/vi/posts/x/``). Each locale gets its own paginated index at
-    ``/<locale>/`` and RSS feed; tag pages and the top menu are produced once and
-    split by locale. With ``root_redirect`` the bare ``/`` redirects to the
-    default locale's home.
+    Sources live under ``<locale>/<posts_dir>/...``. The default locale renders
+    at the site root (``/``, ``/posts/x/``, ``/feed.xml``); every other locale
+    keeps its prefix (``/en/``, ``/en/posts/x/``, ``/en/feed.xml``). Each locale
+    gets its own paginated index and RSS feed; tag pages and the top menu are
+    produced once and split by locale.
     """
 
     if default_locale not in locales:
@@ -176,28 +174,35 @@ def i18n_blog(
             f"default_locale {default_locale!r} is not in locales {list(locales)}"
         )
 
+    def _prefix(locale: str) -> str:
+        return "/" if locale == default_locale else f"/{locale}/"
+
     plugins: list[Plugin] = [
         *_head(markdown_extensions, highlight),
         I18n(locales=list(locales), default_locale=default_locale),
         Permalink(),
         Collections(by_tag=True, by_folder=True, group_by="locale"),
     ]
-    # One paginated index per locale: /<locale>/ lists that locale's posts.
+    # One paginated index per locale; the default locale's index is the root.
     plugins.extend(
         Listing(
             collection=f"{locale}/{posts_dir}",
-            base_url=f"/{locale}/",
+            base_url=_prefix(locale),
             title=locale,
             page_size=page_size,
         )
         for locale in locales
     )
-    # A single tag listing covers every (locale, tag) pair via the :locale token.
+    # A single tag listing covers every (locale, tag) pair via the :locale token,
+    # which resolves empty for the default locale (tags at /tags/:name/).
     plugins.append(Listing(kind="tag", base_url="/:locale/tags/:name/", title=":name"))
     plugins.append(Navigation(mode="frontmatter", group_by="locale"))
     if rss:
         plugins.extend(
-            Rss(collection=f"{locale}/{posts_dir}", path=f"{locale}/feed.xml")
+            Rss(
+                collection=f"{locale}/{posts_dir}",
+                path="feed.xml" if locale == default_locale else f"{locale}/feed.xml",
+            )
             for locale in locales
         )
     plugins.extend(
@@ -210,8 +215,6 @@ def i18n_blog(
     )
     if seo:
         plugins.append(Seo(schema_type="BlogPosting"))
-    if root_redirect:
-        plugins.append(Redirects(rules={"/": f"/{default_locale}/"}))
     plugins.extend(_tail(template_dir, clean))
     return plugins
 
@@ -229,15 +232,14 @@ def i18n_docs(
     markdown_pages: bool = False,
     seo: bool = True,
     highlight: bool = False,
-    root_redirect: bool = True,
 ) -> list[Plugin]:
     """Multilingual technical documentation: ``docs()`` partitioned per locale.
 
-    Sources live under ``<locale>/...``; the locale segment is kept in the URL
+    Sources live under ``<locale>/...``. The default locale renders at the site
+    root (``/guide/install/``); every other locale keeps its prefix
     (``/vi/guide/install/``). Each locale gets its own folder sidebar with
     prev/next, rooted at the locale's content (the locale segment is not shown as
-    a node). With ``root_redirect`` the bare ``/`` redirects to the default
-    locale's home.
+    a node).
     """
 
     if default_locale not in locales:
@@ -258,7 +260,6 @@ def i18n_docs(
             markdown_pages=markdown_pages,
         ),
         *([Seo(schema_type="Article")] if seo else []),
-        *([Redirects(rules={"/": f"/{default_locale}/"})] if root_redirect else []),
         *_tail(template_dir, clean),
     ]
     return plugins

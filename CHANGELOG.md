@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING (i18n):** the default locale now renders at the site root instead
+  of under a `/<locale>/` prefix. With `i18n_blog`/`i18n_docs`, the default
+  locale's pages, index, tag pages and RSS feed move to `/`, `/posts/x/`,
+  `/tags/:name/` and `/feed.xml`; non-default locales keep their prefix
+  (`/en/...`). The redundant root redirect was removed, so the `root_redirect`
+  parameter of `i18n_blog`/`i18n_docs` is gone. The I18n plugin sets
+  `meta["locale_prefix"]` (`""` for the default locale) for templates that build
+  locale-aware links.
+
 ## [1.0.0] - 2026-05-31
 
 First stable release. The public API of the `pyssg` kernel (plugins, lifecycle

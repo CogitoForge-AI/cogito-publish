@@ -50,4 +50,4 @@ it; `render`, `generate` and templates read from it. Tier-2 plugins agree on a
 small set of keys - `site`, `collections`, `menus` - which is what keeps the
 ecosystem from fragmenting.
 
-See [Hooks](/en/architecture/hooks/) for how ordering within a pass works.
+See [Hooks](/architecture/hooks/) for how ordering within a pass works.

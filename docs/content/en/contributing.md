@@ -57,5 +57,5 @@ python -m unittest discover -s tests
 3. Open a PR against `dev` and fill in the template checklist.
 
 To understand the codebase before diving in, read the
-[Architecture](/en/architecture/) section - it walks through the kernel, the
+[Architecture](/architecture/) section - it walks through the kernel, the
 lifecycle and the hook system that every plugin builds on.

@@ -1,5 +1,5 @@
 <header class="topbar">
-  <a class="brand" href="/{{ page.locale | default('en') }}/">
+  <a class="brand" href="{{ home }}">
     <svg class="brand-mark" width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="pyssg-brand" x1="4" y1="2" x2="44" y2="46" gradientUnits="userSpaceOnUse">
@@ -21,7 +21,7 @@
   </a>
   <span class="tagline">{{ site.tagline }}</span>
   <nav class="topbar-links">
-    <a class="topbar-link" href="/{{ page.locale | default('en') }}/guide/getting-started/">Guide</a>
+    <a class="topbar-link" href="{{ home }}guide/getting-started/">Guide</a>
     <a class="topbar-link" href="{{ site.repo_url }}">GitHub</a>
     {% if page.translations and page.translations | length > 1 %}
       <span class="lang-switcher" role="group" aria-label="Language">

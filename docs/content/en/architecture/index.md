@@ -20,11 +20,11 @@ reading files or rendering Markdown are plugins.
 
 ## In this section
 
-- [The kernel](/en/architecture/kernel/) - what lives in the core and why it is so
+- [The kernel](/architecture/kernel/) - what lives in the core and why it is so
   small.
-- [Lifecycle](/en/architecture/lifecycle/) - the phased passes a build goes
+- [Lifecycle](/architecture/lifecycle/) - the phased passes a build goes
   through.
-- [Hooks](/en/architecture/hooks/) - the three hook types and how `stage` ordering
+- [Hooks](/architecture/hooks/) - the three hook types and how `stage` ordering
   works.
 
 ## Data model

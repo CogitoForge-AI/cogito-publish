@@ -8,11 +8,11 @@ order: 2
 The `Template` plugin renders pages with [Jinja2](https://jinja.palletsprojects.com/),
 and adds two Hugo-inspired conveniences on top of it.
 
-- [Inheritance](/en/templating/inheritance/) - share a base skeleton with
+- [Inheritance](/templating/inheritance/) - share a base skeleton with
   `{% extends %}` and `{% block %}`.
-- [Partials](/en/templating/partials/) - reuse snippets and components with the
+- [Partials](/templating/partials/) - reuse snippets and components with the
   `partial()` function.
-- [Lookup cascade](/en/templating/lookup-cascade/) - let pages resolve their
+- [Lookup cascade](/templating/lookup-cascade/) - let pages resolve their
   template automatically by type, section and kind, instead of declaring
   `layout` everywhere.
 

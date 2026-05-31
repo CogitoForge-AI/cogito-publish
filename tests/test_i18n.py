@@ -10,6 +10,7 @@ from pyssg.config import Config
 from pyssg.content import (
     I18N,
     LOCALE,
+    LOCALE_PREFIX,
     TRANSLATION_KEY,
     TRANSLATIONS,
     collections,
@@ -67,11 +68,22 @@ class TagStageTest(unittest.TestCase):
         self.assertEqual(source.meta[LOCALE], "en")
         self.assertEqual(source.meta[TRANSLATION_KEY], "posts/oauth2")
 
+    def test_non_default_locale_keeps_prefix(self) -> None:
+        build = build_with([src("en/posts/oauth2.md")])
+        self.plugin._tag(build)
+        self.assertEqual(build.sources[0].meta[LOCALE_PREFIX], "en")
+
+    def test_default_locale_renders_at_root(self) -> None:
+        build = build_with([src("vi/posts/oauth2.md")])
+        self.plugin._tag(build)
+        self.assertEqual(build.sources[0].meta[LOCALE_PREFIX], "")
+
     def test_unknown_folder_falls_back_to_default(self) -> None:
         build = build_with([src("index.md")])
         self.plugin._tag(build)
         source = build.sources[0]
         self.assertEqual(source.meta[LOCALE], "vi")
+        self.assertEqual(source.meta[LOCALE_PREFIX], "")
         self.assertEqual(source.meta[TRANSLATION_KEY], "index")
 
     def test_translation_key_override(self) -> None:
@@ -97,7 +109,7 @@ class IndexStageTest(unittest.TestCase):
         assert isinstance(index, dict)
         self.assertEqual(
             index["translations"]["posts/oauth2"],
-            {"vi": "/vi/posts/oauth2/", "en": "/en/posts/oauth2/"},
+            {"vi": "/posts/oauth2/", "en": "/en/posts/oauth2/"},
         )
 
     def test_per_source_translations_ordered_with_current_flag(self) -> None:
@@ -106,7 +118,7 @@ class IndexStageTest(unittest.TestCase):
         self.assertEqual(
             en.meta[TRANSLATIONS],
             [
-                {"locale": "vi", "url": "/vi/posts/oauth2/", "current": False},
+                {"locale": "vi", "url": "/posts/oauth2/", "current": False},
                 {"locale": "en", "url": "/en/posts/oauth2/", "current": True},
             ],
         )
@@ -116,14 +128,14 @@ class IndexStageTest(unittest.TestCase):
         source = build.sources[0]
         self.assertEqual(
             source.meta[TRANSLATIONS],
-            [{"locale": "vi", "url": "/vi/posts/only/", "current": True}],
+            [{"locale": "vi", "url": "/posts/only/", "current": True}],
         )
 
     def test_drafts_excluded_from_index(self) -> None:
         build = self._run([src("vi/posts/a.md"), src("en/posts/a.md", draft=True)])
         index = build.meta[I18N]
         assert isinstance(index, dict)
-        self.assertEqual(index["translations"]["posts/a"], {"vi": "/vi/posts/a/"})
+        self.assertEqual(index["translations"]["posts/a"], {"vi": "/posts/a/"})
 
     def test_sources_without_locale_are_skipped(self) -> None:
         # A page that never went through _tag (no locale/key) must not crash the
@@ -185,9 +197,10 @@ class ListingLocaleTokenTest(unittest.TestCase):
             build
         )
         generated = {s.meta["url"]: s for s in build.sources if is_generated(s)}
-        self.assertIn("/vi/tags/python/", generated)
+        # vi is the default locale, so its tag page renders at the root.
+        self.assertIn("/tags/python/", generated)
         self.assertIn("/en/tags/python/", generated)
-        vi_page = generated["/vi/tags/python/"]
+        vi_page = generated["/tags/python/"]
         self.assertEqual(vi_page.meta[LOCALE], "vi")
         # The locale-independent key is what pairs the two listings.
         self.assertEqual(vi_page.meta[TRANSLATION_KEY], "/tags/python/")
@@ -203,8 +216,23 @@ class ListingLocaleTokenTest(unittest.TestCase):
         assert isinstance(index, dict)
         self.assertEqual(
             index["translations"]["/tags/python/"],
-            {"vi": "/vi/tags/python/", "en": "/en/tags/python/"},
+            {"vi": "/tags/python/", "en": "/en/tags/python/"},
         )
+
+    def test_per_locale_index_listings_are_paired(self) -> None:
+        # The default locale's index ("/") and another locale's ("/en/") use
+        # literal base URLs, yet must share a translation_key so the home page
+        # gets a language switcher.
+        build = build_with([src("vi/posts/a.md"), src("en/posts/a.md")])
+        I18n(locales=["vi", "en"], default_locale="vi")._tag(build)
+        Permalink()._collect(build)
+        Collections(by_folder=True, by_tag=False, group_by="locale")._collect(build)
+        Listing(collection="vi/posts", base_url="/", title="vi")._collect(build)
+        Listing(collection="en/posts", base_url="/en/", title="en")._collect(build)
+        I18n(locales=["vi", "en"], default_locale="vi")._index(build)
+        index = build.meta[I18N]
+        assert isinstance(index, dict)
+        self.assertEqual(index["translations"]["/"], {"vi": "/", "en": "/en/"})
 
     def test_locale_token_dropped_without_locale(self) -> None:
         build = build_with([src("posts/a.md", tags=["python"])])
@@ -229,7 +257,8 @@ class NavigationGroupByTest(unittest.TestCase):
         registry = menus(build)
         self.assertIn("main:vi", registry)
         self.assertIn("main:en", registry)
-        self.assertEqual(registry["main:vi"][0].url, "/vi/about/")
+        self.assertEqual(registry["main:vi"][0].url, "/about/")
+        self.assertEqual(registry["main:en"][0].url, "/en/about/")
 
 
 if __name__ == "__main__":

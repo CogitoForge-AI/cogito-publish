@@ -26,6 +26,7 @@ from pyssg.content import (
     KIND_CUSTOM,
     KIND_FOLDER,
     KIND_TAG,
+    LOCALE_PREFIX,
     Collection,
     collections,
     is_draft,
@@ -135,6 +136,11 @@ class Collections:
             group = self._group(source)
             if group is not None:
                 collection.meta[self._group_by] = group
+                # Carry the locale-prefix signal so Listing can render the
+                # default locale at the root (drop the :locale token).
+                prefix = source.meta.get(LOCALE_PREFIX)
+                if prefix is not None:
+                    collection.meta[LOCALE_PREFIX] = prefix
 
 
 def _tags(source: Source, field: str) -> list[str]:

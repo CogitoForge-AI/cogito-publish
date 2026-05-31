@@ -48,12 +48,12 @@ Template(directory="layouts", default_layout="default.html", partials_dir="parti
 ```
 
 Renders each page with Jinja2 and emits an `Output`. The template is chosen by a
-[lookup cascade](/en/templating/lookup-cascade/) (frontmatter `layout` wins, then
+[lookup cascade](/templating/lookup-cascade/) (frontmatter `layout` wins, then
 `type`/`section`/`_default` by `kind`). Supports native
-[inheritance](/en/templating/inheritance/) and a [`partial()`](/en/templating/partials/)
+[inheritance](/templating/inheritance/) and a [`partial()`](/templating/partials/)
 function. Templates receive `content`, `page`, `partial`, and every key of
 `build.meta` (`site`, `collections`, `menus`). See the
-[Templating](/en/templating/) section for the full story.
+[Templating](/templating/) section for the full story.
 
 ### WriteFile
 
@@ -271,7 +271,7 @@ pages and drafts are skipped (they have no authored markdown).
 
 Every preset accepts `sitemap=True` / `minify=True` / `markdown_pages=True`, and
 `blog()` generates an RSS feed by default (`rss=True`). See
-[Presets](/en/plugins/presets/).
+[Presets](/plugins/presets/).
 
 ## Tooling
 
