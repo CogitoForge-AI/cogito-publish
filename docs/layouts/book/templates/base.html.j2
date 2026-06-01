@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="{{ lang or 'en' }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+// Resolve the saved theme preference (auto/light/dark) to a concrete
+// data-theme before first paint, so there is no flash of the wrong theme.
+(function () {
+  try {
+    var pref = localStorage.getItem("theme") || "auto";
+    var dark = pref === "dark" || (pref === "auto" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+  } catch (e) {}
+})();
+</script>
+<title>{% if page.title %}{{ page.title|replace('`', '') }} | {% endif %}{{ site.title }}</title>
+{% if site.description %}<meta name="description" content="{{ site.description }}">{% endif %}
+<link rel="stylesheet" href="/assets/style.css">
+{% if site.highlight_css %}<style>{{ site.highlight_css }}</style>{% endif %}
+{% if site.highlight_css_dark %}<style>{{ site.highlight_css_dark }}</style>{% endif %}
+{% for t in translations %}<link rel="alternate" hreflang="{{ t.lang }}" href="{{ t.url }}">{% endfor %}
+</head>
+<body>
+<input type="checkbox" class="hidden-toggle" id="menu-control">
+<main class="container">
+  <aside class="book-menu">
+    <div class="book-menu-content">
+      <nav>
+        {% set home = '/' if (not lang or lang == default_locale) else '/' ~ lang ~ '/' %}
+        <p class="book-brand"><a href="{{ home }}">{{ site.title }}</a></p>
+        {# Show only the current locale's sections (plus the shared, code-derived
+           References), then reorder them by the configured menu_order. #}
+        {% set visible = [] %}
+        {% for sec in menu if sec.locale == lang or sec.section == 'references' %}{% set _ = visible.append(sec) %}{% endfor %}
+        {% set order = site.menu_order or [] %}
+        {% set ordered = [] %}
+        {% for key in order %}{% for sec in visible if sec.section == key %}{% set _ = ordered.append(sec) %}{% endfor %}{% endfor %}
+        {% for sec in visible if sec.section not in order %}{% set _ = ordered.append(sec) %}{% endfor %}
+        {% for sec in ordered %}
+          {% if sec.section %}<p class="book-section-title">{{ sec.section|replace('-', ' ')|replace('_', ' ')|title }}</p>{% endif %}
+          <ul>
+            {% for item in sec['items'] %}
+            <li><a href="{{ item.url }}"{% if item.url == page.url %} class="active"{% endif %}>{{ item.title|replace('`', '') }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endfor %}
+        <div class="book-menu-footer">
+          {% for t in translations %}<a hreflang="{{ t.lang }}" href="{{ t.url }}">{{ t.lang|upper }}</a>{% endfor %}
+          <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle color theme">
+            <svg class="theme-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1 A7 7 0 0 1 8 15 Z" fill="currentColor"/></svg>
+            <span class="theme-label">Auto</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </aside>
+  <label for="menu-control" class="book-menu-overlay"></label>
+
+  <div class="book-page">
+    <header class="book-header">
+      <label for="menu-control" class="menu-toggle" aria-label="Toggle menu">&#9776;</label>
+      <strong>{{ page.title|replace('`', '') }}</strong>
+      <span class="header-spacer"></span>
+    </header>
+    {% block content %}{% endblock %}
+  </div>
+
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      {% block toc %}
+      {% if toc %}
+      <nav class="toc">
+        <p class="toc-title">On this page</p>
+        <ul>
+          {% for h in toc %}{% if h.level > 1 %}
+          {%- set base = h.text|replace('`', '') -%}
+          {%- set stripped = base.startswith('class ') or base.startswith('async ') -%}
+          {%- set t = base[6:] if stripped else base -%}
+          {%- set before = t.split('(')[0] -%}
+          {%- if '(' in t and before and ' ' not in before -%}{%- set label = before -%}
+          {%- elif stripped and t and ' ' not in t -%}{%- set label = t -%}
+          {%- else -%}{%- set label = base -%}{%- endif -%}
+          <li class="toc-l{{ h.level }}"><a href="#{{ h.slug }}">{{ label }}</a></li>{% endif %}{% endfor %}
+        </ul>
+      </nav>
+      {% endif %}
+      {% endblock %}
+    </div>
+  </aside>
+</main>
+<script>
+// Theme switcher: cycles the saved preference auto -> light -> dark, applies it,
+// and keeps "auto" in sync with the OS while selected.
+(function () {
+  var btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  var label = btn.querySelector(".theme-label");
+  var mql = window.matchMedia("(prefers-color-scheme: dark)");
+  var NAMES = { auto: "Auto", light: "Light", dark: "Dark" };
+  function pref() {
+    try { return localStorage.getItem("theme") || "auto"; } catch (e) { return "auto"; }
+  }
+  function apply(p) {
+    var dark = p === "dark" || (p === "auto" && mql.matches);
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+    if (label) label.textContent = NAMES[p];
+    btn.setAttribute("aria-label", "Color theme: " + NAMES[p]);
+  }
+  apply(pref());
+  btn.addEventListener("click", function () {
+    var order = ["auto", "light", "dark"];
+    var next = order[(order.indexOf(pref()) + 1) % order.length];
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    apply(next);
+  });
+  mql.addEventListener("change", function () { if (pref() === "auto") apply("auto"); });
+})();
+</script>
+{% if '<pre class="mermaid"' in content_html %}
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+const dark = document.documentElement.dataset.theme === "dark";
+mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "default" });
+</script>
+{% endif %}
+</body>
+</html>

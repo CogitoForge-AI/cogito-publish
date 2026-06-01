@@ -1,0 +1,23 @@
+{% extends "base.html.j2" %}
+{% block content %}
+<article class="markdown book-article">
+  {% if breadcrumbs and breadcrumbs|length > 1 %}
+  <nav class="breadcrumbs">
+    {% for c in breadcrumbs %}<a href="{{ c.url }}">{{ c.title|replace('`', '') }}</a>{% if not loop.last %} <span class="sep">/</span> {% endif %}{% endfor %}
+  </nav>
+  {% endif %}
+  {% if reading_time %}<p class="reading-time">{{ reading_time }} min read</p>{% endif %}
+  {{ content_html }}
+  {% if tags %}<p class="tags">{% for t in tags %}<a href="/tags/{{ t }}/">#{{ t }}</a>{% endfor %}</p>{% endif %}
+</article>
+<footer class="book-footer prevnext">
+  {% if prev %}<a class="prev" href="{{ prev.url }}"><span>&larr; Previous</span><strong>{{ prev.title|replace('`', '') }}</strong></a>{% else %}<span class="spacer"></span>{% endif %}
+  {% if next %}<a class="next" href="{{ next.url }}"><span>Next &rarr;</span><strong>{{ next.title|replace('`', '') }}</strong></a>{% endif %}
+</footer>
+{% if backlinks %}
+<aside class="backlinks">
+  <h3>Linked from</h3>
+  <ul>{% for b in backlinks %}<li><a href="{{ b.url }}">{{ b.title|replace('`', '') }}</a></li>{% endfor %}</ul>
+</aside>
+{% endif %}
+{% endblock %}
