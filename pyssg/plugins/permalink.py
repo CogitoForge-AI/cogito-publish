@@ -5,6 +5,10 @@ URL. The default route is file-based (``content/guide/intro.md`` ->
 ``/guide/intro/``; an ``index`` file maps to its directory root). The frontmatter
 keys ``permalink`` / ``url`` override it, and ``template`` selects the layout
 template.
+
+A ``route`` tap may veto a page by routing it to the empty string: when the
+final URL is ``""`` the generator emits no page. Plugins use this to suppress
+output (e.g. the i18n plugin drops documents outside any locale directory).
 """
 
 from __future__ import annotations
@@ -53,6 +57,8 @@ class PermalinkPlugin:
                 if node.meta.get("draft") is True:
                     return  # drafts produce no page
                 url = build.hooks.route.call(compute_url(node), node)
+                if not url:
+                    return  # a route tap suppressed this page (e.g. i18n: no locale)
                 build.emit_page(
                     Page(
                         id=f"page:{node.id}",

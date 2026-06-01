@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ lang or 'en' }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ page.title }} | {{ site.title }}</title>
 <link rel="stylesheet" href="/assets/style.css">
-{% if site.highlight_css %}<style>{{ site.highlight_css }}</style>{% endif %}
+{% if site.highlight_css %}<style>{{ site.highlight_css }}</style>{% endif %}{% for t in translations %}<link rel="alternate" hreflang="{{ t.lang }}" href="{{ t.url }}">{% endfor %}
 </head>
 <body>
 <header class="site-header">
 <a href="/" class="site-title">{{ site.title }}</a>
-<nav class="site-nav"><a href="/">Home</a> <a href="/tags/">Tags</a></nav>
+<nav class="site-nav"><a href="/">Home</a> <a href="/tags/">Tags</a>{% for t in translations %} <a class="lang-link" hreflang="{{ t.lang }}" href="{{ t.url }}">{{ t.lang|upper }}</a>{% endfor %}</nav>
 </header>
 <main class="container">
 {% block content %}{% endblock %}

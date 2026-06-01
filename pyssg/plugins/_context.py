@@ -42,6 +42,29 @@ def _url_titles(build: Build) -> dict[str, str]:
     return {}
 
 
+def _i18n_data(build: Build) -> dict[str, object]:
+    raw = build.site_data.get("i18n")
+    return raw if isinstance(raw, dict) else {}
+
+
+def _languages(build: Build) -> list[str]:
+    """All configured locale codes (empty when the i18n plugin is not loaded)."""
+    langs = _i18n_data(build).get("languages")
+    return [str(code) for code in langs] if isinstance(langs, list) else []
+
+
+def _page_i18n(build: Build, page: Page) -> tuple[str, list[object]]:
+    """``(lang, translations)`` for a page; ``("", [])`` when not localised."""
+    by_url = _i18n_data(build).get("by_url")
+    if isinstance(by_url, dict):
+        entry = by_url.get(page.url)
+        if isinstance(entry, dict):
+            translations = entry.get("translations")
+            tr_list = translations if isinstance(translations, list) else []
+            return str(entry.get("lang", "")), tr_list
+    return "", []
+
+
 def page_url_of(build: Build, doc_id: str) -> str | None:
     """URL of the page generated from a document (permalink id convention)."""
     page = build.graph.get(f"page:{doc_id}")
@@ -130,9 +153,13 @@ def build_page_context(build: Build, page: Page) -> dict[str, object]:
 
     prev, nxt = _prev_next(build, page)
     doc_typed = doc if isinstance(doc, Document) else None
+    lang, translations = _page_i18n(build, page)
     return {
         "page": {**meta, "url": page.url},
         "site": site,
+        "lang": lang,
+        "translations": translations,
+        "languages": _languages(build),
         "content_html": content_html,
         "__content_digest__": content_digest,
         "collections": {},

@@ -20,6 +20,10 @@ byte-identical output.
   **backlinks**, and broken-link detection out of the box.
 - **Zero-config taxonomy** — just add `tags:` or `category:` in frontmatter and
   the `/tags/` and `/categories/` index pages appear automatically.
+- **Internationalization (i18n)** — directory-based locales (`content/en/…`,
+  `content/vi/…`): the default locale is served at the root, others get a URL
+  prefix, and templates receive `lang`, a `translations` switcher, and
+  `hreflang` tags. Untranslated pages are skipped, so there are no broken links.
 - **Rich Markdown** — code highlighting (Pygments), Mermaid diagrams, internal
   link rewriting, table of contents, reading time, and excerpts.
 - **Batteries included** — sidebar navigation, breadcrumbs, prev/next, RSS feed,
@@ -97,11 +101,48 @@ Edit any file under `content/` and the page rebuilds and reloads automatically.
 Pass `--site PATH` to select the site directory (defaults to the current one).
 Run any command with `--help` for its options.
 
+## Internationalization (i18n)
+
+Add the `i18n` plugin and lay content out one directory per locale:
+
+```
+content/
+  en/guide/intro.md   ->  /guide/intro/      (default locale, served at the root)
+  vi/guide/intro.md   ->  /vi/guide/intro/
+```
+
+```python
+from pyssg.presets import docs
+from pyssg.plugins import i18n
+
+config = docs(
+    site={"title": "My Docs"},
+    base_url="https://example.com",
+    extra_plugins=[i18n(default_locale="en", locales=["en", "vi"])],
+)
+```
+
+The rules are deliberately simple, to avoid edge cases:
+
+- The **locale is the top-level directory** — there is no frontmatter override.
+- The **default locale** is served at the site root (its prefix is stripped);
+  every other locale keeps its `/<locale>/` prefix.
+- Content **outside** any locale directory produces no page.
+- A page is emitted only for locales that **actually have the file** — there is
+  no content fallback, so a language switcher never links to a missing
+  translation.
+
+Templates receive three extra variables: `lang` (the current page's locale),
+`translations` (the same page in other locales, each `{lang, url, title}`), and
+`languages` (all configured locales). The built-in `docs` and `blog` themes use
+them to render `<html lang>`, `hreflang` alternates, and a header switcher.
+
 ## Examples
 
 ```bash
-uv run python -m pyssg --site examples/docs serve   # bilingual docs site
-uv run python -m pyssg --site examples/wiki serve   # ~117-note knowledge base
+# A small bilingual docs site (English at the root, Vietnamese under /vi/)
+# built with the docs preset plus the i18n plugin.
+uv run python -m pyssg --site examples/docs serve
 ```
 
 ## Documentation

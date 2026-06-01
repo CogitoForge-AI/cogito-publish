@@ -47,6 +47,9 @@ conflicts with the code/conventions, **follow the code**; do not block on
   errors + be pure. Not auto re-exported into `pyssg.plugins`.
 - **Built-in themes live in `pyssg/themes/<name>/`**; `Config.layout` accepts a
   `str` (relative to the site) or an absolute `Path` (theme).
+- **`route` hook contract:** a `route` tap returning the empty string `""` means
+  "no page" - the permalink generator emits nothing for that document. Plugins
+  use this to suppress output (e.g. i18n drops documents outside any locale dir).
 
 ## Environment & package management
 - **`uv` is the project's sole Python + package manager.** Do not use
