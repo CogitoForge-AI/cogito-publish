@@ -44,16 +44,19 @@ def _matches_one(path: str, parts: tuple[str, ...], pattern: str) -> bool:
     well as the whole path, so ``*.tmp`` catches ``a/b/c.tmp``. Patterns that
     contain a separator are matched against the full normalised path.
     """
+    # fnmatchcase (not fnmatch) so matching stays case-sensitive and identical
+    # across platforms; plain fnmatch applies os.path.normcase, which folds case
+    # on Windows and would make a single ignore list behave differently there.
     if pattern.endswith("/"):
         directory = pattern[:-1]
-        return any(fnmatch.fnmatch(part, directory) for part in parts)
+        return any(fnmatch.fnmatchcase(part, directory) for part in parts)
 
     if "/" in pattern:
-        return fnmatch.fnmatch(path, pattern)
+        return fnmatch.fnmatchcase(path, pattern)
 
-    if fnmatch.fnmatch(path, pattern):
+    if fnmatch.fnmatchcase(path, pattern):
         return True
-    return any(fnmatch.fnmatch(part, pattern) for part in parts)
+    return any(fnmatch.fnmatchcase(part, pattern) for part in parts)
 
 
 def is_ignored(path: str, ignore: list[str]) -> bool:
