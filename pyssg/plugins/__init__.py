@@ -18,6 +18,7 @@ from pyssg.plugins.content_meta import content_meta
 from pyssg.plugins.directory_loader import directory_loader
 from pyssg.plugins.frontmatter import frontmatter
 from pyssg.plugins.highlight import highlight
+from pyssg.plugins.i18n import i18n
 from pyssg.plugins.link_resolver import link_resolver
 from pyssg.plugins.markdown import markdown
 from pyssg.plugins.mermaid import mermaid
@@ -40,6 +41,7 @@ __all__ = [
     "directory_loader",
     "frontmatter",
     "highlight",
+    "i18n",
     "link_resolver",
     "markdown",
     "mermaid",
