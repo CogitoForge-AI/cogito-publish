@@ -56,7 +56,7 @@ _CSS_SITE_KEY = "highlight_css"
 # Language fences left untouched so a mermaid plugin can claim them.
 _MERMAID_LANG = "mermaid"
 
-# Matches a markdown-it fenced code block:
+# Matches a fenced code block as the markdown plugin emits it:
 #   <pre><code class="language-LANG">ESCAPED\n</code></pre>   (with a language)
 #   <pre><code>ESCAPED\n</code></pre>                           (plain fence)
 # ``language-(\S+)`` captures the info string; group "code" is the HTML-escaped
@@ -94,7 +94,7 @@ def highlight_html(html_text: str, highlighter: HtmlFormatter) -> str:
         if lang == _MERMAID_LANG:
             # Leave mermaid blocks for the dedicated plugin.
             return match.group(0)
-        # markdown-it HTML-escapes the body; recover the real source first.
+        # The markdown plugin HTML-escapes the body; recover the real source first.
         code = html.unescape(match.group("code"))
         # ``pygments.highlight`` is untyped (returns ``Any``); it always yields a
         # ``str`` for an ``HtmlFormatter``, so narrow it explicitly.

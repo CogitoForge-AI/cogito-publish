@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 # 230 so mermaid blocks are claimed before highlighting can rewrite them.
 _PARSE_STAGE = 230
 
-# Matches the markup markdown-it emits for a ```mermaid fenced block:
+# Matches the markup the markdown plugin emits for a ```mermaid fenced block:
 # ``<pre><code class="language-mermaid">ESCAPED</code></pre>``. The diagram text
 # is captured non-greedily across newlines (re.DOTALL) so multiple blocks in one
 # document each match independently. Only the ``language-mermaid`` class matches,
