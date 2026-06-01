@@ -53,6 +53,12 @@ def _languages(build: Build) -> list[str]:
     return [str(code) for code in langs] if isinstance(langs, list) else []
 
 
+def _default_locale(build: Build) -> str:
+    """The default locale code (empty when the i18n plugin is not loaded)."""
+    value = _i18n_data(build).get("default_locale")
+    return str(value) if isinstance(value, str) else ""
+
+
 def _page_i18n(build: Build, page: Page) -> tuple[str, list[object]]:
     """``(lang, translations)`` for a page; ``("", [])`` when not localised."""
     by_url = _i18n_data(build).get("by_url")
@@ -107,12 +113,16 @@ def _prev_next(build: Build, page: Page) -> tuple[Crumb | None, Crumb | None]:
     ordered = build.site_data.get("ordered_pages")
     if not isinstance(ordered, list):
         return None, None
-    urls = [str(item.get("url")) for item in ordered if isinstance(item, dict)]
+    items = [item for item in ordered if isinstance(item, dict)]
+    urls = [str(item.get("url")) for item in items]
     if page.url not in urls:
         return None, None
     i = urls.index(page.url)
-    prev = ordered[i - 1] if i > 0 else None
-    nxt = ordered[i + 1] if i + 1 < len(ordered) else None
+    # Keep prev/next within the current page's locale (ordered_pages is grouped by
+    # locale), so navigation never jumps from one language into another.
+    locale = items[i].get("locale")
+    prev = items[i - 1] if i > 0 and items[i - 1].get("locale") == locale else None
+    nxt = items[i + 1] if i + 1 < len(items) and items[i + 1].get("locale") == locale else None
     return _crumb(prev), _crumb(nxt)
 
 
@@ -160,6 +170,7 @@ def build_page_context(build: Build, page: Page) -> dict[str, object]:
         "lang": lang,
         "translations": translations,
         "languages": _languages(build),
+        "default_locale": _default_locale(build),
         "content_html": content_html,
         "__content_digest__": content_digest,
         "collections": {},
