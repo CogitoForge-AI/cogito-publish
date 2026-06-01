@@ -1,7 +1,7 @@
 # Build the documentation site and deploy it to Cloudflare Workers with Wrangler.
 #
 # This replaces Cloudflare's dashboard git auto-build: GitHub Actions builds the
-# site and `wrangler deploy` pushes ./docs/public to the "pyssg" Worker
+# site and `wrangler deploy` pushes ./docs/dist to the "pyssg" Worker
 # (configured in docs/wrangler.jsonc).
 #
 # Requires two repository secrets (Settings -> Secrets and variables -> Actions):
@@ -9,10 +9,14 @@
 #   CLOUDFLARE_ACCOUNT_ID  the account that owns the Worker
 name: Deploy docs
 
-# NOTE: temporarily disabled. The docs/ site was removed during the rewrite and
-# will be re-authored later; push triggers are paused (manual dispatch only) and
-# the push trigger below should be restored once docs/ exists again.
+# Re-deploy when the docs site (or this workflow) changes on main; manual
+# dispatch stays available for ad-hoc deploys.
 on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - ".github/workflows/deploy-docs.yml"
   workflow_dispatch:
 
 # One deploy at a time; newer pushes supersede in-flight runs.

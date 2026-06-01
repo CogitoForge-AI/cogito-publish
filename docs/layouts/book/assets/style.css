@@ -1,0 +1,420 @@
+/* pyssg docs theme - converted from the Hugo "Book" theme
+   (https://github.com/alex-shpak/hugo-book). Light, book-style reading layout:
+   fixed left menu | centered content | right "on this page" TOC. */
+
+:root {
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-500: #adb5bd;
+  --gray-700: #495057;
+
+  --body-background: #ffffff;
+  --body-font-color: #1c1e21;
+  --muted-font-color: #6a737d;
+  --color-link: #0055bb;
+  --color-visited-link: #5500bb;
+  --code-bg: #f6f8fa;
+
+  --font-size: 16px;
+  --font-size-smaller: 0.875rem;
+  --font-size-smallest: 0.75rem;
+  --border-radius: 0.25rem;
+
+  --menu-width: 16rem;
+  --toc-width: 15rem;
+  --container-max-width: 80rem;
+  --padding: 1rem;
+
+  --body-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --mono-font: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+/* Dark mode. The theme switcher (and a no-flash <head> script) resolve the
+   "auto" preference against the OS and set `data-theme="light"|"dark"` on <html>;
+   this palette is adapted from the Hugo Book theme's Nord-based dark scheme. Code
+   highlighting switches via a dark Pygments stylesheet scoped to
+   `[data-theme="dark"] .highlight`, injected in <head>. */
+:root[data-theme="dark"] {
+  --gray-100: #3b4252;
+  --gray-200: #434c5e;
+  --gray-300: #4c566a;
+  --gray-500: #8b95a7;
+  --gray-700: #d8dee9;
+
+  --body-background: #2e3440;
+  --body-font-color: #eceff4;
+  --muted-font-color: #9aa5b8;
+  --color-link: #88c0d0;
+  --color-visited-link: #b48ead;
+  --code-bg: #3b4252;
+
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: var(--font-size); scroll-behavior: smooth; color-scheme: light; }
+
+body {
+  margin: 0;
+  font-family: var(--body-font);
+  color: var(--body-font-color);
+  background: var(--body-background);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--color-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---- Layout ------------------------------------------------------------- */
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  /* Default `align-items: stretch` is required: it makes the menu/toc columns as
+     tall as the content column, which gives their `position: sticky` inner panels
+     room to stay pinned while only the center area scrolls. */
+}
+
+.book-menu {
+  flex: 0 0 var(--menu-width);
+  font-size: var(--font-size-smaller);
+}
+
+.book-menu-content {
+  position: sticky;
+  top: 0;
+  width: var(--menu-width);
+  height: 100vh;
+  overflow-y: auto;
+  padding: var(--padding);
+  border-right: 1px solid var(--gray-200);
+}
+
+.book-page {
+  min-width: 0; /* allow code/tables to scroll instead of stretching layout */
+  flex-grow: 1;
+  padding: 1rem 2.5rem 4rem;
+}
+
+.book-toc {
+  flex: 0 0 var(--toc-width);
+  font-size: var(--font-size-smallest);
+}
+
+.book-toc-content {
+  position: sticky;
+  top: 0;
+  width: var(--toc-width);
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: var(--padding);
+}
+
+/* ---- Sidebar menu ------------------------------------------------------- */
+
+.book-brand {
+  margin: 0 0 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.book-brand a { color: inherit; }
+.book-brand a:hover { text-decoration: none; }
+
+.book-section-title {
+  margin: 1.25rem 0 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+
+.book-menu nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.book-menu nav li { margin: 0; }
+.book-menu nav a {
+  display: block;
+  color: var(--gray-700);
+  padding: 0.18rem 0.5rem;
+  border-radius: var(--border-radius);
+  border-left: 2px solid transparent;
+}
+.book-menu nav a:hover {
+  color: var(--color-link);
+  background: var(--gray-100);
+  text-decoration: none;
+}
+.book-menu nav a.active {
+  color: var(--color-link);
+  font-weight: 600;
+  border-left-color: var(--color-link);
+  background: var(--gray-100);
+}
+
+.book-menu-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-200);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+.book-menu-footer a { color: var(--gray-500); font-size: 0.8rem; }
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.15rem 0.5rem;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  background: none;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--color-link); border-color: var(--color-link); }
+.theme-toggle .theme-icon { width: 0.95em; height: 0.95em; }
+
+/* ---- Table of contents (right) ------------------------------------------ */
+
+.toc-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc li { line-height: 1.4; }
+.toc a {
+  display: block;
+  color: var(--gray-700);
+  padding: 0.15rem 0;
+}
+.toc a:hover { color: var(--color-link); text-decoration: none; }
+.toc-l3 { padding-left: 0.85rem; }
+.toc-l4 { padding-left: 1.7rem; }
+.toc-l5, .toc-l6 { padding-left: 2.4rem; }
+
+/* ---- Mobile header (hidden on desktop) ---------------------------------- */
+
+.hidden-toggle { display: none; }
+.book-header { display: none; }
+.book-menu-overlay { display: none; }
+
+/* ---- Article / Markdown ------------------------------------------------- */
+
+.book-article { max-width: 48rem; }
+
+.breadcrumbs { font-size: 0.8rem; color: var(--gray-500); margin-bottom: 0.75rem; }
+.breadcrumbs a { color: var(--gray-500); }
+.breadcrumbs a:hover { color: var(--color-link); }
+.breadcrumbs .sep { color: var(--gray-300); }
+
+.reading-time { color: var(--muted-font-color); font-size: 0.8rem; margin: 0 0 1.25rem; }
+
+.markdown { word-wrap: break-word; }
+.markdown h1, .markdown h2, .markdown h3,
+.markdown h4, .markdown h5, .markdown h6 {
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 1.6rem 0 0.8rem;
+  scroll-margin-top: 1rem;
+}
+.markdown h1 { font-size: 1.9rem; margin-top: 0; letter-spacing: -0.02em; }
+.markdown h2 {
+  font-size: 1.4rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+.markdown h3 { font-size: 1.15rem; }
+.markdown h4 { font-size: 1rem; }
+
+.markdown p { margin: 0.85rem 0; }
+
+.markdown a { text-decoration: underline; text-underline-offset: 2px; }
+.markdown a:hover { text-decoration: underline; }
+
+.markdown ul, .markdown ol { padding-left: 1.5rem; margin: 0.85rem 0; }
+.markdown li { margin: 0.2rem 0; }
+
+.markdown blockquote {
+  margin: 1rem 0;
+  padding: 0.4rem 1rem;
+  border-left: 4px solid var(--gray-300);
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+.markdown blockquote p { margin: 0.3rem 0; }
+
+.markdown hr { border: 0; border-top: 1px solid var(--gray-200); margin: 2rem 0; }
+
+.markdown img { max-width: 100%; height: auto; }
+
+/* Inline + block code */
+.markdown code {
+  font-family: var(--mono-font);
+  font-size: 0.85em;
+  background: var(--gray-100);
+  padding: 0.12rem 0.35rem;
+  border-radius: var(--border-radius);
+}
+.markdown pre,
+.markdown .highlight {
+  background: var(--code-bg);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+.markdown .highlight pre { margin: 0; border: 0; }
+.markdown pre { padding: 0.85rem 1rem; line-height: 1.5; }
+.markdown pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+/* Tables (markdown + raw-HTML tables emitted by the apidoc plugin) */
+.markdown table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  display: block;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+.markdown th, .markdown td {
+  border: 1px solid var(--gray-200);
+  padding: 0.45rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+.markdown thead th { background: var(--gray-100); }
+.markdown tbody tr:nth-child(even) { background: var(--gray-100); }
+
+/* Mermaid blocks should not get the code background */
+.markdown pre.mermaid { background: none; border: 0; text-align: center; }
+
+/* ---- Tags / prev-next / backlinks --------------------------------------- */
+
+.tags { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tags a {
+  font-size: 0.78rem;
+  color: var(--color-link);
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  padding: 0.1rem 0.55rem;
+  border-radius: 1rem;
+}
+.tags a:hover { text-decoration: none; background: var(--gray-200); }
+
+.book-article + .prevnext { max-width: 48rem; }
+.prevnext {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--gray-200);
+}
+.prevnext a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  max-width: 49%;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  color: var(--body-font-color);
+}
+.prevnext a:hover { border-color: var(--color-link); text-decoration: none; }
+.prevnext a span { font-size: 0.75rem; color: var(--gray-500); }
+.prevnext a strong { color: var(--color-link); font-weight: 600; }
+.prevnext .next { text-align: right; align-items: flex-end; margin-left: auto; }
+.prevnext .spacer { flex: 1; }
+
+.backlinks {
+  max-width: 48rem;
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--gray-200);
+}
+.backlinks h3 { margin: 0 0 0.5rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500); }
+.backlinks ul { margin: 0; padding-left: 1.2rem; }
+
+.term-members, .tag-cloud { padding-left: 1.2rem; }
+.tag-cloud .count { color: var(--gray-500); }
+
+/* ---- Responsive --------------------------------------------------------- */
+
+@media screen and (max-width: 60rem) {
+  .book-toc { display: none; }
+
+  .book-page { padding: 1rem; }
+
+  .book-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: -1rem -1rem 1rem;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+    background: var(--body-background);
+    z-index: 20;
+  }
+  .book-header strong {
+    flex: 1;
+    font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .menu-toggle {
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+    padding: 0.1rem 0.3rem;
+    color: var(--gray-700);
+  }
+
+  .book-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: var(--menu-width);
+    background: var(--body-background);
+    z-index: 40;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  .book-menu-content { height: 100vh; }
+
+  #menu-control:checked ~ .container .book-menu { transform: translateX(0); }
+  #menu-control:checked ~ .container .book-menu-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 35;
+  }
+}

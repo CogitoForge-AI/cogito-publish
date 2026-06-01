@@ -1,16 +1,17 @@
 """Content-meta plugin: TOC/outline, word count, reading time, excerpt.
 
 Runs in the parse phase at stage 300, i.e. *after* the markdown plugin (stage 200)
-has populated ``node.ast`` with markdown-it tokens, ``node.meta["content_html"]``
-and ``node.meta["title"]``. This plugin only reads those derived facts plus the
-raw body and writes four new ``node.meta`` keys; it owns no graph algorithm or
-cache state (plugins declare facts, the engine owns invalidation).
+has populated ``node.ast`` with the heading tree (Python-Markdown ``toc_tokens``),
+``node.meta["content_html"]`` and ``node.meta["title"]``. This plugin only reads
+those derived facts plus the raw body and writes four new ``node.meta`` keys; it
+owns no graph algorithm or cache state (plugins declare facts, the engine owns
+invalidation).
 
 Every computation here is pure: it depends solely on the declared inputs, never
 on a clock or randomness, so two builds of the same input are byte-identical.
 
-``markdown-it-py`` is third-party. It is allowed in a peripheral plugin
-like this one, but never in ``pyssg.core``.
+This module is pure standard library; the markdown engine lives in the markdown
+plugin, never in ``pyssg.core``.
 """
 
 from __future__ import annotations
@@ -18,8 +19,6 @@ from __future__ import annotations
 import re
 import unicodedata
 from typing import TYPE_CHECKING
-
-from markdown_it.token import Token
 
 from pyssg.core.node import Document
 from pyssg.core.types import NodeKind
@@ -74,37 +73,34 @@ def slugify(text: str) -> str:
     return collapsed.strip("-")
 
 
-def _heading_level(tag: str) -> int | None:
-    """Map an ``h1``..``h6`` tag to its integer level, else ``None``."""
-    if len(tag) == 2 and tag[0] == "h" and tag[1].isdigit():
-        level = int(tag[1])
-        if 1 <= level <= 6:
-            return level
-    return None
+def outline(toc_tokens: object) -> list[dict[str, object]]:
+    """Flatten Python-Markdown ``toc_tokens`` into a flat TOC in document order.
 
-
-def outline(tokens: list[Token]) -> list[dict[str, object]]:
-    """Build a flat table of contents from markdown-it tokens, in document order.
-
-    A heading is the pair ``heading_open`` (its ``tag`` gives the level) followed
-    by an ``inline`` token whose ``.content`` is the heading text. Each entry is
-    ``{"level": int, "text": str, "slug": str}``. The list stays flat (one entry
-    per heading); nesting is a presentation concern left to the consumer.
+    ``toc_tokens`` is the nested heading tree the ``toc`` extension records on the
+    parser -- each node a ``{"level", "id", "name", "children"}`` dict -- which the
+    markdown plugin copies onto ``node.ast``. Each returned entry is
+    ``{"level": int, "text": str, "slug": str}`` where ``slug`` is the heading's
+    ``id`` (so in-page anchors always resolve and ``text`` carries no markup). The
+    list stays flat (one entry per heading), walked depth-first; nesting is a
+    presentation concern left to the consumer. Input that is not the expected shape
+    yields an empty list.
     """
     entries: list[dict[str, object]] = []
-    for index, token in enumerate(tokens):
-        if token.type != "heading_open":
-            continue
-        level = _heading_level(token.tag)
-        if level is None:
-            continue
-        if index + 1 >= len(tokens):
-            continue
-        inline = tokens[index + 1]
-        if inline.type != "inline":
-            continue
-        text = inline.content
-        entries.append({"level": level, "text": text, "slug": slugify(text)})
+
+    def _walk(items: object) -> None:
+        if not isinstance(items, list):
+            return
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            level = item.get("level")
+            name = item.get("name")
+            slug = item.get("id")
+            if isinstance(level, int) and isinstance(name, str) and isinstance(slug, str):
+                entries.append({"level": level, "text": name, "slug": slug})
+            _walk(item.get("children"))
+
+    _walk(toc_tokens)
     return entries
 
 
@@ -189,8 +185,7 @@ class ContentMetaPlugin:
                 if node.kind is not NodeKind.MARKDOWN or not isinstance(node, Document):
                     return
 
-                tokens = node.ast if isinstance(node.ast, list) else []
-                node.meta["toc"] = outline(tokens)
+                node.meta["toc"] = outline(node.ast)
 
                 body = node.meta.get("__body__")
                 raw = _text(body) if body is not None else _text(node.meta.get("__raw__"))

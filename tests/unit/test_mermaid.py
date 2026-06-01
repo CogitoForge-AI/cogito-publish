@@ -13,7 +13,7 @@ from pyssg.core.node import Document
 from pyssg.core.types import NodeKind
 from pyssg.plugins.mermaid import MermaidPlugin, clientside_mermaid, mermaid
 
-# Markup markdown-it emits for a ```mermaid fence: the diagram text is HTML-escaped
+# Markup the markdown plugin emits for a ```mermaid fence: the diagram text is HTML-escaped
 # (``-->`` becomes ``--&gt;``) and a trailing newline is kept inside the block.
 _MERMAID_IN = '<pre><code class="language-mermaid">graph TD; A--&gt;B\n</code></pre>'
 _MERMAID_OUT = '<pre class="mermaid">graph TD; A-->B\n</pre>'

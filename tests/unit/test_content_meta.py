@@ -4,18 +4,12 @@ from __future__ import annotations
 
 import unittest
 
-from markdown_it import MarkdownIt
-
 from pyssg.plugins.content_meta import (
     first_paragraph_excerpt,
     outline,
     reading_time,
     slugify,
 )
-
-
-def _tokens(markdown: str) -> list[object]:
-    return list(MarkdownIt("commonmark").parse(markdown))
 
 
 class SlugifyTest(unittest.TestCase):
@@ -50,10 +44,26 @@ class SlugifyTest(unittest.TestCase):
 
 
 class OutlineTest(unittest.TestCase):
+    """``outline`` flattens Python-Markdown's nested ``toc_tokens`` tree."""
+
     def test_multiple_levels_in_document_order(self) -> None:
-        result = outline(_tokens("# A\n\n## B\n\n### C"))  # type: ignore[arg-type]
+        toc = [
+            {
+                "level": 1,
+                "id": "a",
+                "name": "A",
+                "children": [
+                    {
+                        "level": 2,
+                        "id": "b",
+                        "name": "B",
+                        "children": [{"level": 3, "id": "c", "name": "C", "children": []}],
+                    }
+                ],
+            }
+        ]
         self.assertEqual(
-            result,
+            outline(toc),
             [
                 {"level": 1, "text": "A", "slug": "a"},
                 {"level": 2, "text": "B", "slug": "b"},
@@ -62,17 +72,32 @@ class OutlineTest(unittest.TestCase):
         )
 
     def test_nested_same_level_repeats(self) -> None:
-        result = outline(_tokens("## One\n\n### Two\n\n## Three"))  # type: ignore[arg-type]
+        toc = [
+            {
+                "level": 2,
+                "id": "one",
+                "name": "One",
+                "children": [{"level": 3, "id": "two", "name": "Two", "children": []}],
+            },
+            {"level": 2, "id": "three", "name": "Three", "children": []},
+        ]
+        result = outline(toc)
         self.assertEqual([e["level"] for e in result], [2, 3, 2])
         self.assertEqual([e["text"] for e in result], ["One", "Two", "Three"])
 
     def test_no_headings_returns_empty(self) -> None:
-        self.assertEqual(outline(_tokens("Just a paragraph.")), [])  # type: ignore[arg-type]
+        self.assertEqual(outline([]), [])
 
-    def test_heading_slug_uses_text(self) -> None:
-        result = outline(_tokens("# Getting Started"))  # type: ignore[arg-type]
+    def test_non_list_input_returns_empty(self) -> None:
+        self.assertEqual(outline(None), [])
+        self.assertEqual(outline("not a list"), [])
+
+    def test_slug_comes_from_heading_id(self) -> None:
+        # ``outline`` trusts the toc extension's ``id`` (built with our slugify),
+        # so the slug always matches the heading's actual anchor.
+        toc = [{"level": 1, "id": "getting-started", "name": "Getting Started", "children": []}]
         self.assertEqual(
-            result, [{"level": 1, "text": "Getting Started", "slug": "getting-started"}]
+            outline(toc), [{"level": 1, "text": "Getting Started", "slug": "getting-started"}]
         )
 
 

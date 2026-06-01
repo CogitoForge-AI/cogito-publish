@@ -1,0 +1,49 @@
+from __future__ import annotations
+
+from pygments.formatters import HtmlFormatter
+
+from pyssg.contrib.apidoc import apidoc
+from pyssg.contrib.external_links import external_links
+from pyssg.plugins import i18n
+from pyssg.presets import docs
+
+# The pyssg documentation site is itself built with pyssg (dogfooding). It uses
+# the `docs` preset and adds three plugins:
+#
+#   * apidoc         - statically extracts docstrings from the `pyssg` package
+#                      and publishes them as a "References" section.
+#   * external_links - opens off-site links in a new tab with rel="noopener".
+#   * i18n           - directory-based locales: content/en (default, served at the
+#                      root) and content/vi (served under /vi/).
+#
+# `package="../pyssg"` is resolved against this site directory (docs/), so it
+# points at the project's `pyssg/` package one level up. The apidoc route lives
+# under the default locale (`/en/references/`) so the i18n router keeps it (it
+# strips the `/en/` prefix, serving the shared, code-derived References at
+# `/references/`); content outside a locale directory would otherwise be dropped.
+
+# Dark-mode code highlighting. The `highlight` plugin already provides the light
+# stylesheet as site["highlight_css"]; here we generate a dark one (Nord, to match
+# the theme's dark palette), scoped to `[data-theme="dark"] .highlight` so it only
+# applies once the theme switcher (or the no-flash script) selects dark mode.
+_DARK_HIGHLIGHT_CSS = HtmlFormatter(style="nord").get_style_defs('[data-theme="dark"] .highlight')
+
+config = docs(
+    site={
+        "title": "pyssg",
+        "description": "A fast, incremental static site generator for Markdown.",
+        "highlight_css_dark": _DARK_HIGHLIGHT_CSS,
+        # Explicit sidebar section order (by content directory; "" is the home
+        # page). The nav plugin emits sections alphabetically, so the theme
+        # reorders them using this list; sections not listed fall back to the end.
+        "menu_order": ["", "tutorial", "how-to", "reference", "explanation", "references"],
+    },
+    base_url="https://pyssg.nkthanh.dev",
+    # Custom layout converted from the Hugo "Book" theme (docs/layouts/book).
+    layout="layouts/book",
+    extra_plugins=[
+        apidoc(package="../pyssg", route="/en/references/"),
+        external_links(),
+        i18n(default_locale="en", locales=["en", "vi"]),
+    ],
+)

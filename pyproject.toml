@@ -19,13 +19,12 @@ classifiers = [
     "Topic :: Text Processing :: Markup :: Markdown",
 ]
 dependencies = [
-    # Third-party libs live ONLY in peripheral built-in plugins / watch (SPEC 2.2, invariant 1).
-    "markdown-it-py>=3.0",
     "pyyaml>=6.0",
     "jinja2>=3.1",
     "pygments>=2.18",
     "pillow>=10.4",
     "watchdog>=4.0",
+    "markdown>=3.10.2",
 ]
 
 [project.urls]
@@ -44,6 +43,7 @@ dev = [
     "ruff>=0.6",
     "coverage>=7.6",
     "types-pyyaml>=6.0",
+    "types-markdown>=3.10.2.20260518",
 ]
 
 [build-system]
@@ -64,7 +64,7 @@ files = ["pyssg", "tests", "benchmarks"]
 
 # Third-party libs without bundled type stubs: ignore missing imports at the boundary only.
 [[tool.mypy.overrides]]
-module = ["markdown_it.*", "watchdog.*", "PIL.*", "pygments.*", "matplotlib.*"]
+module = ["watchdog.*", "PIL.*", "pygments.*", "matplotlib.*"]
 ignore_missing_imports = true
 
 [tool.ruff]
