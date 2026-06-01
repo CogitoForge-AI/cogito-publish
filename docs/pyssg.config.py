@@ -38,7 +38,7 @@ config = docs(
         # reorders them using this list; sections not listed fall back to the end.
         "menu_order": ["", "tutorial", "how-to", "reference", "explanation", "references"],
     },
-    base_url="https://magiskboy.github.io/pyssg",
+    base_url="https://pyssg.nkthanh.dev",
     # Custom layout converted from the Hugo "Book" theme (docs/layouts/book).
     layout="layouts/book",
     extra_plugins=[
