@@ -222,6 +222,65 @@ class BuildLlmsTest(unittest.TestCase):
         self.assertIn("[x](https://x.com)", full)  # external untouched
         self.assertIn("[b](missing.md)", full)  # broken target left as-is
 
+    def test_markdown_pages_emit_per_page_md_and_link_to_md(self) -> None:
+        from pyssg.contrib.llms import _MD_PREFIX
+
+        build = _build(base_url="https://e.com")
+        build.graph.add_node(
+            Document(
+                id="path:ref/cli",
+                kind=NodeKind.MARKDOWN,
+                source_path="ref/cli.md",
+                meta={"title": "CLI", "__body__": "# CLI\nSee [g](guide.md)."},
+            )
+        )
+        build.graph.add_node(
+            Page(
+                id="page:path:ref/cli",
+                kind=NodeKind.PAGE,
+                url="/ref/cli/",
+                generated_from=["path:ref/cli"],
+            )
+        )
+        build.graph.add_node(
+            Document(
+                id="path:ref/guide",
+                kind=NodeKind.MARKDOWN,
+                source_path="ref/guide.md",
+                meta={"title": "Guide"},
+            )
+        )
+        build.graph.add_node(
+            Page(
+                id="page:path:ref/guide",
+                kind=NodeKind.PAGE,
+                url="/ref/guide/",
+                generated_from=["path:ref/guide"],
+            )
+        )
+        build_llms(build, markdown_pages=True)
+
+        # A raw .md page is emitted at <page>.md with the body verbatim.
+        md = build.graph.get(f"{_MD_PREFIX}/ref/cli/")
+        self.assertIsInstance(md, Page)
+        self.assertEqual(md.url, "/ref/cli.md")  # type: ignore[union-attr]
+        self.assertIsNone(md.template)  # type: ignore[union-attr]
+        cli_md = str(md.meta["content_html"])  # type: ignore[union-attr]
+        # Internal link resolves to the target's .md, not the clean URL.
+        self.assertIn("[g](https://e.com/ref/guide.md)", cli_md)
+        # The index links to .md too.
+        self.assertIn("(https://e.com/ref/cli.md)", _text(build, _INDEX_ID))
+
+    def test_markdown_pages_off_removes_stale_md_pages(self) -> None:
+        from pyssg.contrib.llms import _MD_PREFIX
+
+        build = _build()
+        _add_doc_page(build, "path:a", "/a/", {"title": "A", "__body__": "x"})
+        build_llms(build, markdown_pages=True)
+        self.assertIsInstance(build.graph.get(f"{_MD_PREFIX}/a/"), Page)
+        build_llms(build, markdown_pages=False)  # toggling off must clean them
+        self.assertIsNone(build.graph.get(f"{_MD_PREFIX}/a/"))
+
     def test_factory_returns_named_plugin(self) -> None:
         plugin = llms()
         self.assertEqual(plugin.name, "llms")

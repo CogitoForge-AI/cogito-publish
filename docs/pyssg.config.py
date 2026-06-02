@@ -16,10 +16,11 @@ from pyssg.presets import docs
 #   * external_links - opens off-site links in a new tab with rel="noopener".
 #   * i18n           - directory-based locales: content/en (default, served at the
 #                      root) and content/vi (served under /vi/).
-#   * llms           - emits /llms.txt and /llms-full.txt for AI/IDE agents. The
-#                      `vi` section is excluded so the index stays a focused
-#                      English mirror of the docs (the localized pages would just
-#                      duplicate content for an LLM consumer).
+#   * llms           - emits /llms.txt, /llms-full.txt and (markdown_pages) a raw
+#                      <page>.md per page for AI/IDE agents. The `vi` section is
+#                      excluded so the index stays a focused English mirror of the
+#                      docs (the localized pages would just duplicate content for
+#                      an LLM consumer).
 #
 # `package="../pyssg"` is resolved against this site directory (docs/), so it
 # points at the project's `pyssg/` package one level up. The apidoc route lives
@@ -50,6 +51,6 @@ config = docs(
         apidoc(package="../pyssg", route="/en/references/"),
         external_links(),
         i18n(default_locale="en", locales=["en", "vi"]),
-        llms(exclude=("vi",)),
+        llms(exclude=("vi",), markdown_pages=True),
     ],
 )

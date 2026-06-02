@@ -8,9 +8,17 @@ Emits an AI-consumable index of the site following the `llms.txt
   ``- [title](absolute-url): excerpt``.
 - ``/llms-full.txt`` -- the selected pages' Markdown bodies concatenated into a
   single document (separated by ``---``), so an agent can ingest the whole site in
-  one fetch. Relative ``.md`` links inside the bodies are resolved to absolute
-  site URLs (the bodies are pre-resolution Markdown, so the raw ``foo.md`` links
-  would otherwise 404 on a site that serves clean URLs).
+  one fetch.
+- ``markdown_pages=True`` (opt-in) additionally emits a raw ``.md`` next to every
+  page (``/reference/cli/`` -> ``/reference/cli.md``), so an agent can fetch the
+  Markdown of a single page directly.
+
+Relative ``.md`` links inside the bodies are resolved to absolute URLs (the bodies
+are pre-resolution Markdown, so a raw ``foo.md`` link would otherwise 404 on a
+site that serves clean URLs). When ``markdown_pages`` is on, every link -- in the
+index, the full file and the per-page files -- targets the ``.md`` of the target,
+so an agent can crawl the whole site as Markdown; otherwise links target the clean
+HTML page URLs.
 
 Honest positioning: the value is for IDE agents (Cursor/Cline/Aider) and MCP doc
 servers that ingest a site as context -- not "SEO for AI". Prior art:
@@ -53,6 +61,8 @@ _INDEX_ID = "page:llms"
 _INDEX_URL = "/llms.txt"
 _FULL_ID = "page:llms-full"
 _FULL_URL = "/llms-full.txt"
+# Id prefix for the optional per-page raw Markdown pages (markdown_pages=True).
+_MD_PREFIX = "page:llms-md:"
 
 # Block separator and per-page header for llms-full.txt.
 _SEPARATOR = "\n\n---\n\n"
@@ -81,6 +91,13 @@ def _section_title(section: str) -> str:
     return section.title() if section else "Pages"
 
 
+def _md_url(page_url: str) -> str:
+    """The raw-Markdown URL for a page: ``/reference/cli/`` -> ``/reference/cli.md``
+    (the root page ``/`` -> ``/index.md``)."""
+    stripped = page_url.rstrip("/")
+    return f"{stripped}.md" if stripped else "/index.md"
+
+
 def _body(doc: Document) -> str:
     """The document's Markdown body: ``__body__`` if frontmatter was split, else
     the raw file text, else empty. Mirrors the markdown plugin's own fallback."""
@@ -91,15 +108,19 @@ def _body(doc: Document) -> str:
     return raw if isinstance(raw, str) else ""
 
 
-def _resolve_links(build: Build, source_path: str | None, base_url: str, body: str) -> str:
-    """Rewrite relative ``.md`` links in a Markdown body to absolute site URLs.
+def _resolve_links(
+    build: Build, source_path: str | None, base_url: str, body: str, *, markdown: bool
+) -> str:
+    """Rewrite relative ``.md`` links in a Markdown body to absolute URLs.
 
     The body kept on the node is the *pre-resolution* Markdown, so internal links
     still point at ``foo.md`` -- which 404s on a site that serves clean URLs. This
     resolves them the same way the ``link_resolver`` plugin resolves the HTML: a
     relative ``.md`` href maps to the target document's page URL (made absolute
-    with ``base_url``), with any ``#fragment`` re-slugified. External/absolute/
-    anchor links and links whose target has no page are left untouched.
+    with ``base_url``), with any ``#fragment`` re-slugified. With ``markdown`` the
+    link targets the page's ``.md`` (so an agent can keep crawling Markdown),
+    otherwise the clean HTML URL. External/absolute/anchor links and links whose
+    target has no page are left untouched.
     """
     if source_path is None:
         return body
@@ -116,7 +137,7 @@ def _resolve_links(build: Build, source_path: str | None, base_url: str, body: s
         target_url = page_url_of(build, f"path:{resolved[:-3]}")
         if target_url is None:
             return match.group(0)  # broken/suppressed target: leave it as-is
-        url = f"{base_url}{target_url}"
+        url = f"{base_url}{_md_url(target_url) if markdown else target_url}"
         if fragment:
             url = f"{url}#{slugify(fragment)}"
         return f"[{text}]({url})"
@@ -125,13 +146,18 @@ def _resolve_links(build: Build, source_path: str | None, base_url: str, body: s
 
 
 def _entries(
-    build: Build, include: tuple[str, ...] | None, exclude: tuple[str, ...]
+    build: Build,
+    include: tuple[str, ...] | None,
+    exclude: tuple[str, ...],
+    *,
+    markdown_pages: bool,
 ) -> list[_Entry]:
     """Collect one :class:`_Entry` per selected document page, section/url-sorted.
 
     Only ``Page`` nodes with ``generated_from`` provenance are considered, so the
     virtual sitemap/rss/taxonomy pages -- and the llms pages themselves -- are
-    excluded. A document opts out with ``llms: false``.
+    excluded. A document opts out with ``llms: false``. With ``markdown_pages`` the
+    entry ``link`` and the links inside ``body`` target the ``.md`` versions.
     """
     config = build.builder.config
     base_url = config.base_url if config is not None else ""
@@ -152,14 +178,17 @@ def _entries(
         if section in exclude:
             continue
         excerpt = doc.meta.get("excerpt")
+        link_url = _md_url(node.url) if markdown_pages else node.url
         out.append(
             _Entry(
                 section=section,
                 url=node.url,
-                link=f"{base_url}{node.url}",
+                link=f"{base_url}{link_url}",
                 title=str(doc.meta.get("title") or node.url),
                 excerpt=str(excerpt) if isinstance(excerpt, str) else "",
-                body=_resolve_links(build, doc.source_path, base_url, _body(doc)),
+                body=_resolve_links(
+                    build, doc.source_path, base_url, _body(doc), markdown=markdown_pages
+                ),
             )
         )
     out.sort(key=lambda e: (e.section, e.url))
@@ -209,16 +238,18 @@ def build_llms(
     include: tuple[str, ...] | None = None,
     exclude: tuple[str, ...] = (),
     full: bool = True,
+    markdown_pages: bool = False,
     title: str | None = None,
     summary: str | None = None,
 ) -> None:
-    """Materialize the ``/llms.txt`` (and optional ``/llms-full.txt``) pages."""
+    """Materialize the ``/llms.txt`` (and optional ``/llms-full.txt`` + per-page
+    ``.md``) pages."""
     config = build.builder.config
     site = config.site if config is not None else {}
     index_title = title if title is not None else str(site.get("title") or "")
     index_summary = summary if summary is not None else str(site.get("description") or "")
 
-    entries = _entries(build, include, exclude)
+    entries = _entries(build, include, exclude, markdown_pages=markdown_pages)
     _set_page(
         build,
         _INDEX_ID,
@@ -233,6 +264,19 @@ def build_llms(
         # page-set diff deletes its output.
         build.graph.remove(_FULL_ID)
 
+    # Optional raw Markdown page per selected page. Track the ids owned this run so
+    # pages that vanish (or markdown_pages turned off) get removed and their output
+    # cleaned by the finalize page-set diff.
+    owned: set[str] = set()
+    if markdown_pages:
+        for entry in entries:
+            pid = f"{_MD_PREFIX}{entry.url}"
+            _set_page(build, pid, _md_url(entry.url), entry.title, entry.body.rstrip() + "\n")
+            owned.add(pid)
+    for node in list(build.graph.nodes()):
+        if node.id.startswith(_MD_PREFIX) and node.id not in owned:
+            build.graph.remove(node.id)
+
 
 @dataclass(slots=True)
 class LlmsPlugin:
@@ -241,6 +285,7 @@ class LlmsPlugin:
     include: tuple[str, ...] | None = None
     exclude: tuple[str, ...] = ()
     full: bool = True
+    markdown_pages: bool = False
     title: str | None = None
     summary: str | None = None
     name: str = "llms"
@@ -256,6 +301,7 @@ class LlmsPlugin:
                     include=self.include,
                     exclude=self.exclude,
                     full=self.full,
+                    markdown_pages=self.markdown_pages,
                     title=self.title,
                     summary=self.summary,
                 )
@@ -266,8 +312,16 @@ def llms(
     include: tuple[str, ...] | None = None,
     exclude: tuple[str, ...] = (),
     full: bool = True,
+    markdown_pages: bool = False,
     title: str | None = None,
     summary: str | None = None,
 ) -> LlmsPlugin:
     """Factory used in ``pyssg.config.py``."""
-    return LlmsPlugin(include=include, exclude=exclude, full=full, title=title, summary=summary)
+    return LlmsPlugin(
+        include=include,
+        exclude=exclude,
+        full=full,
+        markdown_pages=markdown_pages,
+        title=title,
+        summary=summary,
+    )

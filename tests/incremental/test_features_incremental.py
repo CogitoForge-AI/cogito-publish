@@ -53,7 +53,7 @@ config = Config(
     plugins=[
         directory_loader(), frontmatter(), markdown(), mermaid(), highlight(),
         content_meta(), permalink(), wikilink(), link_resolver(), transclude(),
-        nav(), taxonomy(), sitemap(), rss(), llms(), asset_copy(), render(),
+        nav(), taxonomy(), sitemap(), rss(), llms(markdown_pages=True), asset_copy(), render(),
     ],
 )
 """
