@@ -51,6 +51,21 @@ class Config:
     ``layout`` is either a ``str`` path relative to the site directory, or an
     absolute :class:`~pathlib.Path` (e.g. a built-in theme; see
     :func:`pyssg.themes.theme_path`) used as-is.
+
+    ``theme`` holds site-level overrides for the active layout's configurable
+    options (colors, layout toggles, nav, ...). A theme declares its option
+    defaults in its ``layout.toml`` ``[options]`` table; the engine resolves the
+    effective options as ``layout defaults <- this dict`` and exposes them to
+    templates as ``theme``. The merge is a shallow per-key override.
+
+    The *mechanism* is standardized but the *option vocabulary* is per-theme:
+    each theme owns its own option names, so consult that theme's documentation.
+    Keys a theme does not declare are still passed through (a theme may read
+    freeform extras), but the engine emits a non-fatal warning for them, since an
+    undeclared key is usually a typo. For consistency across themes, theme
+    authors are encouraged -- not required -- to reuse a few conventional names
+    when applicable, e.g. ``default_theme`` ("auto"/"light"/"dark" color scheme)
+    and ``accent`` (primary color).
     """
 
     content_dir: str = "content"
@@ -59,6 +74,7 @@ class Config:
     base_url: str = ""
     plugins: list[Plugin] = field(default_factory=list)
     site: dict[str, object] = field(default_factory=dict)
+    theme: dict[str, object] = field(default_factory=dict)
 
 
 def load_config(site_dir: Path) -> Config:
