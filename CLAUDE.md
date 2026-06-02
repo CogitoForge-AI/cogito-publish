@@ -13,6 +13,13 @@ conflicts with the code/conventions, **follow the code**; do not block on
 - **Standard open-source style:** clear names, just-enough comments (explain
   *why*, not *what*), follow PEP 8 + `ruff`; write it like a public library that
   a stranger will read.
+- **Docstrings are published API docs.** The References section of the docs site
+  is generated from docstrings via apidoc, so every module/class/function
+  docstring is reader-facing documentation, not a private note. Write the best
+  doc you can: a clear summary line, what it does and *why*, the contract
+  (params, return, raised errors, ordering/purity guarantees), and follow a
+  consistent docstring style. Treat a public symbol with a missing or sloppy
+  docstring as an incomplete change.
 - **Discussion/replies and auxiliary files** (e.g. `TRACK.md`, notes, PR/issue
   descriptions) may use the maintainer's working language. Code stays English.
 

@@ -24,6 +24,7 @@ CONFIG_TEXT = """\
 from __future__ import annotations
 
 from pyssg import Config
+from pyssg.contrib.llms import llms
 from pyssg.plugins import (
     asset_copy,
     content_meta,
@@ -52,7 +53,7 @@ config = Config(
     plugins=[
         directory_loader(), frontmatter(), markdown(), mermaid(), highlight(),
         content_meta(), permalink(), wikilink(), link_resolver(), transclude(),
-        nav(), taxonomy(), sitemap(), rss(), asset_copy(), render(),
+        nav(), taxonomy(), sitemap(), rss(), llms(), asset_copy(), render(),
     ],
 )
 """
