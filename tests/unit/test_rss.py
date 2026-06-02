@@ -62,7 +62,7 @@ class RssTest(unittest.TestCase):
         page = build.graph.get(_PAGE_ID)
         self.assertIsInstance(page, Page)
         self.assertEqual(page.url, _PAGE_URL)  # type: ignore[union-attr]
-        self.assertIsNone(page.template)  # type: ignore[union-attr]
+        self.assertEqual(page.template, "")  # type: ignore[union-attr]
         xml = str(page.meta["content_html"])  # type: ignore[union-attr]
         self.assertIn("<title>My Site</title>", xml)
         self.assertIn("<link>https://example.com/a/</link>", xml)

@@ -151,15 +151,15 @@ def render_full(entries: list[_Entry]) -> str:
 
 
 def _set_page(build: Build, pid: str, url: str, title: str, text: str) -> None:
-    """Create or update a virtual ``template=None`` page emitting ``text`` raw."""
+    """Create or update a virtual ``template=""`` page emitting ``text`` raw."""
     meta: dict[str, object] = {"title": title, "content_html": text}
     existing = build.graph.get(pid)
     if isinstance(existing, Page):
         existing.url = url
-        existing.template = None
+        existing.template = ""
         existing.meta = meta
     else:
-        build.graph.add_node(Page(id=pid, kind=NodeKind.PAGE, url=url, template=None, meta=meta))
+        build.graph.add_node(Page(id=pid, kind=NodeKind.PAGE, url=url, template="", meta=meta))
 
 
 def build_llms(

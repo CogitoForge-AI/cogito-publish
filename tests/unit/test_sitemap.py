@@ -55,7 +55,7 @@ class SitemapTest(unittest.TestCase):
         page = build.graph.get(_PAGE_ID)
         self.assertIsInstance(page, Page)
         self.assertEqual(page.url, _PAGE_URL)  # type: ignore[union-attr]
-        self.assertIsNone(page.template)  # type: ignore[union-attr]
+        self.assertEqual(page.template, "")  # type: ignore[union-attr]
         self.assertIn("https://example.com/a/", str(page.meta["content_html"]))  # type: ignore[union-attr]
 
     def test_build_sitemap_orders_by_url_and_skips_virtual_pages(self) -> None:

@@ -88,7 +88,7 @@ class BuildLlmsTest(unittest.TestCase):
         self.assertIsInstance(full, Page)
         self.assertEqual(index.url, _INDEX_URL)  # type: ignore[union-attr]
         self.assertEqual(full.url, _FULL_URL)  # type: ignore[union-attr]
-        self.assertIsNone(index.template)  # type: ignore[union-attr]
+        self.assertEqual(index.template, "")  # type: ignore[union-attr]
         self.assertIn("# T", _text(build, _INDEX_ID))
         self.assertIn("> D", _text(build, _INDEX_ID))
         self.assertIn("Hello", _text(build, _FULL_ID))

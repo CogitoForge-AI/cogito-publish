@@ -81,6 +81,12 @@ class RenderPlugin:
         if env is None or layout is None:
             return content_html
 
+        # An empty-string template is a deliberate "emit raw" signal used by
+        # virtual pages (sitemap, rss, llms).  ``None`` means "use the layout
+        # default" -- the common case for regular content pages.
+        if page.template == "":
+            return content_html
+
         template_name = page.template or layout.default_template
         lang = str(context.get("lang", ""))
         # The i18n routing plugin (when loaded) names the site's default locale;

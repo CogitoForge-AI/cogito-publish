@@ -131,11 +131,11 @@ def build_rss(build: Build, title: str | None = None) -> None:
     existing = build.graph.get(_PAGE_ID)
     if isinstance(existing, Page):
         existing.url = _PAGE_URL
-        existing.template = None
+        existing.template = ""
         existing.meta = meta
     else:
         build.graph.add_node(
-            Page(id=_PAGE_ID, kind=NodeKind.PAGE, url=_PAGE_URL, template=None, meta=meta)
+            Page(id=_PAGE_ID, kind=NodeKind.PAGE, url=_PAGE_URL, template="", meta=meta)
         )
 
 
