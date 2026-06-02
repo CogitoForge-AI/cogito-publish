@@ -1,0 +1,36 @@
+{% extends "base.html.j2" %}
+{% block content %}
+{% if theme.show_breadcrumbs and breadcrumbs %}
+<nav class="td-breadcrumb" aria-label="Breadcrumb">
+{% for crumb in breadcrumbs %}<a href="{{ crumb.url }}">{{ crumb.title }}</a>{% if not loop.last %} <span aria-hidden="true">/</span> {% endif %}{% endfor %}
+</nav>
+{% endif %}
+<article class="td-article">
+<h1>{{ page.title }}</h1>
+{% set page_description = page.get('description') %}
+{% if page_description %}<p class="td-lead">{{ page_description }}</p>{% endif %}
+{% if theme.show_reading_time and reading_time %}<p class="td-article-meta">{{ t("page.reading_time", minutes=reading_time) }}</p>{% endif %}
+{{ content_html }}
+{% if tags %}<p class="td-tags">{% for tag in tags %}<a href="/tags/{{ tag }}/">#{{ tag }}</a> {% endfor %}</p>{% endif %}
+</article>
+{% if theme.show_prev_next and (prev or next) %}
+<nav class="td-page-nav" aria-label="Page navigation">
+{% if prev %}<a class="td-page-nav-prev" href="{{ prev.url }}"><span class="td-page-nav-label">{{ t("page.prev") }}</span><span class="td-page-nav-title">{{ prev.title }}</span></a>{% else %}<span></span>{% endif %}
+{% if next %}<a class="td-page-nav-next" href="{{ next.url }}"><span class="td-page-nav-label">{{ t("page.next") }}</span><span class="td-page-nav-title">{{ next.title }}</span></a>{% else %}<span></span>{% endif %}
+</nav>
+{% endif %}
+{% if theme.show_backlinks and backlinks %}
+<aside class="td-backlinks">
+<p class="td-backlinks-title">{{ t("page.linked_from") }}</p>
+<ul>{% for b in backlinks %}<li><a href="{{ b.url }}">{{ b.title }}</a></li>{% endfor %}</ul>
+</aside>
+{% endif %}
+{% endblock %}
+{% block toc %}
+{% if theme.show_toc and toc %}
+<nav class="td-toc">
+<p class="td-toc-title">{{ t("page.on_this_page") }}</p>
+<ul>{% for h in toc %}<li class="td-toc-l{{ h.level }}"><a href="#{{ h.slug }}">{{ h.text }}</a></li>{% endfor %}</ul>
+</nav>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html.j2" %}
+{% block content %}
+<article class="td-article">
+<h1>{{ page.title }}</h1>
+<p class="td-lead">{{ t("term.tagged", count=page.count) }}</p>
+<ul class="td-term-members">
+{% for m in page.members %}<li><a href="{{ m.url }}">{{ m.title }}</a></li>{% endfor %}
+</ul>
+</article>
+{% endblock %}
