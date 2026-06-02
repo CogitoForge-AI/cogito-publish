@@ -48,6 +48,33 @@ class LoadLayoutTest(unittest.TestCase):
         self.assertEqual(layout.assets_dir, root / "assets")
         self.assertEqual(layout.default_template, "page.html.j2")
 
+    def test_load_layout_options_default_empty(self) -> None:
+        root = _make_layout(self.tmp_path / "docs")
+        layout = load_layout(root)
+        self.assertEqual(dict(layout.options), {})
+
+    def test_load_layout_reads_options_table(self) -> None:
+        root = _make_layout(
+            self.tmp_path / "docs",
+            manifest=(
+                'name = "docs"\ndefault_template = "page.html.j2"\n'
+                '[options]\nshow_toc = true\naccent = "#0b66c3"\n'
+            ),
+        )
+        layout = load_layout(root)
+        self.assertEqual(dict(layout.options), {"show_toc": True, "accent": "#0b66c3"})
+
+    def test_load_layout_options_is_read_only(self) -> None:
+        root = _make_layout(self.tmp_path / "docs", manifest='name = "docs"\n[options]\nx = 1\n')
+        layout = load_layout(root)
+        with self.assertRaises(TypeError):
+            layout.options["x"] = 2  # type: ignore[index]
+
+    def test_load_layout_rejects_non_table_options(self) -> None:
+        root = _make_layout(self.tmp_path / "docs", manifest='name = "docs"\noptions = 1\n')
+        with self.assertRaisesRegex(LayoutError, "must be a table"):
+            load_layout(root)
+
     def test_load_layout_assets_none_when_absent(self) -> None:
         root = _make_layout(self.tmp_path / "docs", with_assets=False)
         layout = load_layout(root)

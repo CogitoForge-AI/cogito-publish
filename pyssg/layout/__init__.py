@@ -13,8 +13,10 @@ record carries no mutable state so it is safe to share across builds.
 from __future__ import annotations
 
 import tomllib
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field
 from pathlib import Path
+from types import MappingProxyType
 
 from pyssg.core.errors import LayoutError
 
@@ -22,6 +24,7 @@ from pyssg.core.errors import LayoutError
 _MANIFEST_FILENAME = "layout.toml"
 _TEMPLATES_DIRNAME = "templates"
 _ASSETS_DIRNAME = "assets"
+_OPTIONS_KEY = "options"
 
 # Defaults applied when the manifest omits a key.
 _DEFAULT_VERSION = "0.0.0"
@@ -34,6 +37,12 @@ class Layout:
 
     ``root`` is the package directory; ``templates_dir`` and ``assets_dir`` are
     resolved against it. ``assets_dir`` is None when the package ships no assets.
+
+    ``options`` is the theme's configurable-option defaults, read verbatim from
+    the manifest ``[options]`` table (an empty mapping when the table is absent).
+    The engine layers the site's :attr:`pyssg.config.Config.theme` over these
+    defaults to produce the ``theme`` template variable; the layout itself only
+    declares the defaults and never resolves them.
     """
 
     name: str
@@ -42,6 +51,9 @@ class Layout:
     templates_dir: Path
     assets_dir: Path | None
     default_template: str
+    # Defaults to an empty read-only mapping so a layout built without options
+    # (and direct construction in tests) needs no boilerplate.
+    options: Mapping[str, object] = field(default_factory=lambda: MappingProxyType({}))
 
 
 def load_layout(path: Path) -> Layout:
@@ -81,6 +93,8 @@ def load_layout(path: Path) -> Layout:
     assets_dir = path / _ASSETS_DIRNAME
     resolved_assets_dir = assets_dir if assets_dir.is_dir() else None
 
+    options = _read_options(manifest, manifest_path)
+
     return Layout(
         name=name,
         version=version,
@@ -88,7 +102,28 @@ def load_layout(path: Path) -> Layout:
         templates_dir=templates_dir,
         assets_dir=resolved_assets_dir,
         default_template=default_template,
+        options=options,
     )
+
+
+def _read_options(manifest: dict[str, object], manifest_path: Path) -> Mapping[str, object]:
+    """Read the manifest ``[options]`` table as the theme's option defaults.
+
+    An absent table yields an empty mapping. A present-but-non-table value is a
+    malformed manifest, so it raises rather than being silently dropped. The
+    result is wrapped read-only so the immutable :class:`Layout` cannot be
+    mutated through it after loading.
+    """
+    if _OPTIONS_KEY not in manifest:
+        return MappingProxyType({})
+    value = manifest[_OPTIONS_KEY]
+    if not isinstance(value, dict):
+        raise LayoutError(
+            f"{_MANIFEST_FILENAME} key '{_OPTIONS_KEY}' must be a table, "
+            f"got {type(value).__name__}: {manifest_path}"
+        )
+    # Copy so later mutation of the parsed manifest cannot leak into the record.
+    return MappingProxyType(dict(value))
 
 
 def _as_str(manifest: dict[str, object], key: str, *, default: str, manifest_path: Path) -> str:

@@ -1,0 +1,2868 @@
+/*
+ * blog-minimal theme styles.
+ *
+ * Compiled from a minimal subset of hugo-coder
+ * (https://github.com/luizdepra/hugo-coder), MIT License, Copyright (c) Luiz
+ * de Prá. See THEME-LICENSE in this directory.
+ *
+ * This stylesheet is generated offline from coder's SCSS (light + dark); the
+ * pyssg build itself ships only this static CSS and never compiles SCSS. The
+ * subset excludes font-awesome, notices, tabs, the float toggle widget, and
+ * mastodon. See STYLE.md for the exact source commit and the reproduction
+ * command.
+ */
+.content article a:where(.external-link):not(:has(img)):after {
+  -webkit-font-smoothing: antialiased;
+}
+
+.fa-solid, .content article a:where(.external-link):not(:has(img)):after {
+  font-weight: 900;
+}
+
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+/* Document
+   ========================================================================== */
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+html {
+  line-height: 1.15; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/* Sections
+   ========================================================================== */
+/**
+ * Remove the margin in all browsers.
+ */
+body {
+  margin: 0;
+}
+
+/**
+ * Render the `main` element consistently in IE.
+ */
+main {
+  display: block;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* Grouping content
+   ========================================================================== */
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+hr {
+  box-sizing: content-box; /* 1 */
+  height: 0; /* 1 */
+  overflow: visible; /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+pre {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+
+/* Text-level semantics
+   ========================================================================== */
+/**
+ * Remove the gray background on active links in IE 10.
+ */
+a {
+  background-color: transparent;
+  word-wrap: break-word;
+}
+
+/**
+ * 1. Remove the bottom border in Chrome 57-
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+abbr[title] {
+  border-bottom: none; /* 1 */
+  text-decoration: underline; /* 2 */
+  text-decoration: underline dotted; /* 2 */
+}
+
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+b,
+strong {
+  font-weight: bolder;
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+code,
+kbd,
+samp {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+/**
+ * Remove the border on images inside links in IE 10.
+ */
+img {
+  border-style: none;
+}
+
+/* Forms
+   ========================================================================== */
+/**
+ * 1. Change the font styles in all browsers.
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit; /* 1 */
+  font-size: 100%; /* 1 */
+  line-height: 1.15; /* 1 */
+  margin: 0; /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input { /* 1 */
+  overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
+select { /* 1 */
+  text-transform: none;
+}
+
+/**
+ * Correct the inability to style clickable types in iOS and Safari.
+ */
+button,
+[type=button],
+[type=reset],
+[type=submit] {
+  -webkit-appearance: button;
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type=button]::-moz-focus-inner,
+[type=reset]::-moz-focus-inner,
+[type=submit]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+button:-moz-focusring,
+[type=button]:-moz-focusring,
+[type=reset]:-moz-focusring,
+[type=submit]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+ * Correct the padding in Firefox.
+ */
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+legend {
+  box-sizing: border-box; /* 1 */
+  color: inherit; /* 2 */
+  display: table; /* 1 */
+  max-width: 100%; /* 1 */
+  padding: 0; /* 3 */
+  white-space: normal; /* 1 */
+}
+
+/**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+  vertical-align: baseline;
+}
+
+/**
+ * Remove the default vertical scrollbar in IE 10+.
+ */
+textarea {
+  overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10.
+ * 2. Remove the padding in IE 10.
+ */
+[type=checkbox],
+[type=radio] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type=number]::-webkit-inner-spin-button,
+[type=number]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type=search] {
+  -webkit-appearance: textfield; /* 1 */
+  outline-offset: -2px; /* 2 */
+}
+
+/**
+ * Remove the inner padding in Chrome and Safari on macOS.
+ */
+[type=search]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: button; /* 1 */
+  font: inherit; /* 2 */
+}
+
+/* Interactive
+   ========================================================================== */
+/*
+ * Add the correct display in Edge, IE 10+, and Firefox.
+ */
+details {
+  display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+  display: list-item;
+}
+
+/* Misc
+   ========================================================================== */
+/**
+ * Add the correct display in IE 10+.
+ */
+template {
+  display: none;
+}
+
+/**
+ * Add the correct display in IE 10.
+ */
+[hidden] {
+  display: none;
+}
+
+*,
+*:after,
+*:before {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  color: #212121;
+  background-color: #fafafa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, "游ゴシック", "PingFang SC", STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+  font-size: 1.8em;
+  font-weight: 400;
+  line-height: 1.8em;
+}
+@media only screen and (max-width: 768px) {
+  body {
+    font-size: 1.6em;
+    line-height: 1.6em;
+  }
+}
+
+iframe[src*=disqus] {
+  color-scheme: light;
+}
+
+a {
+  font-weight: 500;
+  color: #1565c0;
+  text-decoration: none;
+  transition: all 0.25s ease-in;
+}
+a:focus, a:hover {
+  text-decoration: underline;
+}
+
+p {
+  margin: 2rem 0 2rem 0;
+}
+@media only screen and (max-width: 768px) {
+  p {
+    margin: 1.5rem 0 1.5rem 0;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, "游ゴシック", "PingFang SC", STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+  font-weight: 600;
+  color: #000;
+  margin: 4rem 0 2.5rem 0;
+}
+h1:hover .heading-link,
+h2:hover .heading-link,
+h3:hover .heading-link,
+h4:hover .heading-link,
+h5:hover .heading-link,
+h6:hover .heading-link {
+  visibility: visible;
+}
+h1 .heading-link,
+h2 .heading-link,
+h3 .heading-link,
+h4 .heading-link,
+h5 .heading-link,
+h6 .heading-link {
+  color: #1565c0;
+  font-weight: inherit;
+  text-decoration: none;
+  font-size: 80%;
+  visibility: hidden;
+}
+h1 .title-link,
+h2 .title-link,
+h3 .title-link,
+h4 .title-link,
+h5 .title-link,
+h6 .title-link {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 3.2rem;
+  line-height: 3.6rem;
+}
+@media only screen and (max-width: 768px) {
+  h1 {
+    font-size: 3rem;
+    line-height: 3.4rem;
+  }
+}
+
+h2 {
+  font-size: 2.8rem;
+  line-height: 3.2rem;
+}
+@media only screen and (max-width: 768px) {
+  h2 {
+    font-size: 2.6rem;
+    line-height: 3rem;
+  }
+}
+
+h3 {
+  font-size: 2.4rem;
+  line-height: 2.8rem;
+}
+@media only screen and (max-width: 768px) {
+  h3 {
+    font-size: 2.2rem;
+    line-height: 2.6rem;
+  }
+}
+
+h4 {
+  font-size: 2.2rem;
+  line-height: 2.6rem;
+}
+@media only screen and (max-width: 768px) {
+  h4 {
+    font-size: 2rem;
+    line-height: 2.4rem;
+  }
+}
+
+h5 {
+  font-size: 2rem;
+  line-height: 2.4rem;
+}
+@media only screen and (max-width: 768px) {
+  h5 {
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+  }
+}
+
+h6 {
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+}
+@media only screen and (max-width: 768px) {
+  h6 {
+    font-size: 1.6rem;
+    line-height: 2rem;
+  }
+}
+
+b,
+strong {
+  font-weight: 700;
+}
+
+.highlight div,
+.highlight pre {
+  margin: 2rem 0 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  overflow-x: auto;
+}
+
+pre {
+  display: block;
+  font-family: "SF Mono", Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 2.6rem;
+  overflow-x: auto;
+  margin: 2rem 0 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+pre code {
+  display: inline-block;
+  background-color: inherit;
+  color: inherit;
+}
+
+code {
+  font-family: "SF Mono", Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 1.6rem;
+  font-weight: 400;
+  border-radius: 0.6rem;
+  padding: 0.3rem 0.6rem;
+  background-color: #ccc;
+  color: #212121;
+}
+@media only screen and (max-width: 768px) {
+  code {
+    font-size: 1.5rem;
+  }
+}
+
+blockquote {
+  border-left: 2px solid #e0e0e0;
+  padding-left: 2rem;
+  line-height: 2.2rem;
+  font-weight: 400;
+  font-style: italic;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+th,
+td {
+  padding: 1.6rem;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table td,
+table th {
+  border: 2px solid #000;
+}
+
+table tr:first-child th {
+  border-top: 0;
+}
+
+table tr:last-child td {
+  border-bottom: 0;
+}
+
+table tr td:first-child,
+table tr th:first-child {
+  border-left: 0;
+}
+
+table tr td:last-child,
+table tr th:last-child {
+  border-right: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+figure {
+  text-align: center;
+}
+
+.footnotes ol li p {
+  margin: 0;
+}
+
+.preload-transitions * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.container {
+  margin: 1rem auto;
+  max-width: 90rem;
+  width: 100%;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.fab {
+  font-weight: 400;
+}
+
+.fas {
+  font-weight: 700;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.fab {
+  font-weight: 400;
+}
+
+.fas {
+  font-weight: 900;
+}
+
+body.colorscheme-dark {
+  color: #dadada;
+  background-color: #212121;
+}
+body.colorscheme-dark a {
+  color: #42a5f5;
+}
+body.colorscheme-dark h1,
+body.colorscheme-dark h2,
+body.colorscheme-dark h3,
+body.colorscheme-dark h4,
+body.colorscheme-dark h5,
+body.colorscheme-dark h6 {
+  color: #dadada;
+}
+body.colorscheme-dark h1:hover .heading-link,
+body.colorscheme-dark h2:hover .heading-link,
+body.colorscheme-dark h3:hover .heading-link,
+body.colorscheme-dark h4:hover .heading-link,
+body.colorscheme-dark h5:hover .heading-link,
+body.colorscheme-dark h6:hover .heading-link {
+  visibility: visible;
+}
+body.colorscheme-dark h1 .heading-link,
+body.colorscheme-dark h2 .heading-link,
+body.colorscheme-dark h3 .heading-link,
+body.colorscheme-dark h4 .heading-link,
+body.colorscheme-dark h5 .heading-link,
+body.colorscheme-dark h6 .heading-link {
+  color: #42a5f5;
+  font-weight: inherit;
+  text-decoration: none;
+  font-size: 80%;
+  visibility: hidden;
+}
+body.colorscheme-dark h1 .title-link,
+body.colorscheme-dark h2 .title-link,
+body.colorscheme-dark h3 .title-link,
+body.colorscheme-dark h4 .title-link,
+body.colorscheme-dark h5 .title-link,
+body.colorscheme-dark h6 .title-link {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+body.colorscheme-dark pre code {
+  background-color: inherit;
+  color: inherit;
+}
+body.colorscheme-dark code {
+  background-color: #4f4f4f;
+  color: #dadada;
+}
+body.colorscheme-dark blockquote {
+  border-left: 2px solid #424242;
+}
+body.colorscheme-dark th,
+body.colorscheme-dark td {
+  padding: 1.6rem;
+}
+body.colorscheme-dark table {
+  border-collapse: collapse;
+}
+body.colorscheme-dark table td,
+body.colorscheme-dark table th {
+  border: 2px solid #dadada;
+}
+body.colorscheme-dark table tr:first-child th {
+  border-top: 0;
+}
+body.colorscheme-dark table tr:last-child td {
+  border-bottom: 0;
+}
+body.colorscheme-dark table tr td:first-child,
+body.colorscheme-dark table tr th:first-child {
+  border-left: 0;
+}
+body.colorscheme-dark table tr td:last-child,
+body.colorscheme-dark table tr th:last-child {
+  border-right: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto {
+    color: #dadada;
+    background-color: #212121;
+  }
+  body.colorscheme-auto a {
+    color: #42a5f5;
+  }
+  body.colorscheme-auto h1,
+  body.colorscheme-auto h2,
+  body.colorscheme-auto h3,
+  body.colorscheme-auto h4,
+  body.colorscheme-auto h5,
+  body.colorscheme-auto h6 {
+    color: #dadada;
+  }
+  body.colorscheme-auto h1:hover .heading-link,
+  body.colorscheme-auto h2:hover .heading-link,
+  body.colorscheme-auto h3:hover .heading-link,
+  body.colorscheme-auto h4:hover .heading-link,
+  body.colorscheme-auto h5:hover .heading-link,
+  body.colorscheme-auto h6:hover .heading-link {
+    visibility: visible;
+  }
+  body.colorscheme-auto h1 .heading-link,
+  body.colorscheme-auto h2 .heading-link,
+  body.colorscheme-auto h3 .heading-link,
+  body.colorscheme-auto h4 .heading-link,
+  body.colorscheme-auto h5 .heading-link,
+  body.colorscheme-auto h6 .heading-link {
+    color: #42a5f5;
+    font-weight: inherit;
+    text-decoration: none;
+    font-size: 80%;
+    visibility: hidden;
+  }
+  body.colorscheme-auto h1 .title-link,
+  body.colorscheme-auto h2 .title-link,
+  body.colorscheme-auto h3 .title-link,
+  body.colorscheme-auto h4 .title-link,
+  body.colorscheme-auto h5 .title-link,
+  body.colorscheme-auto h6 .title-link {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  body.colorscheme-auto pre code {
+    background-color: inherit;
+    color: inherit;
+  }
+  body.colorscheme-auto code {
+    background-color: #4f4f4f;
+    color: #dadada;
+  }
+  body.colorscheme-auto blockquote {
+    border-left: 2px solid #424242;
+  }
+  body.colorscheme-auto th,
+  body.colorscheme-auto td {
+    padding: 1.6rem;
+  }
+  body.colorscheme-auto table {
+    border-collapse: collapse;
+  }
+  body.colorscheme-auto table td,
+  body.colorscheme-auto table th {
+    border: 2px solid #dadada;
+  }
+  body.colorscheme-auto table tr:first-child th {
+    border-top: 0;
+  }
+  body.colorscheme-auto table tr:last-child td {
+    border-bottom: 0;
+  }
+  body.colorscheme-auto table tr td:first-child,
+  body.colorscheme-auto table tr th:first-child {
+    border-left: 0;
+  }
+  body.colorscheme-auto table tr td:last-child,
+  body.colorscheme-auto table tr th:last-child {
+    border-right: 0;
+  }
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  margin-top: 1.6rem;
+  margin-bottom: 3.2rem;
+}
+@media only screen and (max-width: 768px) {
+  .content {
+    margin-top: 1rem;
+    margin-bottom: 1.6rem;
+  }
+}
+.content header {
+  margin-top: 6.4rem;
+  margin-bottom: 3.2rem;
+}
+.content header h1 {
+  font-size: 4.2rem;
+  line-height: 4.6rem;
+  margin: 0;
+}
+@media only screen and (max-width: 768px) {
+  .content header h1 {
+    font-size: 4rem;
+    line-height: 4.4rem;
+  }
+}
+.content article a:where(.external-link):not(:has(img)):after {
+  content: "";
+  padding-left: 0.5em;
+  font-size: 0.75em;
+  display: inline;
+}
+.content article details summary {
+  cursor: pointer;
+}
+.content article footer {
+  margin-top: 4rem;
+}
+.content article footer .see-also {
+  margin: 3.2rem 0;
+}
+.content article footer .see-also h3 {
+  margin: 3.2rem 0;
+}
+.content article p {
+  text-align: justify;
+  text-justify: auto;
+  -ms-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.content .post .post-title {
+  margin-bottom: 0.75em;
+}
+.content .post .post-meta i {
+  text-align: center;
+  width: 1.6rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+.content .post .post-meta .date .posted-on {
+  margin-left: 0;
+  margin-right: 1.5rem;
+}
+.content .post .post-meta .tags .tag {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  background-color: #e0e0e0;
+  border-radius: 0.6rem;
+  line-height: 1.5em;
+}
+.content .post .post-meta .tags .tag a {
+  color: #212121;
+}
+.content .post .post-meta .tags .tag a:active {
+  color: #212121;
+}
+.content figure {
+  margin: 0;
+  padding: 0;
+}
+.content figcaption p {
+  text-align: center;
+  font-style: italic;
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.avatar img {
+  width: 20rem;
+  height: auto;
+  border-radius: 50%;
+}
+@media only screen and (max-width: 768px) {
+  .avatar img {
+    width: 17rem;
+  }
+}
+
+.list ul {
+  margin: 3.2rem 0 3.2rem 0;
+  list-style: none;
+  padding: 0;
+}
+.list ul li {
+  font-size: 1.8rem;
+}
+@media only screen and (max-width: 768px) {
+  .list ul li {
+    margin: 1.6rem 0 1.6rem 0;
+  }
+}
+.list ul li .date {
+  display: inline-block;
+  flex: 1;
+  width: 20rem;
+  text-align: right;
+  margin-right: 3rem;
+}
+@media only screen and (max-width: 768px) {
+  .list ul li .date {
+    display: block;
+    text-align: left;
+  }
+}
+.list ul li .title {
+  font-size: 1.8rem;
+  flex: 2;
+  color: #212121;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, "游ゴシック", "PingFang SC", STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+  font-weight: 700;
+}
+.list ul li .title:hover, .list ul li .title:focus {
+  color: #1565c0;
+}
+@media only screen and (min-width: 768.1px) {
+  .list ul:not(.pagination) li {
+    display: flex;
+  }
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.centered .about {
+  text-align: center;
+}
+.centered .about h1 {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+.centered .about h2 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 2.4rem;
+}
+@media only screen and (max-width: 768px) {
+  .centered .about h2 {
+    font-size: 2rem;
+  }
+}
+.centered .about ul {
+  list-style: none;
+  margin: 3rem 0 1rem 0;
+  padding: 0;
+  cursor: pointer;
+}
+.centered .about ul li {
+  display: inline-block;
+  position: relative;
+}
+.centered .about ul li a {
+  color: #212121;
+  text-transform: uppercase;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  font-size: 1.6rem;
+}
+.centered .about ul li a:hover, .centered .about ul li a:focus {
+  color: #1565c0;
+}
+@media only screen and (max-width: 768px) {
+  .centered .about ul li a {
+    font-size: 1.5rem;
+  }
+}
+.centered .error {
+  text-align: center;
+}
+.centered .error h1 {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  font-size: 4.6rem;
+}
+@media only screen and (max-width: 768px) {
+  .centered .error h1 {
+    font-size: 3.2rem;
+  }
+}
+.centered .error h2 {
+  margin-top: 2rem;
+  margin-bottom: 3.2rem;
+  font-size: 3.2rem;
+}
+@media only screen and (max-width: 768px) {
+  .centered .error h2 {
+    font-size: 2.8rem;
+  }
+}
+
+body.colorscheme-dark .content .post .tags .tag {
+  background-color: #424242;
+}
+body.colorscheme-dark .content .post .tags .tag a {
+  color: #dadada;
+}
+body.colorscheme-dark .content .post .tags .tag a:active {
+  color: #dadada;
+}
+body.colorscheme-dark .content .list ul li .title {
+  color: #dadada;
+}
+body.colorscheme-dark .content .list ul li .title:hover, body.colorscheme-dark .content .list ul li .title:focus {
+  color: #42a5f5;
+}
+body.colorscheme-dark .content .centered .about ul li a {
+  color: #dadada;
+}
+body.colorscheme-dark .content .centered .about ul li a:hover, body.colorscheme-dark .content .centered .about ul li a:focus {
+  color: #42a5f5;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .content .post .tags .tag {
+    background-color: #424242;
+  }
+  body.colorscheme-auto .content .post .tags .tag a {
+    color: #dadada;
+  }
+  body.colorscheme-auto .content .post .tags .tag a:active {
+    color: #dadada;
+  }
+  body.colorscheme-auto .content .list ul li .title {
+    color: #dadada;
+  }
+  body.colorscheme-auto .content .list ul li .title:hover, body.colorscheme-auto .content .list ul li .title:focus {
+    color: #42a5f5;
+  }
+  body.colorscheme-auto .content .centered .about ul li a {
+    color: #dadada;
+  }
+  body.colorscheme-auto .content .centered .about ul li a:hover, body.colorscheme-auto .content .centered .about ul li a:focus {
+    color: #42a5f5;
+  }
+}
+
+.navigation {
+  height: 6rem;
+  width: 100%;
+}
+.navigation a,
+.navigation span {
+  display: inline;
+  font-size: 1.7rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, "游ゴシック", "PingFang SC", STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+  font-weight: 600;
+  color: #212121;
+}
+.navigation a:hover, .navigation a:focus {
+  color: #1565c0;
+}
+.navigation .navigation-title {
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+}
+.navigation .navigation-list {
+  float: right;
+  list-style: none;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+@media only screen and (max-width: 768px) {
+  .navigation .navigation-list {
+    position: relative;
+    top: 2rem;
+    right: 0;
+    z-index: 5;
+    visibility: hidden;
+    opacity: 0;
+    padding: 0;
+    max-height: 0;
+    width: 100%;
+    background-color: #fafafa;
+    border-top: solid 2px #e0e0e0;
+    border-bottom: solid 2px #e0e0e0;
+    transition: opacity 0.25s, max-height 0.15s linear;
+  }
+}
+.navigation .navigation-list .navigation-item {
+  float: left;
+  margin: 0;
+  position: relative;
+}
+@media only screen and (max-width: 768px) {
+  .navigation .navigation-list .navigation-item {
+    float: none !important;
+    text-align: center;
+  }
+  .navigation .navigation-list .navigation-item a,
+  .navigation .navigation-list .navigation-item span {
+    line-height: 5rem;
+  }
+}
+.navigation .navigation-list .navigation-item a,
+.navigation .navigation-list .navigation-item span {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+@media only screen and (max-width: 768px) {
+  .navigation .navigation-list .separator {
+    display: none;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .navigation .navigation-list .menu-separator {
+    border-top: 2px solid #212121;
+    margin: 0 8rem;
+  }
+  .navigation .navigation-list .menu-separator span {
+    display: none;
+  }
+}
+.navigation #dark-mode-toggle {
+  margin: 1.7rem 0;
+  font-size: 2.4rem;
+  line-height: inherit;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 100;
+  position: fixed;
+}
+.navigation #menu-toggle {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .navigation #menu-toggle {
+    display: initial;
+    position: relative;
+    visibility: hidden;
+  }
+  .navigation #menu-toggle:checked + label > i {
+    color: #e0e0e0;
+  }
+  .navigation #menu-toggle:checked + label + ul {
+    visibility: visible;
+    opacity: 1;
+    max-height: 100rem;
+  }
+  .navigation #menu-toggle:focus-visible + label {
+    outline-style: auto;
+  }
+}
+.navigation .menu-button {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .navigation .menu-button {
+    position: relative;
+    display: block;
+    font-size: 2.4rem;
+    font-weight: 400;
+  }
+}
+.navigation .menu-button i:hover, .navigation .menu-button i:focus {
+  color: #000;
+}
+.navigation i {
+  color: #212121;
+  cursor: pointer;
+}
+.navigation i:hover, .navigation i:focus {
+  color: #1565c0;
+}
+
+body.colorscheme-dark .navigation a,
+body.colorscheme-dark .navigation span {
+  color: #dadada;
+}
+body.colorscheme-dark .navigation a:hover, body.colorscheme-dark .navigation a:focus {
+  color: #42a5f5;
+}
+@media only screen and (max-width: 768px) {
+  body.colorscheme-dark .navigation .navigation-list {
+    background-color: #212121;
+    border-top: solid 2px #424242;
+    border-bottom: solid 2px #424242;
+  }
+}
+@media only screen and (max-width: 768px) {
+  body.colorscheme-dark .navigation .navigation-list .menu-separator {
+    border-top: 2px solid #dadada;
+  }
+}
+@media only screen and (max-width: 768px) {
+  body.colorscheme-dark .navigation #menu-toggle:checked + label > i {
+    color: #424242;
+  }
+}
+body.colorscheme-dark .navigation i {
+  color: #dadada;
+}
+body.colorscheme-dark .navigation i:hover, body.colorscheme-dark .navigation i:focus {
+  color: #42a5f5;
+}
+body.colorscheme-dark .navigation .menu-button i:hover, body.colorscheme-dark .navigation .menu-button i:focus {
+  color: #dadada;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .navigation a,
+  body.colorscheme-auto .navigation span {
+    color: #dadada;
+  }
+  body.colorscheme-auto .navigation a:hover, body.colorscheme-auto .navigation a:focus {
+    color: #42a5f5;
+  }
+}
+@media only screen and (prefers-color-scheme: dark) and (max-width: 768px) {
+  body.colorscheme-auto .navigation .navigation-list {
+    background-color: #212121;
+    border-top: solid 2px #424242;
+    border-bottom: solid 2px #424242;
+  }
+}
+@media only screen and (prefers-color-scheme: dark) and (max-width: 768px) {
+  body.colorscheme-auto .navigation .navigation-list .menu-separator {
+    border-top: 2px solid #dadada;
+  }
+}
+@media only screen and (prefers-color-scheme: dark) and (max-width: 768px) {
+  body.colorscheme-auto .navigation #menu-toggle:checked + label > i {
+    color: #424242;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .navigation i {
+    color: #dadada;
+  }
+  body.colorscheme-auto .navigation i:hover, body.colorscheme-auto .navigation i:focus {
+    color: #42a5f5;
+  }
+  body.colorscheme-auto .navigation .menu-button i:hover, body.colorscheme-auto .navigation .menu-button i:focus {
+    color: #dadada;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 6rem;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, "游ゴシック", "PingFang SC", STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+}
+.pagination li {
+  display: inline;
+  text-align: center;
+  font-weight: 700;
+  margin: 0 2px;
+  text-align: center;
+  width: 2.2rem;
+}
+.pagination li a {
+  font-weight: 300;
+}
+
+.taxonomy li {
+  display: inline-block;
+  margin: 0.9rem;
+}
+.taxonomy .taxonomy-element {
+  display: block;
+  padding: 0.3rem 0.9rem;
+  background-color: #e0e0e0;
+  border-radius: 0.6rem;
+}
+.taxonomy .taxonomy-element a {
+  color: #212121;
+}
+.taxonomy .taxonomy-element a:active {
+  color: #212121;
+}
+
+body.colorscheme-dark .taxonomy-element {
+  background-color: #424242;
+}
+body.colorscheme-dark .taxonomy-element a {
+  color: #dadada;
+}
+body.colorscheme-dark .taxonomy-element a:active {
+  color: #dadada;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .taxonomy-element {
+    background-color: #424242;
+  }
+  body.colorscheme-auto .taxonomy-element a {
+    color: #dadada;
+  }
+  body.colorscheme-auto .taxonomy-element a:active {
+    color: #dadada;
+  }
+}
+
+.footer {
+  width: 100%;
+  text-align: center;
+  font-size: 1.6rem;
+  line-height: 2rem;
+  margin-bottom: 1rem;
+}
+@media only screen and (max-width: 768px) {
+  .footer {
+    font-size: 1.5rem;
+  }
+}
+.footer a {
+  color: #1565c0;
+}
+
+body.colorscheme-dark .footer a {
+  color: #42a5f5;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .footer a {
+    color: #42a5f5;
+  }
+}
+
+.float-container {
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  position: fixed;
+  font-size: 1.6em;
+}
+.float-container a {
+  position: relative;
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  font-size: 2rem;
+  color: #000;
+  background-color: #e0e0e0;
+  border-radius: 0.2rem;
+  opacity: 0.5;
+  transition: all 0.25s ease-in;
+}
+.float-container a:hover, .float-container a:focus {
+  color: #1565c0;
+  opacity: 1;
+}
+@media only screen and (max-width: 768px) {
+  .float-container a:hover, .float-container a:focus {
+    color: #000;
+    opacity: 0.5;
+  }
+}
+.float-container a i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+body.colorscheme-dark .float-container a {
+  color: #dadada;
+  background-color: #424242;
+}
+body.colorscheme-dark .float-container a:hover, body.colorscheme-dark .float-container a:focus {
+  color: #42a5f5;
+}
+@media only screen and (max-width: 768px) {
+  body.colorscheme-dark .float-container a:hover, body.colorscheme-dark .float-container a:focus {
+    color: #dadada;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .float-container a {
+    color: #dadada;
+    background-color: #424242;
+  }
+  body.colorscheme-auto .float-container a:hover, body.colorscheme-auto .float-container a:focus {
+    color: #42a5f5;
+  }
+}
+@media only screen and (prefers-color-scheme: dark) and (max-width: 768px) {
+  body.colorscheme-auto .float-container a:hover, body.colorscheme-auto .float-container a:focus {
+    color: #dadada;
+  }
+}
+
+/* Background */
+.bg {
+  background-color: #ffffff;
+}
+
+/* PreWrapper */
+.chroma {
+  background-color: #ffffff;
+}
+
+/* Other */
+/* Error */
+.chroma .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+
+/* CodeLine */
+/* LineLink */
+.chroma .lnlinks {
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* LineTableTD */
+.chroma .lntd {
+  vertical-align: top;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+/* LineTable */
+.chroma .lntable {
+  border-spacing: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+/* LineHighlight */
+.chroma .hl {
+  background-color: #ffffcc;
+}
+
+/* LineNumbersTable */
+.chroma .lnt {
+  white-space: pre;
+  user-select: none;
+  margin-right: 0.4em;
+  padding: 0 0.4em 0 0.4em;
+  color: #7f7f7f;
+}
+
+/* LineNumbers */
+.chroma .ln {
+  white-space: pre;
+  user-select: none;
+  margin-right: 0.4em;
+  padding: 0 0.4em 0 0.4em;
+  color: #7f7f7f;
+}
+
+/* Line */
+.chroma .line {
+  display: flex;
+}
+
+/* Keyword */
+.chroma .k {
+  color: #000000;
+  font-weight: bold;
+}
+
+/* KeywordConstant */
+.chroma .kc {
+  color: #000000;
+  font-weight: bold;
+}
+
+/* KeywordDeclaration */
+.chroma .kd {
+  color: #000000;
+  font-weight: bold;
+}
+
+/* KeywordNamespace */
+.chroma .kn {
+  color: #000000;
+  font-weight: bold;
+}
+
+/* KeywordPseudo */
+.chroma .kp {
+  color: #000000;
+  font-weight: bold;
+}
+
+/* KeywordReserved */
+.chroma .kr {
+  color: #000000;
+  font-weight: bold;
+}
+
+/* KeywordType */
+.chroma .kt {
+  color: #445588;
+  font-weight: bold;
+}
+
+/* Name */
+/* NameAttribute */
+.chroma .na {
+  color: #008080;
+}
+
+/* NameBuiltin */
+.chroma .nb {
+  color: #0086b3;
+}
+
+/* NameBuiltinPseudo */
+.chroma .bp {
+  color: #999999;
+}
+
+/* NameClass */
+.chroma .nc {
+  color: #445588;
+  font-weight: bold;
+}
+
+/* NameConstant */
+.chroma .no {
+  color: #008080;
+}
+
+/* NameDecorator */
+.chroma .nd {
+  color: #3c5d5d;
+  font-weight: bold;
+}
+
+/* NameEntity */
+.chroma .ni {
+  color: #800080;
+}
+
+/* NameException */
+.chroma .ne {
+  color: #990000;
+  font-weight: bold;
+}
+
+/* NameFunction */
+.chroma .nf {
+  color: #990000;
+  font-weight: bold;
+}
+
+/* NameFunctionMagic */
+/* NameLabel */
+.chroma .nl {
+  color: #990000;
+  font-weight: bold;
+}
+
+/* NameNamespace */
+.chroma .nn {
+  color: #555555;
+}
+
+/* NameOther */
+/* NameProperty */
+/* NameTag */
+.chroma .nt {
+  color: #000080;
+}
+
+/* NameVariable */
+.chroma .nv {
+  color: #008080;
+}
+
+/* NameVariableClass */
+.chroma .vc {
+  color: #008080;
+}
+
+/* NameVariableGlobal */
+.chroma .vg {
+  color: #008080;
+}
+
+/* NameVariableInstance */
+.chroma .vi {
+  color: #008080;
+}
+
+/* NameVariableMagic */
+/* Literal */
+/* LiteralDate */
+/* LiteralString */
+.chroma .s {
+  color: #dd1144;
+}
+
+/* LiteralStringAffix */
+.chroma .sa {
+  color: #dd1144;
+}
+
+/* LiteralStringBacktick */
+.chroma .sb {
+  color: #dd1144;
+}
+
+/* LiteralStringChar */
+.chroma .sc {
+  color: #dd1144;
+}
+
+/* LiteralStringDelimiter */
+.chroma .dl {
+  color: #dd1144;
+}
+
+/* LiteralStringDoc */
+.chroma .sd {
+  color: #dd1144;
+}
+
+/* LiteralStringDouble */
+.chroma .s2 {
+  color: #dd1144;
+}
+
+/* LiteralStringEscape */
+.chroma .se {
+  color: #dd1144;
+}
+
+/* LiteralStringHeredoc */
+.chroma .sh {
+  color: #dd1144;
+}
+
+/* LiteralStringInterpol */
+.chroma .si {
+  color: #dd1144;
+}
+
+/* LiteralStringOther */
+.chroma .sx {
+  color: #dd1144;
+}
+
+/* LiteralStringRegex */
+.chroma .sr {
+  color: #009926;
+}
+
+/* LiteralStringSingle */
+.chroma .s1 {
+  color: #dd1144;
+}
+
+/* LiteralStringSymbol */
+.chroma .ss {
+  color: #990073;
+}
+
+/* LiteralNumber */
+.chroma .m {
+  color: #009999;
+}
+
+/* LiteralNumberBin */
+.chroma .mb {
+  color: #009999;
+}
+
+/* LiteralNumberFloat */
+.chroma .mf {
+  color: #009999;
+}
+
+/* LiteralNumberHex */
+.chroma .mh {
+  color: #009999;
+}
+
+/* LiteralNumberInteger */
+.chroma .mi {
+  color: #009999;
+}
+
+/* LiteralNumberIntegerLong */
+.chroma .il {
+  color: #009999;
+}
+
+/* LiteralNumberOct */
+.chroma .mo {
+  color: #009999;
+}
+
+/* Operator */
+.chroma .o {
+  color: #000000;
+  font-weight: bold;
+}
+
+/* OperatorWord */
+.chroma .ow {
+  color: #000000;
+  font-weight: bold;
+}
+
+/* Punctuation */
+/* Comment */
+.chroma .c {
+  color: #999988;
+  font-style: italic;
+}
+
+/* CommentHashbang */
+.chroma .ch {
+  color: #999988;
+  font-style: italic;
+}
+
+/* CommentMultiline */
+.chroma .cm {
+  color: #999988;
+  font-style: italic;
+}
+
+/* CommentSingle */
+.chroma .c1 {
+  color: #999988;
+  font-style: italic;
+}
+
+/* CommentSpecial */
+.chroma .cs {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* CommentPreproc */
+.chroma .cp {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* CommentPreprocFile */
+.chroma .cpf {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* Generic */
+/* GenericDeleted */
+.chroma .gd {
+  color: #000000;
+  background-color: #ffdddd;
+}
+
+/* GenericEmph */
+.chroma .ge {
+  color: #000000;
+  font-style: italic;
+}
+
+/* GenericError */
+.chroma .gr {
+  color: #aa0000;
+}
+
+/* GenericHeading */
+.chroma .gh {
+  color: #999999;
+}
+
+/* GenericInserted */
+.chroma .gi {
+  color: #000000;
+  background-color: #ddffdd;
+}
+
+/* GenericOutput */
+.chroma .go {
+  color: #888888;
+}
+
+/* GenericPrompt */
+.chroma .gp {
+  color: #555555;
+}
+
+/* GenericStrong */
+.chroma .gs {
+  font-weight: bold;
+}
+
+/* GenericSubheading */
+.chroma .gu {
+  color: #aaaaaa;
+}
+
+/* GenericTraceback */
+.chroma .gt {
+  color: #aa0000;
+}
+
+/* GenericUnderline */
+.chroma .gl {
+  text-decoration: underline;
+}
+
+/* TextWhitespace */
+.chroma .w {
+  color: #bbbbbb;
+}
+
+body.colorscheme-dark {
+  /* Background */
+}
+body.colorscheme-dark .bg {
+  color: #c9d1d9;
+  background-color: #0d1117;
+}
+body.colorscheme-dark {
+  /* PreWrapper */
+}
+body.colorscheme-dark .chroma {
+  color: #c9d1d9;
+  background-color: #0d1117;
+}
+body.colorscheme-dark {
+  /* Other */
+}
+body.colorscheme-dark {
+  /* Error */
+}
+body.colorscheme-dark .chroma .err {
+  color: #f85149;
+}
+body.colorscheme-dark {
+  /* CodeLine */
+}
+body.colorscheme-dark {
+  /* LineLink */
+}
+body.colorscheme-dark .chroma .lnlinks {
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+}
+body.colorscheme-dark {
+  /* LineTableTD */
+}
+body.colorscheme-dark .chroma .lntd {
+  vertical-align: top;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+body.colorscheme-dark {
+  /* LineTable */
+}
+body.colorscheme-dark .chroma .lntable {
+  border-spacing: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+body.colorscheme-dark {
+  /* LineHighlight */
+}
+body.colorscheme-dark .chroma .hl {
+  background-color: #ffffcc;
+}
+body.colorscheme-dark {
+  /* LineNumbersTable */
+}
+body.colorscheme-dark .chroma .lnt {
+  white-space: pre;
+  user-select: none;
+  margin-right: 0.4em;
+  padding: 0 0.4em 0 0.4em;
+  color: #64686c;
+}
+body.colorscheme-dark {
+  /* LineNumbers */
+}
+body.colorscheme-dark .chroma .ln {
+  white-space: pre;
+  user-select: none;
+  margin-right: 0.4em;
+  padding: 0 0.4em 0 0.4em;
+  color: #6e7681;
+}
+body.colorscheme-dark {
+  /* Line */
+}
+body.colorscheme-dark .chroma .line {
+  display: flex;
+}
+body.colorscheme-dark {
+  /* Keyword */
+}
+body.colorscheme-dark .chroma .k {
+  color: #ff7b72;
+}
+body.colorscheme-dark {
+  /* KeywordConstant */
+}
+body.colorscheme-dark .chroma .kc {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* KeywordDeclaration */
+}
+body.colorscheme-dark .chroma .kd {
+  color: #ff7b72;
+}
+body.colorscheme-dark {
+  /* KeywordNamespace */
+}
+body.colorscheme-dark .chroma .kn {
+  color: #ff7b72;
+}
+body.colorscheme-dark {
+  /* KeywordPseudo */
+}
+body.colorscheme-dark .chroma .kp {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* KeywordReserved */
+}
+body.colorscheme-dark .chroma .kr {
+  color: #ff7b72;
+}
+body.colorscheme-dark {
+  /* KeywordType */
+}
+body.colorscheme-dark .chroma .kt {
+  color: #ff7b72;
+}
+body.colorscheme-dark {
+  /* Name */
+}
+body.colorscheme-dark {
+  /* NameAttribute */
+}
+body.colorscheme-dark {
+  /* NameBuiltin */
+}
+body.colorscheme-dark {
+  /* NameBuiltinPseudo */
+}
+body.colorscheme-dark {
+  /* NameClass */
+}
+body.colorscheme-dark .chroma .nc {
+  color: #f0883e;
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* NameConstant */
+}
+body.colorscheme-dark .chroma .no {
+  color: #79c0ff;
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* NameDecorator */
+}
+body.colorscheme-dark .chroma .nd {
+  color: #d2a8ff;
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* NameEntity */
+}
+body.colorscheme-dark .chroma .ni {
+  color: #ffa657;
+}
+body.colorscheme-dark {
+  /* NameException */
+}
+body.colorscheme-dark .chroma .ne {
+  color: #f0883e;
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* NameFunction */
+}
+body.colorscheme-dark .chroma .nf {
+  color: #d2a8ff;
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* NameFunctionMagic */
+}
+body.colorscheme-dark {
+  /* NameLabel */
+}
+body.colorscheme-dark .chroma .nl {
+  color: #79c0ff;
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* NameNamespace */
+}
+body.colorscheme-dark .chroma .nn {
+  color: #ff7b72;
+}
+body.colorscheme-dark {
+  /* NameOther */
+}
+body.colorscheme-dark {
+  /* NameProperty */
+}
+body.colorscheme-dark .chroma .py {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* NameTag */
+}
+body.colorscheme-dark .chroma .nt {
+  color: #7ee787;
+}
+body.colorscheme-dark {
+  /* NameVariable */
+}
+body.colorscheme-dark .chroma .nv {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* NameVariableClass */
+}
+body.colorscheme-dark {
+  /* NameVariableGlobal */
+}
+body.colorscheme-dark {
+  /* NameVariableInstance */
+}
+body.colorscheme-dark {
+  /* NameVariableMagic */
+}
+body.colorscheme-dark {
+  /* Literal */
+}
+body.colorscheme-dark .chroma .l {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralDate */
+}
+body.colorscheme-dark .chroma .ld {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* LiteralString */
+}
+body.colorscheme-dark .chroma .s {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringAffix */
+}
+body.colorscheme-dark .chroma .sa {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringBacktick */
+}
+body.colorscheme-dark .chroma .sb {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringChar */
+}
+body.colorscheme-dark .chroma .sc {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringDelimiter */
+}
+body.colorscheme-dark .chroma .dl {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringDoc */
+}
+body.colorscheme-dark .chroma .sd {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringDouble */
+}
+body.colorscheme-dark .chroma .s2 {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringEscape */
+}
+body.colorscheme-dark .chroma .se {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringHeredoc */
+}
+body.colorscheme-dark .chroma .sh {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringInterpol */
+}
+body.colorscheme-dark .chroma .si {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringOther */
+}
+body.colorscheme-dark .chroma .sx {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringRegex */
+}
+body.colorscheme-dark .chroma .sr {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringSingle */
+}
+body.colorscheme-dark .chroma .s1 {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralStringSymbol */
+}
+body.colorscheme-dark .chroma .ss {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralNumber */
+}
+body.colorscheme-dark .chroma .m {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralNumberBin */
+}
+body.colorscheme-dark .chroma .mb {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralNumberFloat */
+}
+body.colorscheme-dark .chroma .mf {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralNumberHex */
+}
+body.colorscheme-dark .chroma .mh {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralNumberInteger */
+}
+body.colorscheme-dark .chroma .mi {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralNumberIntegerLong */
+}
+body.colorscheme-dark .chroma .il {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* LiteralNumberOct */
+}
+body.colorscheme-dark .chroma .mo {
+  color: #a5d6ff;
+}
+body.colorscheme-dark {
+  /* Operator */
+}
+body.colorscheme-dark .chroma .o {
+  color: #ff7b72;
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* OperatorWord */
+}
+body.colorscheme-dark .chroma .ow {
+  color: #ff7b72;
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* Punctuation */
+}
+body.colorscheme-dark {
+  /* Comment */
+}
+body.colorscheme-dark .chroma .c {
+  color: #8b949e;
+  font-style: italic;
+}
+body.colorscheme-dark {
+  /* CommentHashbang */
+}
+body.colorscheme-dark .chroma .ch {
+  color: #8b949e;
+  font-style: italic;
+}
+body.colorscheme-dark {
+  /* CommentMultiline */
+}
+body.colorscheme-dark .chroma .cm {
+  color: #8b949e;
+  font-style: italic;
+}
+body.colorscheme-dark {
+  /* CommentSingle */
+}
+body.colorscheme-dark .chroma .c1 {
+  color: #8b949e;
+  font-style: italic;
+}
+body.colorscheme-dark {
+  /* CommentSpecial */
+}
+body.colorscheme-dark .chroma .cs {
+  color: #8b949e;
+  font-weight: bold;
+  font-style: italic;
+}
+body.colorscheme-dark {
+  /* CommentPreproc */
+}
+body.colorscheme-dark .chroma .cp {
+  color: #8b949e;
+  font-weight: bold;
+  font-style: italic;
+}
+body.colorscheme-dark {
+  /* CommentPreprocFile */
+}
+body.colorscheme-dark .chroma .cpf {
+  color: #8b949e;
+  font-weight: bold;
+  font-style: italic;
+}
+body.colorscheme-dark {
+  /* Generic */
+}
+body.colorscheme-dark {
+  /* GenericDeleted */
+}
+body.colorscheme-dark .chroma .gd {
+  color: #ffa198;
+  background-color: #490202;
+}
+body.colorscheme-dark {
+  /* GenericEmph */
+}
+body.colorscheme-dark .chroma .ge {
+  font-style: italic;
+}
+body.colorscheme-dark {
+  /* GenericError */
+}
+body.colorscheme-dark .chroma .gr {
+  color: #ffa198;
+}
+body.colorscheme-dark {
+  /* GenericHeading */
+}
+body.colorscheme-dark .chroma .gh {
+  color: #79c0ff;
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* GenericInserted */
+}
+body.colorscheme-dark .chroma .gi {
+  color: #56d364;
+  background-color: #0f5323;
+}
+body.colorscheme-dark {
+  /* GenericOutput */
+}
+body.colorscheme-dark .chroma .go {
+  color: #8b949e;
+}
+body.colorscheme-dark {
+  /* GenericPrompt */
+}
+body.colorscheme-dark .chroma .gp {
+  color: #8b949e;
+}
+body.colorscheme-dark {
+  /* GenericStrong */
+}
+body.colorscheme-dark .chroma .gs {
+  font-weight: bold;
+}
+body.colorscheme-dark {
+  /* GenericSubheading */
+}
+body.colorscheme-dark .chroma .gu {
+  color: #79c0ff;
+}
+body.colorscheme-dark {
+  /* GenericTraceback */
+}
+body.colorscheme-dark .chroma .gt {
+  color: #ff7b72;
+}
+body.colorscheme-dark {
+  /* GenericUnderline */
+}
+body.colorscheme-dark .chroma .gl {
+  text-decoration: underline;
+}
+body.colorscheme-dark {
+  /* TextWhitespace */
+}
+body.colorscheme-dark .chroma .w {
+  color: #6e7681;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto {
+    /* Background */
+  }
+  body.colorscheme-auto .bg {
+    color: #c9d1d9;
+    background-color: #0d1117;
+  }
+  body.colorscheme-auto {
+    /* PreWrapper */
+  }
+  body.colorscheme-auto .chroma {
+    color: #c9d1d9;
+    background-color: #0d1117;
+  }
+  body.colorscheme-auto {
+    /* Other */
+  }
+  body.colorscheme-auto {
+    /* Error */
+  }
+  body.colorscheme-auto .chroma .err {
+    color: #f85149;
+  }
+  body.colorscheme-auto {
+    /* CodeLine */
+  }
+  body.colorscheme-auto {
+    /* LineLink */
+  }
+  body.colorscheme-auto .chroma .lnlinks {
+    outline: none;
+    text-decoration: none;
+    color: inherit;
+  }
+  body.colorscheme-auto {
+    /* LineTableTD */
+  }
+  body.colorscheme-auto .chroma .lntd {
+    vertical-align: top;
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+  body.colorscheme-auto {
+    /* LineTable */
+  }
+  body.colorscheme-auto .chroma .lntable {
+    border-spacing: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+  body.colorscheme-auto {
+    /* LineHighlight */
+  }
+  body.colorscheme-auto .chroma .hl {
+    background-color: #ffffcc;
+  }
+  body.colorscheme-auto {
+    /* LineNumbersTable */
+  }
+  body.colorscheme-auto .chroma .lnt {
+    white-space: pre;
+    user-select: none;
+    margin-right: 0.4em;
+    padding: 0 0.4em 0 0.4em;
+    color: #64686c;
+  }
+  body.colorscheme-auto {
+    /* LineNumbers */
+  }
+  body.colorscheme-auto .chroma .ln {
+    white-space: pre;
+    user-select: none;
+    margin-right: 0.4em;
+    padding: 0 0.4em 0 0.4em;
+    color: #6e7681;
+  }
+  body.colorscheme-auto {
+    /* Line */
+  }
+  body.colorscheme-auto .chroma .line {
+    display: flex;
+  }
+  body.colorscheme-auto {
+    /* Keyword */
+  }
+  body.colorscheme-auto .chroma .k {
+    color: #ff7b72;
+  }
+  body.colorscheme-auto {
+    /* KeywordConstant */
+  }
+  body.colorscheme-auto .chroma .kc {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* KeywordDeclaration */
+  }
+  body.colorscheme-auto .chroma .kd {
+    color: #ff7b72;
+  }
+  body.colorscheme-auto {
+    /* KeywordNamespace */
+  }
+  body.colorscheme-auto .chroma .kn {
+    color: #ff7b72;
+  }
+  body.colorscheme-auto {
+    /* KeywordPseudo */
+  }
+  body.colorscheme-auto .chroma .kp {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* KeywordReserved */
+  }
+  body.colorscheme-auto .chroma .kr {
+    color: #ff7b72;
+  }
+  body.colorscheme-auto {
+    /* KeywordType */
+  }
+  body.colorscheme-auto .chroma .kt {
+    color: #ff7b72;
+  }
+  body.colorscheme-auto {
+    /* Name */
+  }
+  body.colorscheme-auto {
+    /* NameAttribute */
+  }
+  body.colorscheme-auto {
+    /* NameBuiltin */
+  }
+  body.colorscheme-auto {
+    /* NameBuiltinPseudo */
+  }
+  body.colorscheme-auto {
+    /* NameClass */
+  }
+  body.colorscheme-auto .chroma .nc {
+    color: #f0883e;
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* NameConstant */
+  }
+  body.colorscheme-auto .chroma .no {
+    color: #79c0ff;
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* NameDecorator */
+  }
+  body.colorscheme-auto .chroma .nd {
+    color: #d2a8ff;
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* NameEntity */
+  }
+  body.colorscheme-auto .chroma .ni {
+    color: #ffa657;
+  }
+  body.colorscheme-auto {
+    /* NameException */
+  }
+  body.colorscheme-auto .chroma .ne {
+    color: #f0883e;
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* NameFunction */
+  }
+  body.colorscheme-auto .chroma .nf {
+    color: #d2a8ff;
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* NameFunctionMagic */
+  }
+  body.colorscheme-auto {
+    /* NameLabel */
+  }
+  body.colorscheme-auto .chroma .nl {
+    color: #79c0ff;
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* NameNamespace */
+  }
+  body.colorscheme-auto .chroma .nn {
+    color: #ff7b72;
+  }
+  body.colorscheme-auto {
+    /* NameOther */
+  }
+  body.colorscheme-auto {
+    /* NameProperty */
+  }
+  body.colorscheme-auto .chroma .py {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* NameTag */
+  }
+  body.colorscheme-auto .chroma .nt {
+    color: #7ee787;
+  }
+  body.colorscheme-auto {
+    /* NameVariable */
+  }
+  body.colorscheme-auto .chroma .nv {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* NameVariableClass */
+  }
+  body.colorscheme-auto {
+    /* NameVariableGlobal */
+  }
+  body.colorscheme-auto {
+    /* NameVariableInstance */
+  }
+  body.colorscheme-auto {
+    /* NameVariableMagic */
+  }
+  body.colorscheme-auto {
+    /* Literal */
+  }
+  body.colorscheme-auto .chroma .l {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralDate */
+  }
+  body.colorscheme-auto .chroma .ld {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralString */
+  }
+  body.colorscheme-auto .chroma .s {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringAffix */
+  }
+  body.colorscheme-auto .chroma .sa {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringBacktick */
+  }
+  body.colorscheme-auto .chroma .sb {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringChar */
+  }
+  body.colorscheme-auto .chroma .sc {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringDelimiter */
+  }
+  body.colorscheme-auto .chroma .dl {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringDoc */
+  }
+  body.colorscheme-auto .chroma .sd {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringDouble */
+  }
+  body.colorscheme-auto .chroma .s2 {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringEscape */
+  }
+  body.colorscheme-auto .chroma .se {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringHeredoc */
+  }
+  body.colorscheme-auto .chroma .sh {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringInterpol */
+  }
+  body.colorscheme-auto .chroma .si {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringOther */
+  }
+  body.colorscheme-auto .chroma .sx {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringRegex */
+  }
+  body.colorscheme-auto .chroma .sr {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringSingle */
+  }
+  body.colorscheme-auto .chroma .s1 {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralStringSymbol */
+  }
+  body.colorscheme-auto .chroma .ss {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralNumber */
+  }
+  body.colorscheme-auto .chroma .m {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralNumberBin */
+  }
+  body.colorscheme-auto .chroma .mb {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralNumberFloat */
+  }
+  body.colorscheme-auto .chroma .mf {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralNumberHex */
+  }
+  body.colorscheme-auto .chroma .mh {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralNumberInteger */
+  }
+  body.colorscheme-auto .chroma .mi {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralNumberIntegerLong */
+  }
+  body.colorscheme-auto .chroma .il {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* LiteralNumberOct */
+  }
+  body.colorscheme-auto .chroma .mo {
+    color: #a5d6ff;
+  }
+  body.colorscheme-auto {
+    /* Operator */
+  }
+  body.colorscheme-auto .chroma .o {
+    color: #ff7b72;
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* OperatorWord */
+  }
+  body.colorscheme-auto .chroma .ow {
+    color: #ff7b72;
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* Punctuation */
+  }
+  body.colorscheme-auto {
+    /* Comment */
+  }
+  body.colorscheme-auto .chroma .c {
+    color: #8b949e;
+    font-style: italic;
+  }
+  body.colorscheme-auto {
+    /* CommentHashbang */
+  }
+  body.colorscheme-auto .chroma .ch {
+    color: #8b949e;
+    font-style: italic;
+  }
+  body.colorscheme-auto {
+    /* CommentMultiline */
+  }
+  body.colorscheme-auto .chroma .cm {
+    color: #8b949e;
+    font-style: italic;
+  }
+  body.colorscheme-auto {
+    /* CommentSingle */
+  }
+  body.colorscheme-auto .chroma .c1 {
+    color: #8b949e;
+    font-style: italic;
+  }
+  body.colorscheme-auto {
+    /* CommentSpecial */
+  }
+  body.colorscheme-auto .chroma .cs {
+    color: #8b949e;
+    font-weight: bold;
+    font-style: italic;
+  }
+  body.colorscheme-auto {
+    /* CommentPreproc */
+  }
+  body.colorscheme-auto .chroma .cp {
+    color: #8b949e;
+    font-weight: bold;
+    font-style: italic;
+  }
+  body.colorscheme-auto {
+    /* CommentPreprocFile */
+  }
+  body.colorscheme-auto .chroma .cpf {
+    color: #8b949e;
+    font-weight: bold;
+    font-style: italic;
+  }
+  body.colorscheme-auto {
+    /* Generic */
+  }
+  body.colorscheme-auto {
+    /* GenericDeleted */
+  }
+  body.colorscheme-auto .chroma .gd {
+    color: #ffa198;
+    background-color: #490202;
+  }
+  body.colorscheme-auto {
+    /* GenericEmph */
+  }
+  body.colorscheme-auto .chroma .ge {
+    font-style: italic;
+  }
+  body.colorscheme-auto {
+    /* GenericError */
+  }
+  body.colorscheme-auto .chroma .gr {
+    color: #ffa198;
+  }
+  body.colorscheme-auto {
+    /* GenericHeading */
+  }
+  body.colorscheme-auto .chroma .gh {
+    color: #79c0ff;
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* GenericInserted */
+  }
+  body.colorscheme-auto .chroma .gi {
+    color: #56d364;
+    background-color: #0f5323;
+  }
+  body.colorscheme-auto {
+    /* GenericOutput */
+  }
+  body.colorscheme-auto .chroma .go {
+    color: #8b949e;
+  }
+  body.colorscheme-auto {
+    /* GenericPrompt */
+  }
+  body.colorscheme-auto .chroma .gp {
+    color: #8b949e;
+  }
+  body.colorscheme-auto {
+    /* GenericStrong */
+  }
+  body.colorscheme-auto .chroma .gs {
+    font-weight: bold;
+  }
+  body.colorscheme-auto {
+    /* GenericSubheading */
+  }
+  body.colorscheme-auto .chroma .gu {
+    color: #79c0ff;
+  }
+  body.colorscheme-auto {
+    /* GenericTraceback */
+  }
+  body.colorscheme-auto .chroma .gt {
+    color: #ff7b72;
+  }
+  body.colorscheme-auto {
+    /* GenericUnderline */
+  }
+  body.colorscheme-auto .chroma .gl {
+    text-decoration: underline;
+  }
+  body.colorscheme-auto {
+    /* TextWhitespace */
+  }
+  body.colorscheme-auto .chroma .w {
+    color: #6e7681;
+  }
+}

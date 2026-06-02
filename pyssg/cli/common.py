@@ -3,16 +3,42 @@
 from __future__ import annotations
 
 import asyncio
+import warnings
 from pathlib import Path
 
-from pyssg.config import load_config
+from pyssg.config import Config, load_config
 from pyssg.core.build import BuildStats
 from pyssg.core.builder import Builder
 from pyssg.core.incremental.cache import Cache, FsCache, MemoryCache
 from pyssg.core.phases import full_build
-from pyssg.layout import load_layout
+from pyssg.layout import Layout, load_layout
 
 CACHE_DIRNAME = ".pyssg-cache"
+
+
+def _warn_unknown_theme_options(config: Config, layout: Layout | None) -> None:
+    """Warn (non-fatally) about ``Config.theme`` keys the active theme ignores.
+
+    The theme configuration API resolves options as ``layout defaults <-
+    Config.theme``; a site may set any key and it is still passed to templates.
+    But a key the theme's ``layout.toml`` ``[options]`` does not declare is most
+    often a typo, so it is surfaced here as a warning rather than silently doing
+    nothing. The values are still forwarded -- themes are allowed to read
+    freeform extras -- so this never blocks a build.
+    """
+    if not config.theme:
+        return
+    declared = set(layout.options) if layout is not None else set()
+    unknown = sorted(key for key in config.theme if key not in declared)
+    if not unknown:
+        return
+    where = "the layout's [options]" if layout is not None else "any layout (none is configured)"
+    warnings.warn(
+        f"Config.theme sets option(s) not declared by {where}: "
+        f"{', '.join(unknown)}. They are still passed to templates as `theme.*`; "
+        "check for typos against the theme's layout.toml.",
+        stacklevel=2,
+    )
 
 
 def open_cache(site_dir: Path, no_cache: bool) -> Cache:
@@ -32,6 +58,7 @@ def make_builder(site_dir: Path, cache: Cache | None = None) -> Builder:
         # theme from pyssg.themes) is used as-is.
         layout_path = config.layout if isinstance(config.layout, Path) else site_dir / config.layout
         builder.layout = load_layout(layout_path)
+    _warn_unknown_theme_options(config, builder.layout)
     for plugin in config.plugins:
         builder.use(plugin)
     builder.hooks.initialize.call()

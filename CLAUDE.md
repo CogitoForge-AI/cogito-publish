@@ -73,9 +73,13 @@ conflicts with the code/conventions, **follow the code**; do not block on
   parts, each with tests.
 
 ## Check commands (before reporting "done")
+These MUST mirror CI exactly (the `ruff` step runs both lint **and** format over
+the whole repo, not just `pyssg/`). Running a narrower subset locally is how
+formatting drift slips through and fails CI.
 ```bash
 uv run mypy --strict pyssg
-uv run ruff check pyssg
+uv run ruff check .            # lint (CI: `ruff check .`)
+uv run ruff format --check .   # formatting gate (CI: `ruff format --check .`); run `uv run ruff format .` to fix
 uv run python -m unittest discover -s tests -t .   # full test suite (stdlib unittest), including the invariant tests (boundary, incremental==full, determinism)
 ```
 

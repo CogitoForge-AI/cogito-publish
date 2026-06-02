@@ -1,0 +1,23 @@
+# blog-minimal theme UI strings (base language). A site overrides any key by
+# shipping its own i18n/<lang>.toml at the site root.
+
+[nav]
+home = "Home"
+tags = "Tags"
+
+[theme]
+toggle = "Theme"
+
+[footer]
+powered_by = "Powered by"
+
+[post]
+reading_time = "{minutes} min read"
+toc = "Contents"
+
+[term]
+tagged = "{count} post(s) tagged."
+
+[pagination]
+newer = "Newer"
+older = "Older"

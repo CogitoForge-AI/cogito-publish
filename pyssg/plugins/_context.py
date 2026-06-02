@@ -193,12 +193,24 @@ def build_page_context(build: Build, page: Page) -> dict[str, object]:
     if config is not None:
         site = {**config.site, "base_url": config.base_url}
 
+    # Effective theme options: the active layout's declared defaults overlaid by
+    # the site's per-key overrides (``Config.theme``). Resolved here, alongside
+    # ``site``, so every template sees a single ``theme`` mapping; the layout
+    # only declares defaults and the engine owns the merge.
+    theme: dict[str, object] = {}
+    layout = build.builder.layout
+    if layout is not None:
+        theme.update(layout.options)
+    if config is not None:
+        theme.update(config.theme)
+
     prev, nxt = _prev_next(build, page)
     doc_typed = doc if isinstance(doc, Document) else None
     lang, translations = _page_i18n(build, page)
     return {
         "page": {**meta, "url": page.url},
         "site": site,
+        "theme": theme,
         "lang": lang,
         "translations": translations,
         "languages": _languages(build),
