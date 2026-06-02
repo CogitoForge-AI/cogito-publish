@@ -59,8 +59,10 @@ class DirectoryLoaderFilterBuildTest(unittest.TestCase):
     def setUp(self) -> None:
         self.tmp_path = Path(self.enterContext(tempfile.TemporaryDirectory()))
 
-    def _build(self, filter_args: str) -> set[str]:
-        site = self.tmp_path / filter_args.replace("=", "_").replace('"', "").replace(" ", "")
+    def _build(self, name: str, filter_args: str) -> set[str]:
+        # ``name`` is a filesystem-safe directory; ``filter_args`` may contain
+        # glob metacharacters that are illegal in paths (notably on Windows).
+        site = self.tmp_path / name
         for rel, body in _CONTENT.items():
             path = site / "content" / rel
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -73,7 +75,7 @@ class DirectoryLoaderFilterBuildTest(unittest.TestCase):
         return {p.relative_to(dist).as_posix() for p in dist.rglob("*.html") if p.is_file()}
 
     def test_no_filter_loads_every_markdown_file(self) -> None:
-        pages = self._build("")
+        pages = self._build("no-filter", "")
         self.assertIn("index.html", pages)
         self.assertIn("about/index.html", pages)
         self.assertIn("guide/intro/index.html", pages)
@@ -81,21 +83,21 @@ class DirectoryLoaderFilterBuildTest(unittest.TestCase):
         self.assertIn("templates/daily/index.html", pages)
 
     def test_exclude_prunes_directory_subtrees(self) -> None:
-        pages = self._build('exclude=["drafts", "templates"]')
+        pages = self._build("exclude", 'exclude=["drafts", "templates"]')
         self.assertIn("index.html", pages)
         self.assertIn("guide/intro/index.html", pages)
         self.assertNotIn("drafts/secret/index.html", pages)
         self.assertNotIn("templates/daily/index.html", pages)
 
     def test_include_restricts_to_allowlisted_files(self) -> None:
-        pages = self._build('include=["index.md", "guide/**"]')
+        pages = self._build("include", 'include=["index.md", "guide/**"]')
         self.assertIn("index.html", pages)
         self.assertIn("guide/intro/index.html", pages)
         self.assertNotIn("about/index.html", pages)
         self.assertNotIn("drafts/secret/index.html", pages)
 
     def test_exclude_wins_over_include(self) -> None:
-        pages = self._build('include=["**/*.md"], exclude=["drafts"]')
+        pages = self._build("exclude-wins", 'include=["**/*.md"], exclude=["drafts"]')
         self.assertIn("about/index.html", pages)
         self.assertNotIn("drafts/secret/index.html", pages)
 
