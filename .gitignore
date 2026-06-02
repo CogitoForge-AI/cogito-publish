@@ -28,10 +28,6 @@ coverage.xml
 benchmarks/results/
 benchmarks/.bench-work/
 
-# Example sites are kept locally but not tracked in this repo.
-examples/wiki/
-examples/docs/
-
 # Scratch / working notes
 TRACK.md
 .claude
