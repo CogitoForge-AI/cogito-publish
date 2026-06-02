@@ -62,7 +62,7 @@ trang song ngữ chạy được.
 ## 4. Build và kiểm tra
 
 ```bash
-uv run python -m pyssg --site my-site build
+pyssg --site my-site build
 ```
 
 Trang tiếng Anh xuất hiện ở gốc và trang tiếng Việt nằm dưới `/vi/`. Xem

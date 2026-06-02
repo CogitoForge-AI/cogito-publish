@@ -58,7 +58,7 @@ và gói ở `mypackage/` tại gốc kho mã, hãy dùng `"../mypackage"`. Đư
 ## 3. Build
 
 ```bash
-uv run python -m pyssg --site docs build
+pyssg --site docs build
 ```
 
 Các trang reference xuất hiện dưới route bạn chọn, mỗi module một trang, sắp theo

@@ -11,7 +11,7 @@ order: 6
 ## 1. Tạo một bản build sạch
 
 ```bash
-uv run python -m pyssg --site my-site build
+pyssg --site my-site build
 ```
 
 Mọi thứ cần triển khai giờ nằm trong thư mục đầu ra (mặc định `dist/`; đặt
@@ -38,7 +38,7 @@ Trỏ bất kỳ host tĩnh nào vào thư mục đầu ra. Một vài đích ph
 - **GitHub Pages** - đẩy nội dung `dist/` lên nhánh `gh-pages`, hoặc dùng một Pages
   action tải thư mục lên làm artifact.
 - **Netlify / Cloudflare Pages / Vercel** - đặt lệnh build là
-  `uv run python -m pyssg --site my-site build` và thư mục xuất bản là
+  `pyssg --site my-site build` và thư mục xuất bản là
   `my-site/dist`.
 - **Bất kỳ web server / object storage nào** - sao chép `dist/` vào document root
   hoặc bucket.
@@ -51,11 +51,11 @@ phải yêu cầu về tính đúng đắn) - truyền `--no-cache` nếu bạn 
 bản build sạch từ đầu:
 
 ```bash
-uv run python -m pyssg --site my-site build --no-cache
+pyssg --site my-site build --no-cache
 ```
 
 Để xóa thư mục đầu ra và cache ở máy cục bộ, dùng `clean`:
 
 ```bash
-uv run python -m pyssg --site my-site clean --yes
+pyssg --site my-site clean --yes
 ```

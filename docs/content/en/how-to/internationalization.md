@@ -62,7 +62,7 @@ working bilingual site out of the box.
 ## 4. Build and check
 
 ```bash
-uv run python -m pyssg --site my-site build
+pyssg --site my-site build
 ```
 
 English pages appear at the root and Vietnamese pages under `/vi/`. See

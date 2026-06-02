@@ -7,7 +7,7 @@ order: 2
 # CLI reference
 
 pyssg is invoked as a module: `python -m pyssg [--site PATH] <command> [options]`.
-Through uv that is `uv run python -m pyssg ...`.
+Through uv that is `pyssg ...`.
 
 ## Global option
 
@@ -22,7 +22,7 @@ Run any command with `--help` to see its options.
 Scaffold a new site for a preset.
 
 ```bash
-uv run python -m pyssg --site my-site init --preset docs
+pyssg --site my-site init --preset docs
 ```
 
 | Option | Default | Description |
@@ -39,7 +39,7 @@ identical files.
 Full build to the output directory.
 
 ```bash
-uv run python -m pyssg --site my-site build
+pyssg --site my-site build
 ```
 
 | Option | Default | Description |
@@ -54,7 +54,7 @@ Prints `build: N pages written`.
 Watch the content, rebuild incrementally, and serve with live reload.
 
 ```bash
-uv run python -m pyssg --site my-site serve
+pyssg --site my-site serve
 ```
 
 | Option | Default | Description |
@@ -71,7 +71,7 @@ reloads automatically.
 Remove the output directory and the cache.
 
 ```bash
-uv run python -m pyssg --site my-site clean
+pyssg --site my-site clean
 ```
 
 | Option | Default | Description |
@@ -85,7 +85,7 @@ Without `--yes`, `clean` lists what it will remove and asks for confirmation.
 Copy a built-in theme into the site so you can customize it.
 
 ```bash
-uv run python -m pyssg --site my-site eject-layout --theme docs --to layouts/theme
+pyssg --site my-site eject-layout --theme docs --to layouts/theme
 ```
 
 | Option | Default | Description |

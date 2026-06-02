@@ -60,7 +60,7 @@ config = docs(
 ## 3. Build
 
 ```bash
-uv run python -m pyssg --site docs build
+pyssg --site docs build
 ```
 
 The reference pages appear under the route you chose, one page per module, sorted

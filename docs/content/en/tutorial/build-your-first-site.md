@@ -31,7 +31,7 @@ working result. You do not need to understand every detail yet - the
   uv add git+https://github.com/magiskboy/pyssg
   ```
 
-All commands below are written as `uv run python -m pyssg ...`. The `--site`
+All commands below are written as `pyssg ...`. The `--site`
 option selects the site directory; it defaults to the current directory.
 
 ## Step 1 - Scaffold a new site
@@ -40,7 +40,7 @@ A **preset** is a ready-made configuration that bundles the right plugins and a
 default theme. Scaffold a documentation site with the `docs` preset:
 
 ```bash
-uv run python -m pyssg --site my-site init --preset docs
+pyssg --site my-site init --preset docs
 ```
 
 This creates three files:
@@ -70,7 +70,7 @@ config = docs(
 Render the content into the output directory (`dist/` by default):
 
 ```bash
-uv run python -m pyssg --site my-site build
+pyssg --site my-site build
 ```
 
 You should see something like `build: 3 pages written`. The HTML now lives under
@@ -83,7 +83,7 @@ Instead of rebuilding by hand, run the dev server. It watches your files,
 rebuilds only what changed, and refreshes the browser automatically:
 
 ```bash
-uv run python -m pyssg --site my-site serve
+pyssg --site my-site serve
 ```
 
 Open the printed URL (by default <http://127.0.0.1:8000>). You will see your home

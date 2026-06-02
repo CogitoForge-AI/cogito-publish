@@ -60,13 +60,13 @@ bundles the right plugins and a default theme.
 
 ```bash
 # Scaffold a new site (use --preset blog for a blog)
-uv run python -m pyssg --site my-site init --preset docs
+pyssg --site my-site init --preset docs
 
 # Build to my-site/dist
-uv run python -m pyssg --site my-site build
+pyssg --site my-site build
 
 # Watch + incremental rebuild + live-reload at http://127.0.0.1:8000
-uv run python -m pyssg --site my-site serve
+pyssg --site my-site serve
 ```
 
 `init` writes a one-line config plus some sample content. The whole config file
@@ -142,7 +142,7 @@ them to render `<html lang>`, `hreflang` alternates, and a header switcher.
 ```bash
 # A small bilingual docs site (English at the root, Vietnamese under /vi/)
 # built with the docs preset plus the i18n plugin.
-uv run python -m pyssg --site examples/docs serve
+pyssg --site examples/docs serve
 ```
 
 ## Documentation

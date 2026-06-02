@@ -11,7 +11,7 @@ order: 6
 ## 1. Produce a clean build
 
 ```bash
-uv run python -m pyssg --site my-site build
+pyssg --site my-site build
 ```
 
 Everything to deploy is now in the output directory (`dist/` by default; set
@@ -38,7 +38,7 @@ Point any static host at the output directory. A few common targets:
 - **GitHub Pages** - push the `dist/` contents to the `gh-pages` branch, or use a
   Pages action that uploads the directory as the artifact.
 - **Netlify / Cloudflare Pages / Vercel** - set the build command to
-  `uv run python -m pyssg --site my-site build` and the publish directory to
+  `pyssg --site my-site build` and the publish directory to
   `my-site/dist`.
 - **Any web server / object storage** - copy `dist/` to the document root or
   bucket.
@@ -51,11 +51,11 @@ not a correctness requirement) - pass `--no-cache` if you want to prove a clean
 build from scratch:
 
 ```bash
-uv run python -m pyssg --site my-site build --no-cache
+pyssg --site my-site build --no-cache
 ```
 
 To remove the output directory and cache locally, use `clean`:
 
 ```bash
-uv run python -m pyssg --site my-site clean --yes
+pyssg --site my-site clean --yes
 ```
