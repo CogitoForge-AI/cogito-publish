@@ -1,0 +1,34 @@
+{% extends "base.html.j2" %}
+{% block content %}
+<section class="container post">
+<article>
+<header>
+<div class="post-title"><h1 class="title"><a class="title-link" href="{{ page.url }}">{{ page.title }}</a></h1></div>
+<div class="post-meta">
+<div class="date">
+{% set post_date = page.get('date') %}
+{% if post_date %}<span class="posted-on"><time datetime="{{ post_date }}">{{ post_date }}</time></span>{% endif %}
+{% if theme.show_reading_time and reading_time %}<span class="reading-time">{{ t("post.reading_time", minutes=reading_time) }}</span>{% endif %}
+</div>
+{% if theme.show_tags and tags %}<div class="post-taxonomies"><ul class="tags">{% for tag in tags %}<li><a href="/tags/{{ tag }}/">{{ tag }}</a></li>{% endfor %}</ul></div>{% endif %}
+</div>
+</header>
+{% if theme.show_toc and toc %}
+<div class="toc"><details open><summary>{{ t("post.toc") }}</summary>
+<ul>{% for h in toc %}<li class="toc-level-{{ h.level }}"><a href="#{{ h.slug }}">{{ h.text }}</a></li>{% endfor %}</ul>
+</details></div>
+{% endif %}
+<div class="post-content">
+{{ content_html }}
+</div>
+{% if theme.show_post_nav and (prev or next) %}
+<footer>
+<nav class="post-nav">
+{% if prev %}<a class="prev" href="{{ prev.url }}">&larr; {{ prev.title }}</a>{% endif %}
+{% if next %}<a class="next" href="{{ next.url }}">{{ next.title }} &rarr;</a>{% endif %}
+</nav>
+</footer>
+{% endif %}
+</article>
+</section>
+{% endblock %}
