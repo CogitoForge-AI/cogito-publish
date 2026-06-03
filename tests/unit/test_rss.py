@@ -128,3 +128,62 @@ class RssTest(unittest.TestCase):
 
         xml = str(build.graph.get(_PAGE_ID).meta["content_html"])  # type: ignore[union-attr]
         self.assertEqual(xml.count("<item>"), 1)
+
+    def test_build_rss_emits_guid_and_pubdate(self) -> None:
+        build = _build()
+        _add_doc_page(build, "a", "/a/", {"title": "A", "date": dt.date(2020, 1, 1)})
+        build_rss(build)
+
+        xml = str(build.graph.get(_PAGE_ID).meta["content_html"])  # type: ignore[union-attr]
+        self.assertIn('<guid isPermaLink="true">https://example.com/a/</guid>', xml)
+        # RFC-822 date anchored at midnight UTC, derived purely from frontmatter.
+        self.assertIn("<pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>", xml)
+
+    def test_build_rss_omits_pubdate_without_date(self) -> None:
+        build = _build()
+        _add_doc_page(build, "a", "/a/", {"title": "A"})
+        build_rss(build)
+
+        xml = str(build.graph.get(_PAGE_ID).meta["content_html"])  # type: ignore[union-attr]
+        self.assertNotIn("<pubDate>", xml)
+        self.assertIn("<guid", xml)  # guid is always present
+
+
+class RssI18nTest(unittest.TestCase):
+    """With i18n, one feed per locale: default at /feed.xml, others prefixed."""
+
+    def _localized_build(self) -> Build:
+        build = _build(site={"title": "Multi"})
+        # vi is the default locale (served at the root); en is prefixed.
+        _add_doc_page(build, "vi/a.md", "/a/", {"title": "Bai A", "lang": "vi"})
+        _add_doc_page(build, "en/a.md", "/en/a/", {"title": "Post A", "lang": "en"})
+        build_rss(build)
+        return build
+
+    def test_emits_one_feed_per_locale(self) -> None:
+        build = self._localized_build()
+        root_feed = build.graph.get(_PAGE_ID)
+        en_feed = build.graph.get(f"{_PAGE_ID}:en")
+        self.assertIsInstance(root_feed, Page)
+        self.assertIsInstance(en_feed, Page)
+        self.assertEqual(root_feed.url, "/feed.xml")  # type: ignore[union-attr]
+        self.assertEqual(en_feed.url, "/en/feed.xml")  # type: ignore[union-attr]
+
+    def test_feeds_do_not_mix_locales(self) -> None:
+        build = self._localized_build()
+        root_xml = str(build.graph.get(_PAGE_ID).meta["content_html"])  # type: ignore[union-attr]
+        en_xml = str(build.graph.get(f"{_PAGE_ID}:en").meta["content_html"])  # type: ignore[union-attr]
+        self.assertIn("Bai A", root_xml)
+        self.assertNotIn("Post A", root_xml)
+        self.assertIn("Post A", en_xml)
+        self.assertNotIn("Bai A", en_xml)
+
+    def test_drops_feed_when_locale_loses_all_documents(self) -> None:
+        build = self._localized_build()
+        self.assertIsInstance(build.graph.get(f"{_PAGE_ID}:en"), Page)
+        # Remove the only English document + its page, then rebuild.
+        build.graph.remove("en/a.md")
+        build.graph.remove("page:en/a.md")
+        build_rss(build)
+        self.assertIsNone(build.graph.get(f"{_PAGE_ID}:en"))
+        self.assertIsInstance(build.graph.get(_PAGE_ID), Page)
