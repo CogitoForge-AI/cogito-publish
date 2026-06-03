@@ -21,3 +21,13 @@ class ConfigError(PyssgError):
 
 class LayoutError(PyssgError):
     """A layout package is missing required pieces or is malformed."""
+
+
+class OutputConflictError(PyssgError):
+    """Two build artifacts claim the same output path.
+
+    Raised before anything is written when a static asset would land on the same
+    output file as a generated page (or another asset), so the collision is
+    surfaced for the user to resolve instead of one artifact silently clobbering
+    the other.
+    """
