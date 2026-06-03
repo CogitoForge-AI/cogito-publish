@@ -24,6 +24,7 @@ from pyssg.plugins.markdown import markdown
 from pyssg.plugins.mermaid import mermaid
 from pyssg.plugins.nav import nav
 from pyssg.plugins.permalink import permalink
+from pyssg.plugins.redirects import redirects
 from pyssg.plugins.render import render
 from pyssg.plugins.rss import rss
 from pyssg.plugins.sitemap import sitemap
@@ -47,6 +48,7 @@ __all__ = [
     "mermaid",
     "nav",
     "permalink",
+    "redirects",
     "render",
     "rss",
     "sitemap",
