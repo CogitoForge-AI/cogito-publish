@@ -8,9 +8,8 @@ staging/building a fixture site -- keeps the suite anchored to one fixture and
 one build routine.
 
 A test that needs a different preset, theme, or plugin wiring passes its own
-``config`` text (which replaces the fixture's ``pyssg.config.py``) and, for the
-source-only gallery themes, a ``vendor_theme`` name to copy into the site under
-``theme/``. The content under ``content/`` is the constant across all of them.
+``config`` text (which replaces the fixture's ``pyssg.config.py``). The content
+under ``content/`` is the constant across all of them.
 """
 
 from __future__ import annotations
@@ -20,11 +19,6 @@ from pathlib import Path
 
 #: Root of the on-disk test fixtures (``tests/fixtures``).
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
-
-#: Repo-root ``themes/`` gallery (source-only, not shipped in the wheel). Gallery
-#: themes are referenced by path because they are not importable via
-#: ``pyssg.themes.theme_path``.
-THEMES = Path(__file__).resolve().parents[1] / "themes"
 
 #: The single content fixture every end-to-end test builds from.
 DEFAULT_FIXTURE = "custom"
@@ -50,25 +44,20 @@ def stage_site(
     *,
     fixture: str = DEFAULT_FIXTURE,
     config: str | None = None,
-    vendor_theme: str | None = None,
     name: str = "site",
 ) -> Path:
     """Copy a fixture into ``tmp_path`` and return the staged site directory.
 
     The build's ``dist`` therefore never touches the repository. ``config``, when
     given, replaces the fixture's ``pyssg.config.py`` so one content fixture can
-    be driven through any preset/theme/plugin wiring. ``vendor_theme`` copies a
-    repo-root gallery theme into the site under ``theme/`` (matching a
-    ``layout="theme"`` config), the same way a user adopts a gallery theme.
-    ``name`` disambiguates multiple sites staged under the same ``tmp_path``
-    (e.g. two builds for a determinism check).
+    be driven through any preset/theme/plugin wiring. ``name`` disambiguates
+    multiple sites staged under the same ``tmp_path`` (e.g. two builds for a
+    determinism check).
     """
     site = tmp_path / name
     shutil.copytree(FIXTURES / fixture, site)
     if config is not None:
         (site / "pyssg.config.py").write_text(config, encoding="utf-8")
-    if vendor_theme is not None:
-        shutil.copytree(THEMES / vendor_theme, site / "theme")
     return site
 
 
@@ -77,7 +66,6 @@ def build_site_from_fixture(
     *,
     fixture: str = DEFAULT_FIXTURE,
     config: str | None = None,
-    vendor_theme: str | None = None,
     name: str = "site",
 ) -> Path:
     """Stage a fixture site, build it, and return its ``dist`` directory.
@@ -91,7 +79,6 @@ def build_site_from_fixture(
         tmp_path,
         fixture=fixture,
         config=config,
-        vendor_theme=vendor_theme,
         name=name,
     )
     build_site(site)
