@@ -11,6 +11,37 @@ version or commit if you depend on it.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-04
+
+CLI overhaul. The command-line surface was rebuilt on Typer as a discoverable
+command tree, gaining a `new` scaffolding group, while the built-in theme set was
+trimmed and the showcase themes moved to a separate repository. Builds remain
+deterministic and incremental rebuilds byte-identical to a full build.
+
+### Added
+
+- **`new` scaffolding group** — `new site`, `new theme`, and the new `new post`
+  and `new plugin` commands generate starter files (a generated plugin builds end
+  to end). `new post` is the only command that reads the clock (via its `--date`
+  default); the scaffolder itself stays pure and deterministic.
+
+### Changed
+
+- **CLI rebuilt on Typer** — the single-file argparse CLI is now a Typer (Click)
+  command tree with one command per module. `build`, `serve`, and `clean` keep
+  full flag and JSON/NDJSON parity with the old CLI, and `deploy` becomes a
+  `deploy list|status|<target>` sub-group with its lazy target registry intact.
+  The old exit-code contract is preserved (usage errors raise `SystemExit`;
+  `build --json` failures print a JSON object and return 1).
+- **Showcase themes moved out** — the `blog-minimal`, `blog-technical`, and
+  `docs-technical` showcase themes moved to a separate repository. The bundled
+  `blog` and `docs` built-in themes are unchanged.
+
+### Deprecated
+
+- `init` and `eject-layout` remain as hidden back-compat aliases for `new site`
+  and `new theme`; prefer the `new` commands.
+
 ## [0.2.0] - 2026-06-03
 
 Plugin-design and i18n release. The summarizer plugins gained per-locale output
@@ -95,6 +126,7 @@ incremental rebuild is byte-identical to a full rebuild.
   References section of the docs site from Python docstrings.
 - **CLI** — `init`, `build`, `serve`, `clean`, and `eject-layout`.
 
-[Unreleased]: https://github.com/magiskboy/pyssg/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/magiskboy/pyssg/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/magiskboy/pyssg/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/magiskboy/pyssg/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/magiskboy/pyssg/releases/tag/v0.1.0
