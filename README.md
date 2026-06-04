@@ -157,7 +157,6 @@ pyssg --site examples/docs serve
 
 ## Documentation
 
-- Design history: [`docs/content/technical-spec-v0.1.0.md`](docs/content/technical-spec-v0.1.0.md)
 - Contributing conventions: [`CLAUDE.md`](CLAUDE.md)
 
 ## License

@@ -13,6 +13,10 @@ For the bigger picture of how plugins fit together, read
 [The plugin pipeline](../explanation/plugin-pipeline.md) first. This guide is the
 practical recipe.
 
+To start from a working skeleton instead of an empty file, run
+`pyssg new plugin <name>`: it scaffolds `plugins/<name>.py` with the class, the
+factory, and the hook wiring already in place, ready to customize.
+
 ## The plugin shape
 
 A plugin is any object with a `name` attribute and an `apply(builder)` method.

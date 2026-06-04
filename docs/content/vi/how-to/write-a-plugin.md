@@ -13,6 +13,10 @@ các plugin tích hợp làm.
 [Pipeline plugin](../explanation/plugin-pipeline.md) trước. Hướng dẫn này là công
 thức thực hành.
 
+Để bắt đầu từ một khung sẵn chạy thay vì một file trống, chạy
+`pyssg new plugin <name>`: nó tạo `plugins/<name>.py` với lớp, factory và phần nối
+hook đã sẵn sàng để tùy biến.
+
 ## Hình hài một plugin
 
 Một plugin là bất kỳ đối tượng nào có thuộc tính `name` và phương thức
