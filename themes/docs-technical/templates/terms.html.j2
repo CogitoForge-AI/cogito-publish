@@ -1,9 +1,0 @@
-{% extends "base.html.j2" %}
-{% block content %}
-<article class="td-article">
-<h1>{{ page.title }}</h1>
-<ul class="td-tag-cloud">
-{% for tg in page.terms %}<li><a href="{{ tg.url }}">{{ tg.term }} <span class="td-tag-count">{{ tg.count }}</span></a></li>{% endfor %}
-</ul>
-</article>
-{% endblock %}
