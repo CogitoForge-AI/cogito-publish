@@ -2,11 +2,12 @@
 # Section headings follow the Vietnamese Diataxis convention.
 
 [banner]
-dev = "pyssg đang trong giai đoạn phát triển (chưa 1.0) - API, cấu hình và theme có thể thay đổi."
+dev = "Cogito Publish đang trong giai đoạn phát triển (chưa 1.0) - API, cấu hình và theme có thể thay đổi."
 
 [section]
 tutorial = "Hướng dẫn"
 how-to = "Cách làm"
+integrations = "Tích hợp"
 reference = "Tra cứu"
 explanation = "Giải thích"
 references = "Tài liệu API"

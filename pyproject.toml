@@ -1,6 +1,6 @@
 [project]
 name = "pyssg"
-version = "0.3.0"
+version = "0.1.0"
 description = "Cogito Publish is an incremental static site generator for Markdown with a Webpack-inspired hook and dependency-graph architecture."
 readme = "README.md"
 requires-python = ">=3.13"

@@ -3,11 +3,12 @@
 # labels so the English site is unchanged.
 
 [banner]
-dev = "pyssg is pre-1.0 and under active development - APIs, config, and themes may change."
+dev = "Cogito Publish is pre-1.0 and under active development - APIs, config, and themes may change."
 
 [section]
 tutorial = "Tutorial"
 how-to = "How To"
+integrations = "Integrations"
 reference = "Reference"
 explanation = "Explanation"
 references = "References"
