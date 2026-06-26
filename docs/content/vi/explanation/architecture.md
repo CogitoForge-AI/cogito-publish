@@ -6,7 +6,7 @@ order: 2
 
 # Kiến trúc
 
-PySSG được tổ chức như một **nhân nhỏ, thuần khiết** được bao quanh bởi các
+Cogito Publish được tổ chức như một **nhân nhỏ, thuần khiết** được bao quanh bởi các
 **plugin ngoại vi**, theo tinh thần tách compiler/plugin của Webpack. Hiểu ranh
 giới này sẽ giải thích được phần lớn các quyết định thiết kế.
 

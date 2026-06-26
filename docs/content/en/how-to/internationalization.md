@@ -114,7 +114,7 @@ See the [i18n reference](/reference/i18n/) for the exact lookup and merge rules.
 ## 5. Build and check
 
 ```bash
-pyssg --site my-site build
+cogito-publish --site my-site build
 ```
 
 English pages appear at the root and Vietnamese pages under `/vi/`. See

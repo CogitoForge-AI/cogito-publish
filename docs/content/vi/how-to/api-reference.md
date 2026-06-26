@@ -58,7 +58,7 @@ và gói ở `mypackage/` tại gốc kho mã, hãy dùng `"../mypackage"`. Đư
 ## 3. Build
 
 ```bash
-pyssg --site docs build
+cogito-publish --site docs build
 ```
 
 Các trang reference xuất hiện dưới route bạn chọn, mỗi module một trang, sắp theo
@@ -75,6 +75,6 @@ cập nhật thay đổi trong mã.
 ## Chính trang này
 
 Trang bạn đang đọc được sinh đúng bằng thiết lập này. Xem
-[`docs/pyssg.config.py`](https://github.com/magiskboy/pyssg/blob/main/docs/pyssg.config.py)
+[`docs/pyssg.config.py`](https://github.com/CogitoForge-AI/cogito-publish/blob/main/docs/pyssg.config.py)
 - nó thêm `apidoc(package="../pyssg", route="/references/")` lên trên preset `docs`,
 và đó chính là thứ tạo ra mục [References](/references/pyssg/) trong thanh bên.

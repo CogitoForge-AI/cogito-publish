@@ -1,4 +1,4 @@
-"""``pyssg serve`` -- watch, incrementally rebuild, and serve with live reload."""
+"""``cogito-publish serve`` -- watch, incrementally rebuild, and serve with live reload."""
 
 from __future__ import annotations
 

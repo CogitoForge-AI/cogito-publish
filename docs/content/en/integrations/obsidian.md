@@ -7,8 +7,8 @@ order: 2
 # Publish an Obsidian vault
 
 This guide shows how to turn an [Obsidian](https://obsidian.md) vault into a
-static website with the **PySSG Publish** plugin, and how to do the same from the
-command line if you prefer. You do not need to know Python.
+static website with the **Cogito Publish for Obsidian** plugin, and how to do
+the same from the command line if you prefer. You do not need to know Python.
 
 ## Before you begin
 
@@ -22,7 +22,7 @@ command line if you prefer. You do not need to know Python.
 
 The plugin is not yet in the community store, so install it manually:
 
-1. Build it from the PySSG repository:
+1. Build it from the Cogito Publish repository:
 
    ```bash
    cd adapters/pyssg-obsidian
@@ -33,7 +33,7 @@ The plugin is not yet in the community store, so install it manually:
 2. Copy `manifest.json`, `main.js` and `styles.css` into your vault under
    `.obsidian/plugins/pyssg-publish/`.
 3. In Obsidian, open **Settings -> Community plugins**, reload, and enable
-   **PySSG Publish**.
+   **Cogito Publish for Obsidian**.
 
 ## Choose what gets published
 
@@ -84,19 +84,19 @@ artifacts are never mixed into your notes or re-indexed by Obsidian.
 | Content subfolder | Build only a subfolder of the vault (default: the whole vault). |
 | Exclude / Include globs | Comma-separated filters, *added* to the always-excluded `.obsidian`, `.trash`, `.git` and the Templates / Daily-notes folders the plugin reads from your vault settings. |
 | Preview server | Host and port for live preview. |
-| pyssg executable | Use an existing `pyssg` instead of the managed runtime. |
-| pyssg version (git ref) | Branch, tag or commit installed when auto-provisioning. |
+| cogito-publish executable | Use an existing `cogito-publish` instead of the managed runtime. |
+| Cogito Publish version (git ref) | Branch, tag or commit installed when auto-provisioning. |
 | Reset managed runtime | Delete the downloaded runtime so it is rebuilt. |
 
-## Use pyssg without the plugin
+## Use Cogito Publish without the plugin
 
 The plugin is a convenience layer; you can build the same vault from the terminal
 with the `obsidian` preset. Scaffold a fresh vault-style site:
 
 ```bash
-pyssg --site my-vault new site --preset obsidian
-pyssg --site my-vault build
-pyssg --site my-vault serve   # live preview with reload
+cogito-publish --site my-vault new site --preset obsidian
+cogito-publish --site my-vault build
+cogito-publish --site my-vault serve   # live preview with reload
 ```
 
 To publish an **existing** vault without adding a config file to it, point
@@ -119,7 +119,7 @@ config = obsidian(
 )
 ```
 
-Then `pyssg --site <dir-containing-this-config> build`. See the
+Then `cogito-publish --site <dir-containing-this-config> build`. See the
 [CLI reference](../reference/cli.md) and
 [configuration reference](../reference/configuration.md) for all options.
 
@@ -127,21 +127,22 @@ Then `pyssg --site <dir-containing-this-config> build`. See the
 
 The first time you build or preview, the plugin downloads
 [uv](https://docs.astral.sh/uv/) (a small static binary), uses it to install a
-managed Python and an isolated copy of PySSG, and caches everything in a shared
+managed Python and an isolated copy of Cogito Publish, and caches everything in a shared
 application-data directory - never inside your vault. This runs once in the
-background; afterwards builds start instantly. Pin the PySSG version with the
-**pyssg version (git ref)** setting for reproducible installs.
+background; afterwards builds start instantly. Pin the Cogito Publish version with the
+**Cogito Publish version (git ref)** setting for reproducible installs.
 
 ## Troubleshooting
 
 - **Setup failed or seems stuck.** Use **Reset managed runtime** in settings, then
   build again to re-provision from scratch.
-- **Offline or managed machine.** Install PySSG yourself and set the **pyssg
-  executable** path in settings; the plugin then skips the download entirely.
+- **Offline or managed machine.** Install Cogito Publish yourself and set the
+  **cogito-publish executable** path in settings; the plugin then skips the
+  download entirely.
 - **A note will not publish.** Confirm its frontmatter has `publish: true` (in
   allowlist mode) and that it is not inside an excluded folder.
 
 ## Next steps
 
 - [Deploy a built site](../how-to/deploy.md) - publish the generated output.
-- [CLI reference](../reference/cli.md) - every `pyssg` command and flag.
+- [CLI reference](../reference/cli.md) - every `cogito-publish` command and flag.

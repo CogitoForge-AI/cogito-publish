@@ -1,6 +1,6 @@
-"""``pyssg deploy`` -- push the built site to a hosting provider.
+"""``cogito-publish deploy`` -- push the built site to a hosting provider.
 
-A two-level command: ``pyssg deploy <target-or-action>`` where the leaf is
+A two-level command: ``cogito-publish deploy <target-or-action>`` where the leaf is
 either a registered hosting target (``github-pages``, ``cloudflare``,
 ``netlify``) or a meta action (``list`` / ``status``).
 

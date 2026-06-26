@@ -7,9 +7,9 @@ import type PyssgPlugin from "./main";
  * provisioned and served.
  */
 export interface PyssgSettings {
-	/** Explicit path to a `pyssg` executable; empty means auto-provision via uv. */
+	/** Explicit path to a `cogito-publish` executable; empty means auto-provision via uv. */
 	pyssgPath: string;
-	/** Git ref of pyssg to install when auto-provisioning (pinned for reproducibility). */
+	/** Git ref of Cogito Publish to install when auto-provisioning. */
 	pyssgGitRef: string;
 	/** Managed Python version uv installs for the runtime. */
 	pythonVersion: string;
@@ -158,9 +158,9 @@ export class PyssgSettingTab extends PluginSettingTab {
 		containerEl.createEl("h3", { text: "Python runtime" });
 
 		new Setting(containerEl)
-			.setName("pyssg executable")
+			.setName("cogito-publish executable")
 			.setDesc(
-				"Path to an existing pyssg executable. Leave empty to download and " +
+				"Path to an existing cogito-publish executable. Leave empty to download and " +
 					"manage an isolated Python runtime automatically (via uv).",
 			)
 			.addText((t) =>
@@ -174,8 +174,8 @@ export class PyssgSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("pyssg version (git ref)")
-			.setDesc("Branch, tag or commit of pyssg to install when auto-provisioning.")
+			.setName("Cogito Publish version (git ref)")
+			.setDesc("Branch, tag or commit of Cogito Publish to install when auto-provisioning.")
 			.addText((t) =>
 				t
 					.setValue(this.plugin.settings.pyssgGitRef)

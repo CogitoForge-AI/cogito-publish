@@ -17,7 +17,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 # Cache layout mirrors the rest of the cache (lives next to the build cache, so
-# ``pyssg clean`` already removes it). Kept separate from the build cache files
+# ``cogito-publish clean`` already removes it). Kept separate from the build cache files
 # to avoid any cross-contamination if either side changes its format.
 _CACHE_DIRNAME = ".pyssg-cache"
 _DEPLOY_SUBDIR = "deploy"

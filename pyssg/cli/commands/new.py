@@ -1,10 +1,4 @@
-"""``pyssg new`` -- scaffold a site, post, theme, or plugin.
-
-The ``new`` group is the single home for project scaffolding. The historical
-top-level commands ``pyssg init`` and ``pyssg eject-layout`` are preserved as
-hidden aliases for ``new site`` / ``new theme`` so existing docs, scripts, and
-the published Obsidian adapter keep working.
-"""
+"""``cogito-publish new`` -- scaffold a site, post, theme, or plugin."""
 
 from __future__ import annotations
 
@@ -49,7 +43,7 @@ def run_new_site(site: Path, *, preset: str, force: bool) -> int:
     print(f"initialized {preset} site in {site}:")
     for path in created:
         print(f"  {path}")
-    print("next: pyssg --site", str(site), "build")
+    print("next: cogito-publish --site", str(site), "build")
     return 0
 
 
@@ -162,27 +156,3 @@ def new_plugin(
 ) -> None:
     """Scaffold a starter plugin module under ``plugins/``."""
     exit_with(run_new_plugin(site_from(ctx), name=name, force=force))
-
-
-@app.command("init", hidden=True)
-def init(
-    ctx: typer.Context,
-    preset: Annotated[
-        str, typer.Option("--preset", help="site preset: docs|blog|obsidian")
-    ] = "docs",
-    force: Annotated[bool, typer.Option("--force", help="overwrite an existing config")] = False,
-) -> None:
-    """Deprecated alias for ``new site``."""
-    exit_with(run_new_site(site_from(ctx), preset=preset, force=force))
-
-
-@app.command("eject-layout", hidden=True)
-def eject_layout_command(
-    ctx: typer.Context,
-    theme: Annotated[str, typer.Option("--theme", help="built-in theme to copy")],
-    to: Annotated[
-        str, typer.Option("--to", help="destination dir (relative to site)")
-    ] = "layouts/theme",
-) -> None:
-    """Deprecated alias for ``new theme``."""
-    exit_with(run_new_theme(site_from(ctx), theme=theme, to=to))

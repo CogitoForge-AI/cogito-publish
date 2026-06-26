@@ -7,7 +7,7 @@ pipeline orchestrates the provider-agnostic part (build, hash, skip, persist).
 Built-in targets are not registered automatically: each one lives in its own
 module (``github_pages``, ``cloudflare``, ``netlify``) and calls
 :func:`register` at import time. The CLI imports them lazily, so a user who
-never runs ``pyssg deploy`` does not pay for the optional third-party imports.
+never runs ``cogito-publish deploy`` does not pay for the optional third-party imports.
 For tests, the registry can be passed in explicitly via the ``targets`` keyword
 of :func:`pyssg.deploy.pipeline.run_deploy`, so there is no need to mutate
 module-level state.

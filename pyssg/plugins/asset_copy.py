@@ -18,7 +18,7 @@ from the source, so rebuilds stay cheap and the output is byte-identical to a
 full rebuild. The copy is keyed on ``evaluate_collections`` (once per finalize)
 and is a deterministic function of the source bytes -- no clock, no globals -- so
 two builds are byte-identical. It never deletes files it did not place, so a
-file removed from a source stays in the output until ``pyssg clean`` (a
+file removed from a source stays in the output until ``cogito-publish clean`` (a
 deliberate, documented limitation).
 
 Before writing anything the plugin checks for output-path collisions: if a mount

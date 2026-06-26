@@ -9,7 +9,7 @@ from pyssg.contrib.llms import llms
 from pyssg.plugins import i18n
 from pyssg.presets import docs
 
-# The pyssg documentation site is itself built with pyssg (dogfooding). It uses
+# The Cogito Publish documentation site is itself built with pyssg (dogfooding). It uses
 # the `docs` preset and adds three plugins:
 #
 #   * apidoc         - statically extracts docstrings from the `pyssg` package
@@ -37,7 +37,7 @@ _DARK_HIGHLIGHT_CSS = HtmlFormatter(style="nord").get_style_defs('[data-theme="d
 
 config = docs(
     site={
-        "title": "pyssg",
+        "title": "Cogito Publish",
         "description": "A fast, incremental static site generator for Markdown.",
         "highlight_css_dark": _DARK_HIGHLIGHT_CSS,
         # Explicit sidebar section order (by content directory; "" is the home
@@ -53,7 +53,7 @@ config = docs(
             "references",
         ],
     },
-    base_url="https://pyssg.nkthanh.dev",
+    base_url="https://publish.cogito-ai.org",
     # Custom layout converted from the Hugo "Book" theme (docs/layouts/book).
     layout="layouts/book",
     extra_plugins=[

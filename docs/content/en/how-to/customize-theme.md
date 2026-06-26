@@ -14,7 +14,7 @@ from a built-in theme instead of from scratch.
 `new theme` copies a built-in theme into your site so you can edit it:
 
 ```bash
-pyssg --site my-site new theme --name docs --to layouts/theme
+cogito-publish --site my-site new theme --name docs --to layouts/theme
 ```
 
 This copies the `docs` theme into `my-site/layouts/theme/`. (The available themes
@@ -48,7 +48,7 @@ Inside `layouts/theme/` you will find the Jinja templates and CSS. Edit them and
 re-run `serve` to see changes live:
 
 ```bash
-pyssg --site my-site serve
+cogito-publish --site my-site serve
 ```
 
 Templates receive the page's rendered content plus the context variables the

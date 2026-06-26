@@ -1,16 +1,16 @@
-# Contributing to pyssg
+# Contributing to Cogito Publish
 
 Thanks for your interest in contributing! This document explains how to set up a
 development environment and the conventions the project follows.
 
 ## Development setup
 
-pyssg uses [uv](https://docs.astral.sh/uv/) as its package manager and targets
+Cogito Publish uses [uv](https://docs.astral.sh/uv/) as its package manager and targets
 Python 3.13.
 
 ```bash
-git clone https://github.com/magiskboy/pyssg.git
-cd pyssg
+git clone https://github.com/CogitoForge-AI/cogito-publish.git
+cd cogito-publish
 uv sync --all-extras          # runtime extras + dev tools (ruff, mypy, types)
 source .venv/bin/activate
 ```
@@ -63,7 +63,7 @@ coverage report -m             # per-file table with missing lines
 
 ## Architecture in one minute
 
-pyssg is a small lifecycle-hook kernel (inspired by webpack's Tapable) plus
+Cogito Publish is a small lifecycle-hook kernel (inspired by webpack's Tapable) plus
 plugins that tap into phases (`discover -> load -> parse -> collect -> transform
 -> render -> generate -> optimize -> emit`). Three layered packages ship in one
 wheel:

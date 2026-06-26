@@ -2,7 +2,7 @@
 
 The CLI is a Typer (Click) command tree rooted at :data:`app`. A single global
 option -- ``--site`` -- lives on the root callback so it can appear *before* the
-subcommand (``pyssg --site PATH build``); commands read it back via
+subcommand (``cogito-publish --site PATH build``); commands read it back via
 :func:`site_from`.
 
 :func:`main` adapts Typer to the process-exit contract the rest of the project
@@ -46,7 +46,7 @@ class AppContext:
 
 
 app = typer.Typer(
-    name="pyssg",
+    name="cogito-publish",
     help="Incremental static site generator for Markdown.",
     add_completion=False,
     no_args_is_help=False,
@@ -92,7 +92,7 @@ def main(argv: list[str] | None = None) -> int:
     """
     command = get_command(app)
     try:
-        result = command.main(args=argv, prog_name="pyssg", standalone_mode=False)
+        result = command.main(args=argv, prog_name="cogito-publish", standalone_mode=False)
     except ClickException as exc:
         exc.show()
         raise SystemExit(exc.exit_code) from exc

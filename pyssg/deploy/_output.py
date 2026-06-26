@@ -1,4 +1,4 @@
-"""Friendly console output for the ``pyssg deploy`` pipeline.
+"""Friendly console output for the ``cogito-publish deploy`` pipeline.
 
 The deploy CLI is the most user-facing surface pyssg ships: a typo in a token
 or a stray network error is something the user has to fix in the next minute,

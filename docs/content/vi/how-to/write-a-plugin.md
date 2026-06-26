@@ -14,7 +14,7 @@ các plugin tích hợp làm.
 thức thực hành.
 
 Để bắt đầu từ một khung sẵn chạy thay vì một file trống, chạy
-`pyssg new plugin <name>`: nó tạo `plugins/<name>.py` với lớp, factory và phần nối
+`cogito-publish new plugin <name>`: nó tạo `plugins/<name>.py` với lớp, factory và phần nối
 hook đã sẵn sàng để tùy biến.
 
 ## Hình hài một plugin
@@ -81,7 +81,7 @@ lặp sẽ ném `HookOrderError`.
 
 ## Các quy tắc mọi plugin phải tuân theo
 
-Đây không phải tùy chọn - chúng là thứ giữ cho các đảm bảo build của PySSG đứng
+Đây không phải tùy chọn - chúng là thứ giữ cho các đảm bảo build của Cogito Publish đứng
 vững:
 
 1. **Thuần khiết theo các đầu vào đã khai báo.** Không có trạng thái toàn cục có

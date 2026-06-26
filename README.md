@@ -1,18 +1,18 @@
-# PySSG
+# Cogito Publish
 
 ![Status: in development](https://img.shields.io/badge/status-in%20development-orange)
 
-A fast, incremental static site generator for Markdown, with a Webpack-inspired
-plugin architecture. Built for **documentation sites**, **blogs**, and large
-**wikis / knowledge bases**.
+Cogito Publish is a fast, incremental static site generator for Markdown, with a
+Webpack-inspired plugin architecture. Built for **documentation sites**,
+**blogs**, and large **wikis / knowledge bases**.
 
 The core (`pyssg.core`) is pure standard library; every third-party dependency
 lives in a peripheral plugin. Builds are deterministic — building twice produces
 byte-identical output.
 
 > **Pre-1.0 and in active development.** The public API, configuration, and
-> built-in themes may still change without notice. If you depend on PySSG, pin a
-> specific commit.
+> built-in themes may still change without notice. If you depend on Cogito
+> Publish, pin a specific commit.
 
 ## Features
 
@@ -44,18 +44,22 @@ byte-identical output.
 
 ## Installation
 
-PySSG is installed directly from GitHub (it is not published to PyPI).
+The current Python package and import namespace remain `pyssg` during the
+branding transition. This milestone updates the public-facing project identity,
+repository, and documentation site without breaking existing installs.
+
+Cogito Publish is installed directly from GitHub (it is not published to PyPI).
 
 To add it as a dependency in your own project:
 
 ```bash
-uv add git+https://github.com/magiskboy/pyssg
+uv add git+https://github.com/CogitoForge-AI/cogito-publish
 ```
 
 Or clone the repository to develop against it:
 
 ```bash
-git clone https://github.com/magiskboy/pyssg && cd pyssg
+git clone https://github.com/CogitoForge-AI/cogito-publish && cd cogito-publish
 uv sync
 ```
 
@@ -66,13 +70,13 @@ bundles the right plugins and a default theme.
 
 ```bash
 # Scaffold a new site (use --preset blog for a blog)
-pyssg --site my-site new site --preset docs
+cogito-publish --site my-site new site --preset docs
 
 # Build to my-site/dist
-pyssg --site my-site build
+cogito-publish --site my-site build
 
 # Watch + incremental rebuild + live-reload at http://127.0.0.1:8000
-pyssg --site my-site serve
+cogito-publish --site my-site serve
 ```
 
 `new site` writes a one-line config plus some sample content. The whole config
@@ -108,8 +112,7 @@ Edit any file under `content/` and the page rebuilds and reloads automatically.
 | `deploy list\|status\|<target>` | Push the built site to a hosting provider. |
 
 Pass `--site PATH` to select the site directory (defaults to the current one).
-Run any command with `--help` for its options. The earlier `init` and
-`eject-layout` commands still work as aliases for `new site` / `new theme`.
+Run any command with `--help` for its options.
 
 ## Internationalization (i18n)
 
@@ -152,11 +155,12 @@ them to render `<html lang>`, `hreflang` alternates, and a header switcher.
 ```bash
 # A small bilingual docs site (English at the root, Vietnamese under /vi/)
 # built with the docs preset plus the i18n plugin.
-pyssg --site examples/docs serve
+cogito-publish --site examples/docs serve
 ```
 
 ## Documentation
 
+- Docs site: [publish.cogito-ai.org](https://publish.cogito-ai.org)
 - Contributing conventions: [`CLAUDE.md`](CLAUDE.md)
 
 ## License

@@ -1,4 +1,4 @@
-"""``pyssg clean`` -- remove the output directory and the build cache."""
+"""``cogito-publish clean`` -- remove the output directory and the build cache."""
 
 from __future__ import annotations
 

@@ -7,7 +7,7 @@ from pyssg.presets import blog
 # Two customization mechanisms are demonstrated:
 #
 # 1. A local layout (``layout/``), ejected from the built-in ``blog`` theme with
-#    ``pyssg eject-layout`` and then edited: tweaked templates (an accent header
+#    ``cogito-publish new theme` and then edited: tweaked templates (an accent header
 #    band, a tagline, a footer note) and a rebranded ``assets/style.css``.
 #    ``layout="layout"`` is a site-relative path, so it resolves against this
 #    directory.

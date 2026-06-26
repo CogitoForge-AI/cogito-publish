@@ -15,6 +15,6 @@ Look at three files to see how it fits together:
 To build it yourself:
 
 ```bash
-pyssg --site examples/custom build
-pyssg --site examples/custom serve
+cogito-publish --site examples/custom build
+cogito-publish --site examples/custom serve
 ```

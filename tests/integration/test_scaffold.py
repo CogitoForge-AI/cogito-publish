@@ -1,4 +1,4 @@
-"""Integration tests for ``pyssg init`` / ``pyssg eject-layout`` scaffolding."""
+"""Integration tests for ``cogito-publish new`` scaffolding."""
 
 from __future__ import annotations
 
@@ -73,9 +73,9 @@ class InitSiteTest(unittest.TestCase):
         text = (site / CONFIG_FILENAME).read_text(encoding="utf-8")
         self.assertIn("from pyssg.presets import blog", text)
 
-    def test_cli_init_entrypoint(self) -> None:
+    def test_cli_new_site_entrypoint(self) -> None:
         site = self.tmp / "cli_site"
-        rc = main(["--site", str(site), "init", "--preset", "docs"])
+        rc = main(["--site", str(site), "new", "site", "--preset", "docs"])
         self.assertEqual(rc, 0)
         self.assertTrue((site / CONFIG_FILENAME).is_file())
 

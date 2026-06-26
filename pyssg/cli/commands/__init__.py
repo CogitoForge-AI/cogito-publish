@@ -1,4 +1,4 @@
-"""Command modules for the ``pyssg`` CLI.
+"""Command modules for the ``cogito-publish`` CLI.
 
 Importing this package registers every subcommand on
 :data:`pyssg.cli.app.app` as a side effect. The package ``pyssg.cli``

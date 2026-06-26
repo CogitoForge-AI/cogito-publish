@@ -1,4 +1,4 @@
-"""GitHub Pages deploy target (``pyssg deploy github-pages``).
+"""GitHub Pages deploy target (``cogito-publish deploy github-pages``).
 
 GitHub Pages is published from a git branch, so this target needs no HTTP
 client and no ``pyssg[deploy]`` extra: it shells out to ``git`` and force-pushes
@@ -61,7 +61,7 @@ _DEFAULT_BRANCH = "gh-pages"
 # meaningful (history is force-pushed away each time), but git refuses to commit
 # without one, and relying on the user's global git config would make the
 # behavior depend on machine state.
-_COMMIT_NAME = "pyssg deploy"
+_COMMIT_NAME = "cogito-publish deploy"
 _COMMIT_EMAIL = "deploy@pyssg.local"
 _DEFAULT_MESSAGE = "Deploy site with pyssg"
 

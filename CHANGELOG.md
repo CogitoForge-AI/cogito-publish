@@ -116,7 +116,7 @@ incremental rebuild is byte-identical to a full rebuild.
 - **Unicode-aware slugify** with a configurable slug function.
 - **Live-reload dev server** — `serve` watches files, rebuilds incrementally,
   and refreshes the browser.
-- **Deploy subsystem** — `pyssg deploy` with `github-pages`, `cloudflare`, and
+- **Deploy subsystem** — `cogito-publish deploy` with `github-pages`, `cloudflare`, and
   `netlify` targets.
 - **AI-friendly output** (`contrib`) — an `llms.txt` / `llms-full.txt` plugin
   with raw content emit and resolved links.
@@ -126,7 +126,7 @@ incremental rebuild is byte-identical to a full rebuild.
   References section of the docs site from Python docstrings.
 - **CLI** — `init`, `build`, `serve`, `clean`, and `eject-layout`.
 
-[Unreleased]: https://github.com/magiskboy/pyssg/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/magiskboy/pyssg/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/magiskboy/pyssg/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/magiskboy/pyssg/releases/tag/v0.1.0
+[Unreleased]: https://github.com/CogitoForge-AI/cogito-publish/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/CogitoForge-AI/cogito-publish/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/CogitoForge-AI/cogito-publish/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/CogitoForge-AI/cogito-publish/releases/tag/v0.1.0

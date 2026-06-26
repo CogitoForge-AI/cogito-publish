@@ -6,8 +6,8 @@ order: 1
 
 # Integrations
 
-Integrations connect PySSG to the tools you already write in. Each one is an
-official **adapter** - a thin layer that drives a PySSG build from another
+Integrations connect Cogito Publish to the tools you already write in. Each one is an
+official **adapter** - a thin layer that drives a Cogito Publish build from another
 application - and lives in the project's `adapters/<name>/` directory with its
 own toolchain.
 

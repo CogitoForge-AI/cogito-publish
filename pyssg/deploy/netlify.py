@@ -1,4 +1,4 @@
-"""Netlify deploy target (``pyssg deploy netlify``).
+"""Netlify deploy target (``cogito-publish deploy netlify``).
 
 Publishes the built site with Netlify's file-digest Deploy API: the whole site
 is described as a ``{path: sha1}`` manifest, Netlify replies with the subset of

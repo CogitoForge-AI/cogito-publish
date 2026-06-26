@@ -1,4 +1,4 @@
-"""``pyssg build`` -- full build to the output directory."""
+"""``cogito-publish build`` -- full build to the output directory."""
 
 from __future__ import annotations
 

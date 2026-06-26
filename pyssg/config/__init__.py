@@ -67,12 +67,12 @@ class Config:
     when applicable, e.g. ``default_theme`` ("auto"/"light"/"dark" color scheme)
     and ``accent`` (primary color).
 
-    ``deploy`` holds per-target options for the ``pyssg deploy`` subcommand;
+    ``deploy`` holds per-target options for the ``cogito-publish deploy`` subcommand;
     keys are target names (``"github-pages"``, ``"cloudflare"``, ``"netlify"``)
     and values are the option dicts passed to that target. This field is not
     validated at load time: a site that never deploys does not need to fill it
     in, and validation runs only when the user actually invokes
-    ``pyssg deploy <target>``.
+    ``cogito-publish deploy <target>``.
     """
 
     content_dir: str = "content"

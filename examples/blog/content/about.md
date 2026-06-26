@@ -13,6 +13,6 @@ site.
 To build it yourself:
 
 ```bash
-pyssg --site examples/blog build
-pyssg --site examples/blog serve
+cogito-publish --site examples/blog build
+cogito-publish --site examples/blog serve
 ```

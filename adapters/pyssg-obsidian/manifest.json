@@ -1,10 +1,10 @@
 {
 	"id": "pyssg-publish",
-	"name": "PySSG Publish",
+	"name": "Cogito Publish for Obsidian",
 	"version": "0.1.0",
 	"minAppVersion": "1.5.0",
-	"description": "Build and preview your vault as a static website with PySSG. Publishes notes marked publish: true, resolves wikilinks, embeds and attachments.",
-	"author": "PySSG",
-	"authorUrl": "https://github.com/magiskboy/pyssg",
+	"description": "Build and preview your vault as a static website with Cogito Publish. Publishes notes marked publish: true, resolves wikilinks, embeds and attachments.",
+	"author": "Cogito Publish",
+	"authorUrl": "https://github.com/CogitoForge-AI/cogito-publish",
 	"isDesktopOnly": true
 }

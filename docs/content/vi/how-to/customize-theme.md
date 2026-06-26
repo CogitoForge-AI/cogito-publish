@@ -14,7 +14,7 @@ một theme tích hợp sẵn thay vì làm lại từ đầu.
 `new theme` sao chép một theme tích hợp vào trang của bạn để bạn có thể sửa:
 
 ```bash
-pyssg --site my-site new theme --name docs --to layouts/theme
+cogito-publish --site my-site new theme --name docs --to layouts/theme
 ```
 
 Lệnh này sao chép theme `docs` vào `my-site/layouts/theme/`. (Các theme có sẵn là
@@ -48,7 +48,7 @@ Bên trong `layouts/theme/` bạn sẽ thấy các template Jinja và CSS. Sửa
 chạy lại `serve` để xem thay đổi trực tiếp:
 
 ```bash
-pyssg --site my-site serve
+cogito-publish --site my-site serve
 ```
 
 Template nhận nội dung đã render của trang cùng các biến ngữ cảnh do plugin đóng

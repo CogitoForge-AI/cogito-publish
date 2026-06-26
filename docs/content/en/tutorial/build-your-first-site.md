@@ -17,21 +17,21 @@ working result. You do not need to understand every detail yet - the
 ## Prerequisites
 
 - **Python 3.13+** and **[uv](https://github.com/astral-sh/uv)** installed.
-- PySSG available. The simplest way while you learn is to clone the repository
+- Cogito Publish available. The simplest way while you learn is to clone the repository
   and run everything through `uv run`:
 
   ```bash
-  git clone https://github.com/magiskboy/pyssg && cd pyssg
+  git clone https://github.com/CogitoForge-AI/cogito-publish && cd cogito-publish
   uv sync
   ```
 
   In your own project you would instead add it as a dependency:
 
   ```bash
-  uv add git+https://github.com/magiskboy/pyssg
+  uv add git+https://github.com/CogitoForge-AI/cogito-publish
   ```
 
-All commands below are written as `pyssg ...`. The `--site`
+All commands below are written as `cogito-publish ...`. The `--site`
 option selects the site directory; it defaults to the current directory.
 
 ## Step 1 - Scaffold a new site
@@ -40,7 +40,7 @@ A **preset** is a ready-made configuration that bundles the right plugins and a
 default theme. Scaffold a documentation site with the `docs` preset:
 
 ```bash
-pyssg --site my-site new site --preset docs
+cogito-publish --site my-site new site --preset docs
 ```
 
 This creates three files:
@@ -70,7 +70,7 @@ config = docs(
 Render the content into the output directory (`dist/` by default):
 
 ```bash
-pyssg --site my-site build
+cogito-publish --site my-site build
 ```
 
 You should see something like `build: 3 pages written`. The HTML now lives under
@@ -83,7 +83,7 @@ Instead of rebuilding by hand, run the dev server. It watches your files,
 rebuilds only what changed, and refreshes the browser automatically:
 
 ```bash
-pyssg --site my-site serve
+cogito-publish --site my-site serve
 ```
 
 Open the printed URL (by default <http://127.0.0.1:8000>). You will see your home
@@ -100,7 +100,7 @@ title: Home
 ---
 # Welcome to my docs
 
-This is my first pyssg site.
+This is my first Cogito Publish site.
 ```
 
 Save the file. The terminal shows a quick incremental rebuild and the browser

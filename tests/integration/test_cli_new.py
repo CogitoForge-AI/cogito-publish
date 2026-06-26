@@ -1,9 +1,9 @@
-"""Tests for the ``pyssg new`` scaffolding group and its hidden aliases.
+"""Tests for the ``cogito-publish new`` scaffolding group.
 
 Covers the pure scaffolders (``scaffold_post`` / ``scaffold_plugin`` and
-``slugify``) and the CLI surface via ``main``: ``new site|post|theme|plugin``,
-plus the back-compat aliases ``init`` / ``eject-layout``. A generated plugin is
-imported and wired into a real build to prove the template is correct and usable.
+``slugify``) and the CLI surface via ``main``: ``new site|post|theme|plugin``.
+A generated plugin is imported and wired into a real build to prove the template
+is correct and usable.
 """
 
 from __future__ import annotations
@@ -163,14 +163,6 @@ class NewCliTest(unittest.TestCase):
         rc = self._run(["--site", str(site), "new", "plugin", "my_plugin"])
         self.assertEqual(rc, 0)
         self.assertTrue((site / "plugins" / "my_plugin.py").is_file())
-
-    def test_eject_layout_alias_matches_new_theme(self) -> None:
-        site = self.tmp / "s"
-        site.mkdir()
-        argv = ["--site", str(site), "eject-layout", "--theme", "docs", "--to", "layouts/y"]
-        rc = self._run(argv)
-        self.assertEqual(rc, 0)
-        self.assertTrue((site / "layouts" / "y" / "layout.toml").is_file())
 
     def test_unknown_preset_is_usage_error(self) -> None:
         with self.assertRaises(SystemExit), redirect_stdout(io.StringIO()):

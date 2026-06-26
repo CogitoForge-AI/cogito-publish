@@ -11,7 +11,7 @@ order: 6
 ## 1. Produce a clean build
 
 ```bash
-pyssg --site my-site build
+cogito-publish --site my-site build
 ```
 
 Everything to deploy is now in the output directory (`dist/` by default; set
@@ -31,11 +31,11 @@ config = docs(
 )
 ```
 
-## 3. Deploy with `pyssg deploy`
+## 3. Deploy with `cogito-publish deploy`
 
-PySSG ships a built-in deploy command for the common hosts. Declare per-target
+Cogito Publish ships a built-in deploy command for the common hosts. Declare per-target
 options under `Config.deploy` (keyed by target name), then run
-`pyssg deploy <target>`. The command builds the site, uploads the output, and
+`cogito-publish deploy <target>`. The command builds the site, uploads the output, and
 records the result so a re-run with byte-identical output is a no-op.
 
 ```python
@@ -58,9 +58,9 @@ Credentials are always read from the environment, never from the config file.
 Then deploy:
 
 ```bash
-pyssg --site my-site deploy list           # configured targets + whether each is implemented
-pyssg --site my-site deploy github-pages   # build and publish
-pyssg --site my-site deploy status         # last-deploy record per target
+cogito-publish --site my-site deploy list           # configured targets + whether each is implemented
+cogito-publish --site my-site deploy github-pages   # build and publish
+cogito-publish --site my-site deploy status         # last-deploy record per target
 ```
 
 Each target subcommand accepts `--dry-run` (validate and report what would be
@@ -82,24 +82,24 @@ A few common targets:
 - **GitHub Pages** - push the `dist/` contents to the `gh-pages` branch, or use a
   Pages action that uploads the directory as the artifact.
 - **Netlify / Cloudflare Pages / Vercel** - set the build command to
-  `pyssg --site my-site build` and the publish directory to
+  `cogito-publish --site my-site build` and the publish directory to
   `my-site/dist`.
 - **Any web server / object storage** - copy `dist/` to the document root or
   bucket.
 
 ## 5. Keep builds reproducible in CI
 
-PySSG builds are deterministic: given the same inputs, two builds produce
+Cogito Publish builds are deterministic: given the same inputs, two builds produce
 byte-identical output. In CI, run a full `build` (the cache is an optimization,
 not a correctness requirement) - pass `--no-cache` if you want to prove a clean
 build from scratch:
 
 ```bash
-pyssg --site my-site build --no-cache
+cogito-publish --site my-site build --no-cache
 ```
 
 To remove the output directory and cache locally, use `clean`:
 
 ```bash
-pyssg --site my-site clean --yes
+cogito-publish --site my-site clean --yes
 ```

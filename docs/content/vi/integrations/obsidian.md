@@ -7,8 +7,8 @@ order: 2
 # Publish một vault Obsidian
 
 Hướng dẫn này chỉ cách biến một vault [Obsidian](https://obsidian.md) thành trang
-web tĩnh bằng plugin **PySSG Publish**, và cách làm tương tự từ dòng lệnh nếu bạn
-muốn. Bạn không cần biết Python.
+web tĩnh bằng plugin **Cogito Publish for Obsidian**, và cách làm tương tự từ
+dòng lệnh nếu bạn muốn. Bạn không cần biết Python.
 
 ## Trước khi bắt đầu
 
@@ -22,7 +22,7 @@ muốn. Bạn không cần biết Python.
 
 Plugin chưa có trên cửa hàng cộng đồng nên hãy cài thủ công:
 
-1. Build từ kho PySSG:
+1. Build từ kho Cogito Publish:
 
    ```bash
    cd adapters/pyssg-obsidian
@@ -33,7 +33,7 @@ Plugin chưa có trên cửa hàng cộng đồng nên hãy cài thủ công:
 2. Chép `manifest.json`, `main.js` và `styles.css` vào vault tại
    `.obsidian/plugins/pyssg-publish/`.
 3. Trong Obsidian, mở **Settings -> Community plugins**, tải lại và bật
-   **PySSG Publish**.
+   **Cogito Publish for Obsidian**.
 
 ## Chọn nội dung để publish
 
@@ -83,19 +83,19 @@ bao giờ lẫn vào ghi chú hay bị Obsidian index lại.
 | Content subfolder | Chỉ build một thư mục con của vault (mặc định: cả vault). |
 | Exclude / Include globs | Bộ lọc cách nhau bằng dấu phẩy, *cộng thêm* vào các mục luôn bị loại: `.obsidian`, `.trash`, `.git` và các thư mục Templates / Daily notes mà plugin tự đọc từ cấu hình vault của bạn. |
 | Preview server | Host và port cho xem trước trực tiếp. |
-| pyssg executable | Dùng một `pyssg` có sẵn thay cho runtime tự quản. |
-| pyssg version (git ref) | Nhánh, tag hoặc commit được cài khi tự dựng runtime. |
+| cogito-publish executable | Dùng một `cogito-publish` có sẵn thay cho runtime tự quản. |
+| Cogito Publish version (git ref) | Nhánh, tag hoặc commit được cài khi tự dựng runtime. |
 | Reset managed runtime | Xoá runtime đã tải để dựng lại. |
 
-## Dùng PySSG không qua plugin
+## Dùng Cogito Publish không qua plugin
 
 Plugin chỉ là lớp tiện ích; bạn có thể build cùng vault đó từ terminal với preset
 `obsidian`. Tạo một site kiểu vault mới:
 
 ```bash
-pyssg --site my-vault new site --preset obsidian
-pyssg --site my-vault build
-pyssg --site my-vault serve   # xem trước trực tiếp, tự tải lại
+cogito-publish --site my-vault new site --preset obsidian
+cogito-publish --site my-vault build
+cogito-publish --site my-vault serve   # xem trước trực tiếp, tự tải lại
 ```
 
 Để publish một vault **đã có** mà không thêm tệp cấu hình vào nó, trỏ
@@ -117,28 +117,28 @@ config = obsidian(
 )
 ```
 
-Sau đó `pyssg --site <thư-mục-chứa-config> build`. Xem [tham chiếu
+Sau đó `cogito-publish --site <thư-mục-chứa-config> build`. Xem [tham chiếu
 CLI](../reference/cli.md) và [tham chiếu cấu hình](../reference/configuration.md)
 để biết mọi tuỳ chọn.
 
 ## Cách runtime Python được dựng tự động
 
 Lần đầu build hoặc xem trước, plugin tải [uv](https://docs.astral.sh/uv/) (một
-binary tĩnh nhỏ gọn), dùng nó cài một Python tự quản và một bản PySSG độc lập, rồi
+binary tĩnh nhỏ gọn), dùng nó cài một Python tự quản và một bản Cogito Publish độc lập, rồi
 lưu cache vào thư mục dữ liệu ứng dụng dùng chung - không bao giờ nằm trong vault.
 Việc này chạy một lần ở chế độ nền; sau đó build khởi động tức thì. Hãy ghim phiên
-bản PySSG qua cài đặt **pyssg version (git ref)** để cài đặt tái lập được.
+bản Cogito Publish qua cài đặt **Cogito Publish version (git ref)** để cài đặt tái lập được.
 
 ## Khắc phục sự cố
 
 - **Dựng runtime lỗi hoặc treo.** Dùng **Reset managed runtime** trong cài đặt
   rồi build lại để dựng lại từ đầu.
-- **Máy offline hoặc bị quản lý.** Tự cài PySSG và đặt đường dẫn **pyssg
-  executable** trong cài đặt; plugin sẽ bỏ qua bước tải.
+- **Máy offline hoặc bị quản lý.** Tự cài Cogito Publish và đặt đường dẫn
+  **cogito-publish executable** trong cài đặt; plugin sẽ bỏ qua bước tải.
 - **Một note không chịu publish.** Kiểm tra frontmatter có `publish: true` (ở chế
   độ allowlist) và note không nằm trong thư mục bị loại.
 
 ## Bước tiếp theo
 
 - [Deploy một trang đã build](../how-to/deploy.md) - publish output đã tạo.
-- [Tham chiếu CLI](../reference/cli.md) - mọi lệnh và cờ của `pyssg`.
+- [Tham chiếu CLI](../reference/cli.md) - mọi lệnh và cờ của `cogito-publish`.

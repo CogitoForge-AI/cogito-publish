@@ -1,4 +1,4 @@
-"""Cloudflare Pages deploy target (``pyssg deploy cloudflare``).
+"""Cloudflare Pages deploy target (``cogito-publish deploy cloudflare``).
 
 Publishes the built site with Cloudflare Pages' *Direct Upload* protocol -- the
 same content-addressed flow Wrangler uses. Each file is hashed, the API is asked

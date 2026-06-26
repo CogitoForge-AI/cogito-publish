@@ -1,7 +1,7 @@
 [project]
 name = "pyssg"
 version = "0.3.0"
-description = "Incremental static site generator for Markdown, with a Webpack-inspired hook + dependency-graph architecture."
+description = "Cogito Publish is an incremental static site generator for Markdown with a Webpack-inspired hook and dependency-graph architecture."
 readme = "README.md"
 requires-python = ">=3.13"
 license = { text = "MIT" }
@@ -29,12 +29,13 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/magiskboy/pyssg"
-Repository = "https://github.com/magiskboy/pyssg"
-Issues = "https://github.com/magiskboy/pyssg/issues"
+Homepage = "https://publish.cogito-ai.org"
+Documentation = "https://publish.cogito-ai.org"
+Repository = "https://github.com/CogitoForge-AI/cogito-publish"
+Issues = "https://github.com/CogitoForge-AI/cogito-publish/issues"
 
 [project.scripts]
-pyssg = "pyssg.cli:main"
+cogito-publish = "pyssg.cli:main"
 
 [project.optional-dependencies]
 deploy = [

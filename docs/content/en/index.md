@@ -4,9 +4,9 @@ nav_title: Overview
 order: 1
 ---
 
-# PySSG
+# Cogito Publish
 
-**PySSG** is a fast, incremental static site generator for Markdown, with a
+**Cogito Publish** is a fast, incremental static site generator for Markdown, with a
 Webpack-inspired plugin architecture. It is built for **documentation sites**,
 **blogs**, and large **wikis / knowledge bases**.
 
@@ -15,7 +15,7 @@ lives in a peripheral plugin. Builds are deterministic - building twice produces
 byte-identical output, and an incremental rebuild is guaranteed byte-identical to
 a full rebuild.
 
-> This documentation site is itself built with PySSG. The **References** section
+> This documentation site is itself built with Cogito Publish. The **References** section
 > in the sidebar is generated automatically from the project's own docstrings by
 > the [`apidoc`](how-to/api-reference.md) contrib plugin.
 
@@ -34,7 +34,7 @@ splits docs into four kinds, each serving a different need:
 - **[Reference](reference/index.md)** - information-oriented, precise
   descriptions of the CLI, configuration, frontmatter, and the built-in plugins.
 - **[Explanation](explanation/index.md)** - understanding-oriented discussion of
-  *why* PySSG works the way it does (architecture, the plugin pipeline,
+  *why* Cogito Publish works the way it does (architecture, the plugin pipeline,
   incremental builds, the linking model).
 - **[References](/references/pyssg/)** - the auto-generated API reference for the
   `pyssg` package.

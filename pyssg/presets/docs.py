@@ -65,7 +65,7 @@ def docs(
     it with a site-local layout. ``extra_plugins`` are appended after the
     defaults (so they run last). ``rss_title`` defaults to the site title.
     ``deploy`` is forwarded verbatim to :attr:`Config.deploy` for the
-    ``pyssg deploy`` subcommand; see the deploy docs for the schema.
+    ``cogito-publish deploy`` subcommand; see the deploy docs for the schema.
     """
     plugins: list[Plugin] = [
         directory_loader(),

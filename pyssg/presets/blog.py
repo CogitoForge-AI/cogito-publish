@@ -70,7 +70,7 @@ def blog(
     sorted newest-first by ``date``, and paginated at ``posts_route`` with
     ``posts_per_page`` per page. ``layout`` defaults to the built-in ``blog``
     theme. ``deploy`` is forwarded verbatim to :attr:`Config.deploy` for the
-    ``pyssg deploy`` subcommand.
+    ``cogito-publish deploy`` subcommand.
     """
     posts = CollectionSpec(
         name="posts",

@@ -6,7 +6,7 @@ import { Notice } from "obsidian";
 import { run } from "./process";
 import type { PyssgSettings } from "./settings";
 
-const PYSSG_REPO = "https://github.com/magiskboy/pyssg";
+const PYSSG_REPO = "https://github.com/CogitoForge-AI/cogito-publish";
 
 /** Whether we are on Windows (affects executable names and the uv installer). */
 const isWindows = platform() === "win32";
@@ -33,16 +33,17 @@ function uvBinPath(root: string): string {
 function venvPyssgPath(root: string): string {
 	const venv = join(root, "venv");
 	return isWindows
-		? join(venv, "Scripts", "pyssg.exe")
-		: join(venv, "bin", "pyssg");
+		? join(venv, "Scripts", "cogito-publish.exe")
+		: join(venv, "bin", "cogito-publish");
 }
 
 /**
- * Provisions and locates a usable `pyssg` executable.
+ * Provisions and locates a usable `cogito-publish` executable.
  *
  * Resolution order: an explicit path from settings, then a previously managed
  * runtime, then a fresh uv-managed install (download uv, install a managed
- * Python, create an isolated venv with pyssg from the pinned git ref). The first
+ * Python, create an isolated venv with Cogito Publish from the pinned git ref).
+ * The first
  * provisioning shows progress; subsequent calls return the cached path instantly.
  */
 export class Runtime {
@@ -56,7 +57,9 @@ export class Runtime {
 	async resolve(): Promise<string> {
 		if (this.settings.pyssgPath) {
 			if (!existsSync(this.settings.pyssgPath)) {
-				throw new Error(`configured pyssg executable not found: ${this.settings.pyssgPath}`);
+				throw new Error(
+					`configured cogito-publish executable not found: ${this.settings.pyssgPath}`,
+				);
 			}
 			return this.settings.pyssgPath;
 		}
@@ -69,19 +72,24 @@ export class Runtime {
 	}
 
 	private async provision(root: string): Promise<string> {
-		const notice = new Notice("PySSG: preparing Python runtime (one-time setup)...", 0);
+		const notice = new Notice(
+			"Cogito Publish: preparing Python runtime (one-time setup)...",
+			0,
+		);
 		try {
 			await mkdir(root, { recursive: true });
 			const uv = await this.ensureUv(root, notice);
 
-			notice.setMessage("PySSG: installing Python " + this.settings.pythonVersion + "...");
+			notice.setMessage(
+				"Cogito Publish: installing Python " + this.settings.pythonVersion + "...",
+			);
 			await this.runChecked(uv, ["python", "install", this.settings.pythonVersion], root);
 
 			const venv = join(root, "venv");
-			notice.setMessage("PySSG: creating isolated environment...");
+			notice.setMessage("Cogito Publish: creating isolated environment...");
 			await this.runChecked(uv, ["venv", venv, "--python", this.settings.pythonVersion], root);
 
-			notice.setMessage("PySSG: installing pyssg...");
+			notice.setMessage("Cogito Publish: installing CLI...");
 			const spec = `git+${PYSSG_REPO}@${this.settings.pyssgGitRef}`;
 			const python = isWindows
 				? join(venv, "Scripts", "python.exe")
@@ -90,9 +98,9 @@ export class Runtime {
 
 			const pyssg = venvPyssgPath(root);
 			if (!existsSync(pyssg)) {
-				throw new Error("pyssg was installed but its executable was not found");
+				throw new Error("Cogito Publish was installed but its executable was not found");
 			}
-			notice.setMessage("PySSG: runtime ready.");
+			notice.setMessage("Cogito Publish: runtime ready.");
 			window.setTimeout(() => notice.hide(), 2000);
 			return pyssg;
 		} catch (err) {
@@ -107,7 +115,7 @@ export class Runtime {
 		if (existsSync(uv)) {
 			return uv;
 		}
-		notice.setMessage("PySSG: downloading uv...");
+		notice.setMessage("Cogito Publish: downloading uv...");
 		const installDir = join(root, "uv");
 		await mkdir(installDir, { recursive: true });
 		// uv's official installer; UV_UNMANAGED_INSTALL drops the binary into our

@@ -6,14 +6,14 @@ order: 2
 
 # CLI reference
 
-PySSG is invoked as a module: `python -m pyssg [--site PATH] <command> [options]`.
-Through uv that is `pyssg ...`.
+Cogito Publish is invoked as a command: `cogito-publish [--site PATH] <command> [options]`.
+The Python module entry point remains `python -m pyssg ...`.
 
 ## Global option
 
 | Option | Default | Description |
 |---|---|---|
-| `--site PATH` | `.` | The site directory. All other paths in the config (`content_dir`, `output_dir`, `layout`) are relative to it. It is global, so it goes *before* the command: `pyssg --site my-site build`. |
+| `--site PATH` | `.` | The site directory. All other paths in the config (`content_dir`, `output_dir`, `layout`) are relative to it. It is global, so it goes *before* the command: `cogito-publish --site my-site build`. |
 
 Run any command with `--help` to see its options.
 
@@ -22,7 +22,7 @@ Run any command with `--help` to see its options.
 Full build to the output directory.
 
 ```bash
-pyssg --site my-site build
+cogito-publish --site my-site build
 ```
 
 | Option | Default | Description |
@@ -40,7 +40,7 @@ or `{"command": "build", "ok": false, "error": "..."}` on failure (exit code 1).
 Watch the content, rebuild incrementally, and serve with live reload.
 
 ```bash
-pyssg --site my-site serve
+cogito-publish --site my-site serve
 ```
 
 | Option | Default | Description |
@@ -58,7 +58,7 @@ reloads automatically.
 Remove the output directory and the cache.
 
 ```bash
-pyssg --site my-site clean
+cogito-publish --site my-site clean
 ```
 
 | Option | Default | Description |
@@ -78,7 +78,7 @@ Scaffold a new site for a preset: a one-line `pyssg.config.py` plus a little
 sample content.
 
 ```bash
-pyssg --site my-site new site --preset docs
+cogito-publish --site my-site new site --preset docs
 ```
 
 | Option | Default | Description |
@@ -91,7 +91,7 @@ pyssg --site my-site new site --preset docs
 Scaffold a new blog post under `content/posts/`.
 
 ```bash
-pyssg --site my-site new post --title "Hello, world" --tag intro
+cogito-publish --site my-site new post --title "Hello, world" --tag intro
 ```
 
 | Option | Default | Description |
@@ -107,7 +107,7 @@ pyssg --site my-site new post --title "Hello, world" --tag intro
 Copy a built-in theme into the site so you can customize it (the "eject").
 
 ```bash
-pyssg --site my-site new theme --name docs --to layouts/theme
+cogito-publish --site my-site new theme --name docs --to layouts/theme
 ```
 
 | Option | Default | Description |
@@ -124,7 +124,7 @@ Scaffold a starter plugin module under `plugins/`: a plugin class plus its
 lowercase factory, ready to customize.
 
 ```bash
-pyssg --site my-site new plugin my_plugin
+cogito-publish --site my-site new plugin my_plugin
 ```
 
 | Argument / Option | Default | Description |
@@ -139,12 +139,12 @@ on `PYTHONPATH`).
 ## `deploy`
 
 Push the built site to a hosting provider. The form is
-`pyssg deploy <target-or-action>`, where the leaf is either a configured target
+`cogito-publish deploy <target-or-action>`, where the leaf is either a configured target
 (`github-pages`, `cloudflare`, `netlify`) or a meta action.
 
 ```bash
-pyssg --site my-site deploy list
-pyssg --site my-site deploy github-pages --dry-run
+cogito-publish --site my-site deploy list
+cogito-publish --site my-site deploy github-pages --dry-run
 ```
 
 | Action | Description |
@@ -162,12 +162,3 @@ Each target subcommand accepts:
 | `--skip-check` | off | Skip the post-build sanity check. |
 
 See [Deploy your site](../how-to/deploy.md) for the per-provider configuration.
-
-## Deprecated aliases
-
-These earlier commands still work as hidden aliases; prefer the `new` group:
-
-| Alias | Use instead |
-|---|---|
-| `pyssg init --preset docs` | `pyssg new site --preset docs` |
-| `pyssg eject-layout --theme docs` | `pyssg new theme --name docs` |

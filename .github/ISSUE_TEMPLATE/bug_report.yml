@@ -18,8 +18,8 @@ body:
       label: Steps to reproduce
       description: A minimal config, content tree, or command sequence that triggers the bug.
       placeholder: |
-        1. pyssg new site --theme docs
-        2. pyssg build
+        1. cogito-publish --site my-site new site --preset docs
+        2. cogito-publish --site my-site build
         3. ...
     validations:
       required: true
@@ -27,9 +27,9 @@ body:
     id: environment
     attributes:
       label: Environment
-      description: pyssg version (or git commit), Python version, OS, and installed extras.
+      description: cogito-publish version (or git commit), Python version, OS, and installed extras.
       placeholder: |
-        pyssg: 0.1.0 (git+https://github.com/magiskboy/pyssg@<sha>)
+        pyssg: 0.1.0 (git+https://github.com/CogitoForge-AI/cogito-publish@<sha>)
         Python: 3.13.x
         OS: macOS 14 / Ubuntu 24.04 / Windows 11
         Extras: pyssg[plugins]

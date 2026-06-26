@@ -1,12 +1,7 @@
-# Build the documentation site and deploy it to Cloudflare Workers with Wrangler.
+# Build the documentation site and publish it to GitHub Pages.
 #
-# This replaces Cloudflare's dashboard git auto-build: GitHub Actions builds the
-# site and `wrangler deploy` pushes ./docs/dist to the "pyssg" Worker
-# (configured in docs/wrangler.jsonc).
-#
-# Requires two repository secrets (Settings -> Secrets and variables -> Actions):
-#   CLOUDFLARE_API_TOKEN   token with the "Edit Cloudflare Workers" permission
-#   CLOUDFLARE_ACCOUNT_ID  the account that owns the Worker
+# GitHub Actions builds ./docs/dist, writes the custom-domain CNAME, uploads the
+# artifact, and deploys it to the repository's Pages environment.
 name: Deploy docs
 
 # Re-deploy when the docs site, the documented package, or this workflow changes
@@ -24,6 +19,11 @@ on:
       - ".github/workflows/deploy-docs.yml"
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 # One deploy at a time; newer pushes supersede in-flight runs.
 concurrency:
   group: deploy-docs
@@ -32,6 +32,9 @@ concurrency:
 jobs:
   deploy:
     name: Build and deploy
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -39,17 +42,16 @@ jobs:
         with:
           python-version: "3.13"
           enable-cache: true
+      - uses: actions/configure-pages@v5
       - run: uv sync --all-extras
       - name: Build site
-        run: uv run pyssg build
+        run: uv run cogito-publish build
         working-directory: docs
-      - uses: cloudflare/wrangler-action@v4
+      - name: Write Pages custom domain
+        run: printf 'publish.cogito-ai.org\n' > dist/CNAME
+        working-directory: docs
+      - uses: actions/upload-pages-artifact@v4
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: docs
-          # v4 is required to deploy a static-assets-only Worker (no `main`);
-          # the action otherwise installs an older default that errors with
-          # "Missing entry-point".
-          wranglerVersion: "4.40.0"
-          command: deploy
+          path: docs/dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

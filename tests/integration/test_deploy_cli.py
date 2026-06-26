@@ -1,4 +1,4 @@
-"""Integration tests for the ``pyssg deploy`` CLI surface.
+"""Integration tests for the ``cogito-publish deploy`` CLI surface.
 
 Exercises the argparse wiring and the meta actions (``list`` / ``status``). All
 three built-in targets (``github-pages``, ``cloudflare``, ``netlify``) register
@@ -30,7 +30,7 @@ class DeployCliParserTest(unittest.TestCase):
         self.tmp = Path(self.enterContext(tempfile.TemporaryDirectory()))
 
     def test_deploy_without_action_fails(self) -> None:
-        """``pyssg deploy`` without a sub-action is a usage error."""
+        """``cogito-publish deploy`` without a sub-action is a usage error."""
         with self.assertRaises(SystemExit), redirect_stderr(io.StringIO()):
             main(["--site", str(self.tmp), "deploy"])
 

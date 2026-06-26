@@ -1,26 +1,26 @@
-# PySSG Publish (Obsidian plugin)
+# Cogito Publish for Obsidian (Obsidian plugin)
 
 Build and preview your Obsidian vault as a static website with
-[PySSG](https://github.com/magiskboy/pyssg), without leaving the editor.
+[Cogito Publish](https://github.com/CogitoForge-AI/cogito-publish), without leaving the editor.
 
 - **Publish what you choose** - by default only notes whose frontmatter sets
   `publish: true` are rendered, so private notes stay private.
 - **PKM-native** - `[[wikilinks]]`, `![[note]]` embeds, `![[image.png]]`
-  attachments and `#tags` are handled by PySSG's built-in pipeline.
+  attachments and `#tags` are handled by Cogito Publish's built-in pipeline.
 - **Live preview** - render the site inside Obsidian or in your browser; edits
   rebuild incrementally and the preview reloads itself.
 - **Zero-setup Python** - on first use the plugin downloads an isolated Python
-  runtime (via [uv](https://docs.astral.sh/uv/)) and installs PySSG into it. No
+  runtime (via [uv](https://docs.astral.sh/uv/)) and installs Cogito Publish into it. No
   system Python required; nothing is written into your vault.
 
 ## How it works
 
-The plugin is a thin UI layer over the `pyssg` command-line tool. It generates a
+The plugin is a thin UI layer over the `cogito-publish` command-line tool. It generates a
 `pyssg.config.py` in a private working directory **outside** the vault (using the
 `pyssg.presets.obsidian` preset with your settings), then shells out to:
 
-- `pyssg --site <workdir> build --json` for one-shot builds, and
-- `pyssg --site <workdir> serve --json` for live preview.
+- `cogito-publish --site <workdir> build --json` for one-shot builds, and
+- `cogito-publish --site <workdir> serve --json` for live preview.
 
 Both commands speak newline-delimited JSON (`--json`), which the plugin parses to
 track the served URL and rebuild progress. The build output is written outside
@@ -48,9 +48,9 @@ A ribbon globe icon runs **Preview site**.
   your Templates / Daily-notes folders from the vault's own settings and excludes
   them too; these globs are *added* on top.
 - **Preview server** - host and port for live preview.
-- **pyssg executable** - point at an existing `pyssg` instead of the managed
+- **cogito-publish executable** - point at an existing `cogito-publish` instead of the managed
   runtime (useful for offline / CI machines).
-- **pyssg version (git ref)** - branch, tag or commit to install when
+- **Cogito Publish version (git ref)** - branch, tag or commit to install when
   auto-provisioning.
 - **Reset managed runtime** - delete the downloaded runtime so it is rebuilt.
 
@@ -66,6 +66,6 @@ Copy `manifest.json`, `main.js` and `styles.css` into
 `<vault>/.obsidian/plugins/pyssg-publish/` to test locally, or symlink this
 folder there.
 
-This adapter lives in the PySSG monorepo under `adapters/pyssg-obsidian/`. It has
+This adapter lives in the Cogito Publish monorepo under `adapters/pyssg-obsidian/`. It has
 its own Node/TypeScript toolchain and is not covered by the Python test suite;
 future ecosystem integrations follow the same `adapters/<name>/` layout.

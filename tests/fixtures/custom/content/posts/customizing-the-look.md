@@ -13,7 +13,7 @@ The built-in themes live inside the pyssg package. To edit one, copy it into the
 site first:
 
 ```bash
-pyssg --site examples/custom eject-layout --theme blog --to layout
+cogito-publish --site examples/custom new theme --name blog --to layout
 ```
 
 That writes an editable copy under `layout/` -- templates, CSS, and the i18n

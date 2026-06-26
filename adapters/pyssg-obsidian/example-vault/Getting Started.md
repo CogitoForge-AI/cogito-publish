@@ -5,7 +5,7 @@ title: Getting Started
 ## Getting Started
 
 1. Open this folder as a vault in Obsidian
-2. Enable the **PySSG Publish** plugin.
+2. Enable the **Cogito Publish for Obsidian** plugin.
 3. Run the **Preview site (live)** command to see the rendered site.
 4. Run **Build site** to export the static output.
 

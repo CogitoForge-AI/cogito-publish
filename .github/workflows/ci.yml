@@ -115,8 +115,8 @@ jobs:
           wheel=$(ls dist/*.whl)
           uv venv /tmp/smoke
           uv pip install --python /tmp/smoke "pyssg @ ${wheel}"
-          /tmp/smoke/bin/pyssg --site site init --preset docs
-          /tmp/smoke/bin/pyssg --site site build
+          /tmp/smoke/bin/cogito-publish --site site new site --preset docs
+          /tmp/smoke/bin/cogito-publish --site site build
           test -f site/dist/index.html
       - uses: actions/upload-artifact@v7
         with:

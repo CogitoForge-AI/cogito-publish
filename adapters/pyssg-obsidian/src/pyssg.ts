@@ -5,7 +5,7 @@ import { LineProcess, run } from "./process";
 import { parseGlobList, type PyssgSettings } from "./settings";
 import { runtimeRoot } from "./runtime";
 
-/** Parsed `--json` summary from `pyssg build`. */
+/** Parsed `--json` summary from `cogito-publish build`. */
 export interface BuildResult {
 	ok: boolean;
 	pages?: number;
@@ -47,7 +47,7 @@ function readJson(path: string): Record<string, unknown> | null {
 }
 
 /**
- * Folders to exclude that pyssg cannot know about, discovered from the vault's
+ * Folders to exclude that Cogito Publish cannot know about, discovered from the vault's
  * own Obsidian configuration: the core Templates and Daily-notes folders, plus
  * the Templater community plugin's folder. These hold template notes (often with
  * `{{date}}`-style placeholders), not publishable content. The `.obsidian`,
@@ -139,8 +139,8 @@ function lastJsonLine(text: string): string | null {
 }
 
 /**
- * Manages the lifecycle of a `pyssg serve --json` process. Resolves `start()`
- * once the server emits its `ready` event (carrying the served URL).
+ * Manages the lifecycle of a `cogito-publish serve --json` process. Resolves
+ * `start()` once the server emits its `ready` event (carrying the served URL).
  */
 export class ServeProcess {
 	private proc: LineProcess | null = null;
@@ -206,8 +206,8 @@ export class ServeProcess {
 						errLines.push(line);
 						if (errLines.length > 20) errLines.shift();
 					},
-					onError: (err) => fail(`could not start pyssg (${this.pyssgPath})`),
-					onClose: (code) => fail(`pyssg serve exited (code ${code ?? "?"})`),
+					onError: (err) => fail(`could not start cogito-publish (${this.pyssgPath})`),
+					onClose: (code) => fail(`cogito-publish serve exited (code ${code ?? "?"})`),
 				},
 			);
 			proc.start();

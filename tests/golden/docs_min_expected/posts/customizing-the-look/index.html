@@ -13,7 +13,7 @@ and the whole change took two moves.</p>
 <h2 id="1-eject-the-theme">1. Eject the theme</h2>
 <p>The built-in themes live inside the pyssg package. To edit one, copy it into the
 site first:</p>
-<pre><code class="language-bash">pyssg --site examples/custom eject-layout --theme blog --to layout
+<pre><code class="language-bash">cogito-publish --site examples/custom new theme --name blog --to layout
 </code></pre>
 <p>That writes an editable copy under <code>layout/</code> -- templates, CSS, and the i18n
 strings. Point the config at it with <code>layout="layout"</code> and you are now serving

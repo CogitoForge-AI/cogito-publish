@@ -1,4 +1,4 @@
-"""Provider-agnostic orchestrator for ``pyssg deploy <target>``.
+"""Provider-agnostic orchestrator for ``cogito-publish deploy <target>``.
 
 This is the only public entry point a CLI command (or programmatic caller)
 needs to invoke a deploy. It strings together the steps that every target
@@ -99,7 +99,7 @@ def run_deploy(
     else:
         out.step("building site")
         started = perf_counter()
-        # Full build for deploys: incremental cache exists for `pyssg build`
+        # Full build for deploys: incremental cache exists for `cogito-publish build`
         # and `serve`, but production uploads must not gamble on cache state.
         stats = build_site(site_dir, open_cache(site_dir, no_cache=True))
         out.ok(f"built {len(stats.changed_outputs)} page(s) in {(perf_counter() - started):.1f}s")

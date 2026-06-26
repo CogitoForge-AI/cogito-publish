@@ -14,7 +14,7 @@ For the bigger picture of how plugins fit together, read
 practical recipe.
 
 To start from a working skeleton instead of an empty file, run
-`pyssg new plugin <name>`: it scaffolds `plugins/<name>.py` with the class, the
+`cogito-publish new plugin <name>`: it scaffolds `plugins/<name>.py` with the class, the
 factory, and the hook wiring already in place, ready to customize.
 
 ## The plugin shape
@@ -80,7 +80,7 @@ Before every call the taps are topologically sorted; a constraint cycle raises
 
 ## The rules every plugin must follow
 
-These are not optional - they are what makes PySSG's build guarantees hold:
+These are not optional - they are what makes Cogito Publish's build guarantees hold:
 
 1. **Be pure with respect to declared inputs.** No global mutable state, and no
    direct `datetime.now()` / `time` / `random`. Building twice must be

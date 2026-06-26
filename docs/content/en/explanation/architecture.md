@@ -6,7 +6,7 @@ order: 2
 
 # Architecture
 
-PySSG is organized as a **small pure kernel** surrounded by **peripheral
+Cogito Publish is organized as a **small pure kernel** surrounded by **peripheral
 plugins**, in the spirit of Webpack's compiler/plugin split. Understanding this
 boundary explains most of the design decisions.
 
