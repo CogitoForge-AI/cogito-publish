@@ -50,7 +50,7 @@ jobs:
       - name: Write Pages custom domain
         run: printf 'publish.cogito-ai.org\n' > dist/CNAME
         working-directory: docs
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: docs/dist
       - id: deployment
